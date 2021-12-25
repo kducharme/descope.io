@@ -6,7 +6,7 @@
     </div>
 
     <!-- Login Form -->
-    <form>
+    <form @submit.prevent="login">
       <h1>Log in</h1>
       <div>
         <label for="email">Email</label>
@@ -17,31 +17,50 @@
         <input type="password" required id="password" v-model="password" />
       </div>
       <button type="submit">Log in</button>
-      <router-link :to="{ name: 'Register' }">Don't have an account? Sign up.</router-link>
+      <router-link :to="{ name: 'Register' }"
+        >Don't have an account? Sign up.</router-link
+      >
     </form>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
+import { supabase } from "../supabase/init";
+import { useRouter } from "vue-router";
 
 export default {
   name: "login",
   setup() {
     // Create data / vars
+    const router = useRouter();
     const email = ref(null);
     const password = ref(null);
     const errorMsg = ref(null);
 
-    // Register function
+    // Login function
+    const login = async () => {
+      try {
+        const { error } = await supabase.auth.signIn({
+          email: email.value,
+          password: password.value,
+        });
+        if (error) throw error;
+        router.push({ name: 'Dashboard' })
 
-    return { email, password, errorMsg };
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+            errorMsg.value = null;
+          }, 5000);
+      }
+    };
+    return { email, password, errorMsg, login };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
 form {
   display: flex;
   flex-direction: column;
@@ -63,5 +82,4 @@ button {
   background: black;
   color: white;
 }
-
 </style>
