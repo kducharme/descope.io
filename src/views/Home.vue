@@ -1,5 +1,5 @@
 <template>
-  <div>I am the home page (user is logged out)</div>
+  <div>I am the home page — user is logged out</div>
 </template>
 
 <script>

@@ -17,7 +17,7 @@
         <input type="password" required id="password" v-model="password" />
       </div>
       <button type="submit">Log in</button>
-      <router-link :to="{ name: 'Register' }"
+      <router-link :to="{ name: 'Signup' }"
         >Don't have an account? Sign up.</router-link
       >
     </form>
@@ -46,7 +46,7 @@ export default {
           password: password.value,
         });
         if (error) throw error;
-        router.push({ name: 'Dashboard' })
+        router.push({ name: 'Launches' })
 
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;

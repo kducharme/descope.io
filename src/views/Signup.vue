@@ -26,7 +26,7 @@
         />
       </div>
       <button type="submit">Sign up</button>
-      <router-link :to="{ name: 'Login' }"
+      <router-link :to="{ name: 'ConfirmEmail' }"
         >Already have an account? Log in.</router-link
       >
     </form>
@@ -57,7 +57,7 @@ export default {
             password: password.value,
           });
           if (error) throw error;
-          router.push({ name: "Dashboard" });
+          router.push({ name: "ConfirmEmail" });
         } catch (error) {
           errorMsg.value = error.message;
           setTimeout(() => {

@@ -1,10 +1,10 @@
 <template>
-  <div>I am the dashboard page (user logged in)</div>
+  <div>List of launches — user is logged in</div>
 </template>
 
 <script>
 export default {
-  name: "Dashboard",
+  name: "Launches",
   components: {},
   setup() {
     // Create data / vars

@@ -2,10 +2,14 @@
   <header>
     <nav class="nav">
       <div class="nav__left">
-        <div class="nav__logo">
+        <router-link class="nav__logo" :to="{ name: 'Home'}" v-if="!user">
           <img src="../assets/images/launch_logo.png" class="nav__logo--img" />
           <p class="nav__logo--text">LaunchList</p>
-        </div>
+        </router-link>
+        <router-link class="nav__logo" :to="{ name: 'Launches'}" v-if="user">
+          <img src="../assets/images/launch_logo.png" class="nav__logo--img" />
+          <p class="nav__logo--text">LaunchList</p>
+        </router-link>
         <!-- Inactive User Navigation -->
         <router-link class="nav__link" :to="{ name: 'Home' }" v-if="!user"
           >Home</router-link
@@ -16,12 +20,15 @@
         <router-link class="nav__link" :to="{ name: 'Login' }" v-if="!user"
           >Login</router-link
         >
-        <router-link class="nav__link nav__link--primary" :to="{ name: 'Register' }" v-if="!user"
+        <router-link
+          class="nav__link nav__link--primary"
+          :to="{ name: 'Signup' }"
+          v-if="!user"
           >Create account</router-link
         >
         <!-- Active User Navigation -->
-        <router-link class="nav__link" :to="{ name: 'Dashboard' }" v-if="user"
-          >Dashboard</router-link
+        <router-link class="nav__link" :to="{ name: 'Launches' }" v-if="user"
+          >Launches</router-link
         >
         <section @click="logout" v-if="user">Logout</section>
       </div>
@@ -86,9 +93,9 @@ export default {
     align-items: center;
     margin-right: 32px;
     .nav__logo--img {
-    margin-right: 12px;
-    height: 32px;
-    width: 32px;
+      margin-right: 12px;
+      height: 32px;
+      width: 32px;
     }
     .nav__logo--text {
       font-weight: 800;
