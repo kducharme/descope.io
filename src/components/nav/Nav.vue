@@ -1,38 +1,7 @@
 <template>
   <header>
-    <nav class="nav">
-      <div class="nav__left">
-        <router-link class="nav__logo" :to="{ name: 'Home'}" v-if="!user">
-          <img src="../assets/images/launch_logo.png" class="nav__logo--img" />
-          <p class="nav__logo--text">LaunchList</p>
-        </router-link>
-        <router-link class="nav__logo" :to="{ name: 'Launches'}" v-if="user">
-          <img src="../assets/images/launch_logo.png" class="nav__logo--img" />
-          <p class="nav__logo--text">LaunchList</p>
-        </router-link>
-        <!-- Inactive User Navigation -->
-        <router-link class="nav__link" :to="{ name: 'Home' }" v-if="!user"
-          >Home</router-link
-        >
-      </div>
-      <div class="nav__right">
-        <!-- Inactive User Navigation -->
-        <router-link class="nav__link" :to="{ name: 'Login' }" v-if="!user"
-          >Login</router-link
-        >
-        <router-link
-          class="nav__link nav__link--primary"
-          :to="{ name: 'Signup' }"
-          v-if="!user"
-          >Create account</router-link
-        >
-        <!-- Active User Navigation -->
-        <router-link class="nav__link" :to="{ name: 'Launches' }" v-if="user"
-          >Launches</router-link
-        >
-        <section @click="logout" v-if="user">Logout</section>
-      </div>
-    </nav>
+    <NavUnregistered v-if="!user" />
+    <NavRegistered v-if="user" />
   </header>
 </template>
 
@@ -41,8 +10,11 @@ import { supabase } from "../supabase/init";
 import { useRouter } from "vue-router";
 import store from "../store/index";
 import { computed } from "vue";
+import NavUnregistered from "./NavUnregistered";
+import NavRegistered from "./NavRegistered";
 
 export default {
+  components: { NavRegistered, NavUnregistered },
   setup() {
     // Get user from store
     const user = computed(() => store.state.user);

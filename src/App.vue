@@ -1,19 +1,19 @@
 <template>
   <div v-if="appReady">
-    <Navigation />
+    <Nav />
     <router-view />
   </div>
 </template>
 
 <script>
-import Navigation from "./components/Navigation.vue";
+import Nav from "./nav/Nav.vue";
 import { ref } from 'vue';
 import { supabase } from './supabase/init'
 import store from './store/index'
 
 export default {
   components: {
-    Navigation,
+    Nav,
   },
   setup() {
     // Create data / vars
