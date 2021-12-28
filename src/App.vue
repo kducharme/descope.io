@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Nav from "./components/Nav.vue";
+import Nav from "./components/BaseNav.vue";
 import { ref } from 'vue';
 import { supabase } from './supabase/init'
 import store from './store/index'

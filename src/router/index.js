@@ -32,7 +32,7 @@ const routes = [
     component: ConfirmEmail,
   },
   {
-    path: "/launches/all",
+    path: "/launches/",
     name: "LaunchList",
     component: LaunchList,
   },

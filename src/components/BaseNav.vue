@@ -1,10 +1,41 @@
 <template>
   <header>
-    <nav class="nav">
-      
+
+    <!-- Marketing Navigation (User is Not Registered) -->
+    <nav class="nav" v-if="!user">
+      <div class="nav__left">
+        <router-link class="nav__logo" :to="{ name: 'Welcome' }">
+          <img
+            src="../assets/images/launch_logo.png"
+            class="nav__logo--img"
+          />
+          <p class="nav__logo--text">LaunchList</p>
+        </router-link>
+        <router-link class="nav__link" :to="{ name: 'Welcome' }"
+          >Home</router-link
+        >
+      </div>
+
+      <div class="nav__right">
+        <router-link class="nav__link" :to="{ name: 'Login' }"
+          >Login</router-link
+        >
+        <router-link
+          class="nav__link nav__link--primary"
+          :to="{ name: 'Signup' }"
+          >Create account</router-link
+        >
+      </div>
+    </nav>
+
+    <!-- App Navigation (User is Registered) -->
+    <nav class="nav" v-if="user">
       <div class="nav__left">
         <router-link class="nav__logo" :to="{ name: 'LaunchList' }">
-          <img src="../assets/images/launch_logo.png" class="nav__logo--img" />
+          <img
+            src="../assets/images/launch_logo.png"
+            class="nav__logo--img"
+          />
           <p class="nav__logo--text">LaunchList</p>
         </router-link>
       </div>
@@ -12,6 +43,11 @@
       <div class="nav__right">
         <router-link class="nav__link" :to="{ name: 'LaunchList' }" v-if="user"
           >Launches</router-link
+        >
+        <router-link
+          class="nav__link nav__link--primary"
+          :to="{ name: 'Launch' }"
+          >Create new launch</router-link
         >
         <section @click="logout" v-if="user">Logout</section>
       </div>
@@ -26,6 +62,7 @@ import store from "../store/index";
 import { computed } from "vue";
 
 export default {
+  components: { },
   setup() {
     // Get user from store
     const user = computed(() => store.state.user);
