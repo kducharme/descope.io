@@ -1,19 +1,23 @@
 <template>
   <header>
     <nav class="nav">
-      
       <div class="nav__left">
-        <router-link class="nav__logo" :to="{ name: 'Launches' }">
+        <router-link class="nav__logo" :to="{ name: 'Welcome' }">
           <img src="../assets/images/launch_logo.png" class="nav__logo--img" />
           <p class="nav__logo--text">LaunchList</p>
         </router-link>
+        <router-link class="nav__link" :to="{ name: 'Welcome' }">Home</router-link>
       </div>
 
       <div class="nav__right">
-        <router-link class="nav__link" :to="{ name: 'Launches' }" v-if="user"
-          >Launches</router-link
+        <router-link class="nav__link" :to="{ name: 'Login' }"
+          >Login</router-link
         >
-        <section @click="logout" v-if="user">Logout</section>
+        <router-link
+          class="nav__link nav__link--primary"
+          :to="{ name: 'Signup' }"
+          >Create account</router-link
+        >
       </div>
     </nav>
   </header>
@@ -36,7 +40,7 @@ export default {
     // Logout function
     const logout = async () => {
       await supabase.auth.signOut();
-      router.push({ name: "Home" });
+      router.push({ name: "Welcome" });
     };
 
     return { logout, user };

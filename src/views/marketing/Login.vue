@@ -26,7 +26,7 @@
 
 <script>
 import { ref } from "vue";
-import { supabase } from "../supabase/init";
+import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 
 export default {
@@ -46,7 +46,7 @@ export default {
           password: password.value,
         });
         if (error) throw error;
-        router.push({ name: 'Launches' })
+        router.push({ name: 'LaunchList' })
 
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;

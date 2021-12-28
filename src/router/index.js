@@ -1,15 +1,20 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import Login from "../views/Login.vue";
-import Signup from "../views/Signup.vue";
-import Launches from "../views/Launches.vue";
-import ConfirmEmail from "../views/ConfirmEmail.vue";
+
+// Marketing pages
+import Welcome from "../views/marketing/Welcome.vue";
+import Login from "../views/marketing/Login.vue";
+import Signup from "../views/marketing/Signup.vue";
+import ConfirmEmail from "../views/marketing/ConfirmEmail.vue";
+
+// App pages
+import LaunchList from "../views/app/LaunchList.vue";
+import Launch from "../views/app/Launch.vue";
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    name: "Welcome",
+    component: Welcome,
   },
   {
     path: "/login",
@@ -22,14 +27,19 @@ const routes = [
     component: Signup,
   },
   {
-    path: "/launches",
-    name: "Launches",
-    component: Launches,
-  },
-  {
     path: "/confirm",
     name: "ConfirmEmail",
     component: ConfirmEmail,
+  },
+  {
+    path: "/launches/all",
+    name: "LaunchList",
+    component: LaunchList,
+  },
+  {
+    path: "/launches/create",
+    name: "Launch",
+    component: Launch,
   },
 ];
 

@@ -35,7 +35,7 @@
 
 <script>
 import { ref } from "vue";
-import { supabase } from "../supabase/init";
+import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 
 export default {
