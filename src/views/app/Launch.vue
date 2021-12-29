@@ -1,39 +1,41 @@
 <template>
-  <div>
-hwwo
-  </div>
+  <div v-if="dataLoaded">hello</div>
 </template>
 
 <script>
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
+import { useRouter } from "vue-router";
 
 export default {
-  name: "Document",
+  name: "Launch",
   setup() {
-    // Set active user id
-    const uid = supabase.auth.user().id;
-
-    // Set active launch
-
-    // const launchId = this.$route.params.id;
+    // Setup ref to router
+    const router = useRouter();
 
     // Create data
-    const launchName = ref('');
-    const launchContent = ref('');
-    const launchOwner = ref(uid);
-    // const statusMsg = ref(null)
-    // const errorMsg = ref(null)
+    const launchId = router.currentRoute.value.fullPath.split("/").pop();
+    const data = ref([]);
+    const dataLoaded = ref(null);
 
-    // Add exercise
+    console.log(launchId);
 
-    // Delete exercise
+    // Get data
+    const getData = async () => {
+      const { data: launch } = await supabase
+        .from("launches")
+        .select("*")
+        .eq('uniqueId', launchId);
 
-    // Listens for chaging of workout type input
+      data.value = launch[0];
+      dataLoaded.value = true;
+      console.log(data.value)
+    };
 
-    // Create workout
+    // Run get data function
+    getData();
 
-    return { launchName, launchContent, launchOwner };
+    return { data, dataLoaded};
   },
 };
 </script>

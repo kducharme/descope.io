@@ -30,7 +30,7 @@ export default {
     const router = useRouter();
 
     // Create data
-    const id = ref(uuidv4());
+    const id = ref(null);
     const launchName = ref("");
     const launchContent = ref("");
     const launchOwner = ref(user);
@@ -39,8 +39,13 @@ export default {
 
     // Create a "launch" in Supabase
     const createLaunch = async () => {
+
+      // Generate unique id for launch
+      id.value = uuidv4();
+      console.log(id.value);
+      
       try {
-        const { error } = await supabase.from("launch").insert([
+        const { error } = await supabase.from("launches").insert([
           {
             uniqueId: id.value,
             name: null,
@@ -49,6 +54,8 @@ export default {
           },
         ]);
         if (error) throw error;
+        routeToLaunch();
+
         statusMsg.value = "Success";
         setTimeout(() => {
           statusMsg.value = null;
@@ -59,13 +66,12 @@ export default {
           errorMsg.value = null;
         }, 5000);
       }
-
-      routeToLaunch();
     };
 
     // Route user to launch view
     const routeToLaunch = () => {
       router.push({ name: "Launch", params: { launchId: id.value } });
+      id.value = null;
     };
 
     return {
