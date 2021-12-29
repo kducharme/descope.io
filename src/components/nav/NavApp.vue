@@ -1,39 +1,12 @@
 <template>
   <header>
-
-    <!-- Marketing Navigation (User is Not Registered) -->
-    <nav class="nav" v-if="!user">
-      <div class="nav__left">
-        <router-link class="nav__logo" :to="{ name: 'Welcome' }">
-          <img
-            src="../assets/images/launch_logo.png"
-            class="nav__logo--img"
-          />
-          <p class="nav__logo--text">LaunchList</p>
-        </router-link>
-        <router-link class="nav__link" :to="{ name: 'Welcome' }"
-          >Home</router-link
-        >
-      </div>
-
-      <div class="nav__right">
-        <router-link class="nav__link" :to="{ name: 'Login' }"
-          >Login</router-link
-        >
-        <router-link
-          class="nav__link nav__link--primary"
-          :to="{ name: 'Signup' }"
-          >Create account</router-link
-        >
-      </div>
-    </nav>
-
+      
     <!-- App Navigation (User is Registered) -->
-    <nav class="nav" v-if="user">
+    <nav class="nav">
       <div class="nav__left">
         <router-link class="nav__logo" :to="{ name: 'LaunchList' }">
           <img
-            src="../assets/images/launch_logo.png"
+            src="../../assets/images/launch_logo.png"
             class="nav__logo--img"
           />
           <p class="nav__logo--text">LaunchList</p>
@@ -56,9 +29,9 @@
 </template>
 
 <script>
-import { supabase } from "../supabase/init";
+import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
-import store from "../store/index";
+import store from "../../store/index";
 import { computed } from "vue";
 
 export default {

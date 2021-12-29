@@ -1,29 +1,36 @@
 <template>
   <div v-if="appReady">
-    <Nav />
+    <NavMarketing v-if="!user" />
+    <NavApp v-if="user" />
     <router-view />
   </div>
 </template>
 
 <script>
-import Nav from "./components/BaseNav.vue";
-import { ref } from 'vue';
-import { supabase } from './supabase/init'
-import store from './store/index'
+import NavApp from "./components/nav/NavApp.vue";
+import NavMarketing from "./components/nav/NavMarketing.vue";
+import { ref } from "vue";
+import { supabase } from "./supabase/init";
+import store from "./store/index";
+import { computed } from "vue";
 
 export default {
   components: {
-    Nav,
+    NavApp,
+    NavMarketing,
   },
   setup() {
     // Create data / vars
     const appReady = ref(null);
 
+    // Get user from store
+    const user = computed(() => store.state.user);
+
     // Check to see if user is already logged in
-    const user = supabase.auth.user();
+    const loggedUser = supabase.auth.user();
 
     // If user does not exist, need to make app ready
-    if (!user) {
+    if (!loggedUser) {
       appReady.value = true;
     }
 
@@ -34,8 +41,7 @@ export default {
       appReady.value = true;
     });
 
-
-    return {appReady};
+    return { appReady, user, loggedUser };
   },
 };
 </script>
@@ -43,9 +49,15 @@ export default {
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap");
 
-body, h1, h2, h3, p, a, button {
+body,
+h1,
+h2,
+h3,
+p,
+a,
+button {
   background: white;
-  color: #0C1015;
-  font-family: 'Avenir';
+  color: #0c1015;
+  font-family: "Avenir";
 }
 </style>
