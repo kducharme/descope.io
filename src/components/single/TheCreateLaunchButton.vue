@@ -14,7 +14,8 @@
 <script>
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
-// import { useRouter } from "vue-router";
+import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "vue-router";
 
 export default {
   name: "TheCreateLaunchButton",
@@ -26,9 +27,10 @@ export default {
     const user = supabase.auth.user();
 
     // Setup ref to router
-    // const router = useRouter();
+    const router = useRouter();
 
     // Create data
+    const id = ref(uuidv4());
     const launchName = ref("");
     const launchContent = ref("");
     const launchOwner = ref(user);
@@ -40,9 +42,10 @@ export default {
       try {
         const { error } = await supabase.from("launch").insert([
           {
+            uniqueId: id.value,
             name: null,
             published: false,
-            created_by: launchOwner.value.id
+            created_by: launchOwner.value.id,
           },
         ]);
         if (error) throw error;
@@ -62,8 +65,7 @@ export default {
 
     // Route user to launch view
     const routeToLaunch = () => {
-      //   router.push({ name: "Launch" });
-      console.log("routed to launch");
+      router.push({ name: "Launch", params: { launchId: id.value } });
     };
 
     return {
@@ -91,19 +93,19 @@ export default {
 }
 
 .message {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    width: 100vw;
-    top: 12px;
-    left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  width: 100vw;
+  top: 12px;
+  left: 0;
 }
 
-.message__error, .message__status {
-    padding: 8px 12px;
-    background: black;
-    color: white;
+.message__error,
+.message__status {
+  padding: 8px 12px;
+  background: black;
+  color: white;
 }
-
 </style>

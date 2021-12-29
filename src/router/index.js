@@ -37,7 +37,7 @@ const routes = [
     component: LaunchList,
   },
   {
-    path: "/launch/create",
+    path: "/launch/:launchId",
     name: "Launch",
     component: Launch,
   },
