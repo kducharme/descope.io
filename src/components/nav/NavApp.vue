@@ -17,11 +17,7 @@
         <router-link class="nav__link" :to="{ name: 'LaunchList' }" v-if="user"
           >Launches</router-link
         >
-        <span
-          class="nav__link nav__link--primary"
-          @click="createLaunch"
-          >Create new launch</span
-        >
+        <TheCreateLaunchButton />
         <section @click="logout" v-if="user">Logout</section>
       </div>
     </nav>
@@ -33,9 +29,12 @@ import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import store from "../../store/index";
 import { computed } from "vue";
+import TheCreateLaunchButton from '../single/TheCreateLaunchButton.vue'
 
 export default {
-  components: { },
+  components: { 
+    TheCreateLaunchButton,
+  },
   setup() {
     // Get user from store
     const user = computed(() => store.state.user);
@@ -49,12 +48,7 @@ export default {
       router.push({ name: "Welcome" });
     };
 
-    // Create new draft launch
-    const createLaunch = () => {
-      console.log('hi');
-    }
-
-    return { logout, user, createLaunch };
+    return { logout, user };
   },
 };
 </script>

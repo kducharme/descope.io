@@ -11,8 +11,8 @@ import { supabase } from "../../supabase/init";
 export default {
   name: "Document",
   setup() {
-    // Set active user
-    const user = supabase.auth.user();
+    // Set active user id
+    const uid = supabase.auth.user().id;
 
     // Set active launch
 
@@ -21,7 +21,7 @@ export default {
     // Create data
     const launchName = ref('');
     const launchContent = ref('');
-    const launchOwner = ref(user.id);
+    const launchOwner = ref(uid);
     // const statusMsg = ref(null)
     // const errorMsg = ref(null)
 
