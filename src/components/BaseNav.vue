@@ -44,10 +44,10 @@
         <router-link class="nav__link" :to="{ name: 'LaunchList' }" v-if="user"
           >Launches</router-link
         >
-        <router-link
+        <span
           class="nav__link nav__link--primary"
-          :to="{ name: 'Launch' }"
-          >Create new launch</router-link
+          @click="createLaunch"
+          >Create new launch</span
         >
         <section @click="logout" v-if="user">Logout</section>
       </div>
@@ -76,7 +76,12 @@ export default {
       router.push({ name: "Welcome" });
     };
 
-    return { logout, user };
+    // Create new draft launch
+    const createLaunch = () => {
+      console.log('hi');
+    }
+
+    return { logout, user, createLaunch };
   },
 };
 </script>
