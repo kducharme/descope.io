@@ -31,7 +31,7 @@ export default {
 
     // Create data
     const id = ref(null);
-    const launchName = ref("");
+    const launchName = ref("Untitled");
     const launchContent = ref("");
     const launchOwner = ref(user);
     const statusMsg = ref(null);
@@ -43,7 +43,7 @@ export default {
       // Generate unique id for launch
       id.value = uuidv4();
       console.log(id.value);
-      
+
       try {
         const { error } = await supabase.from("launches").insert([
           {
