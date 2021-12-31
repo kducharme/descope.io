@@ -1,14 +1,25 @@
 <template>
   <div v-if="appReady">
-    <NavMarketing v-if="!user" />
-    <NavApp v-if="user" />
-    <router-view />
+    <div class="marketing" v-if="!user">
+      <NavMarketing />
+      <router-view />
+    </div>
+    <div class="app" v-if="user">
+      <div class="app__left">
+        <NavApp v-if="user" />
+      </div>
+      <div class="app__right">
+        <Subnav />
+        <router-view />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import NavApp from "./components/nav/NavApp.vue";
 import NavMarketing from "./components/nav/NavMarketing.vue";
+import Subnav from "./components/nav/Subnav.vue";
 import { ref } from "vue";
 import { supabase } from "./supabase/init";
 import store from "./store/index";
@@ -18,6 +29,7 @@ export default {
   components: {
     NavApp,
     NavMarketing,
+    Subnav,
   },
   setup() {
     // Create data / vars
@@ -56,8 +68,17 @@ h3,
 p,
 a,
 button {
-  background: white;
-  color: #0c1015;
+  color: white;
   font-family: "Avenir";
+  font-size: 14px;
+}
+
+body {
+  background: #1E1F21;
+}
+
+.app {
+  display: flex;
+  flex-direction: row;
 }
 </style>

@@ -1,24 +1,34 @@
 <template>
   <header>
-      
-    <!-- App Navigation (User is Registered) -->
     <nav class="nav">
-      <div class="nav__left">
-        <router-link class="nav__logo" :to="{ name: 'LaunchList' }">
+      <div class="nav__top">
+        <div class="logo" @click="navigateHome">
           <img
-            src="../../assets/images/launch_logo.png"
-            class="nav__logo--img"
+            src="../../assets/images/launch_logo_light.png"
+            class="logo__img"
           />
-          <p class="nav__logo--text">LaunchList</p>
-        </router-link>
+          <p class="logo__text">LaunchDocs</p>
+        </div>
+        <div class="links">
+          <router-link class="nav__link" :to="{ name: 'Home' }" v-if="user"
+            >Home</router-link
+          >
+          <router-link
+            class="nav__link"
+            :to="{ name: 'LaunchHistory' }"
+            v-if="user"
+            >Archive</router-link
+          >
+          <p class="links__title">Active launches</p>
+          <TheLaunchList />
+        </div>
       </div>
 
-      <div class="nav__right">
-        <router-link class="nav__link" :to="{ name: 'LaunchList' }" v-if="user"
-          >Launches</router-link
-        >
-        <TheCreateLaunchButton />
-        <section @click="logout" v-if="user">Logout</section>
+      <!-- User settings  -->
+      <div class="nav__bottom">
+        <section @click="logout" v-if="user" class="nav__link--logout">
+          Logout
+        </section>
       </div>
     </nav>
   </header>
@@ -29,11 +39,11 @@ import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import store from "../../store/index";
 import { computed } from "vue";
-import TheCreateLaunchButton from '../single/TheCreateLaunchButton.vue'
+import TheLaunchList from "./TheLaunchList.vue";
 
 export default {
-  components: { 
-    TheCreateLaunchButton,
+  components: {
+    TheLaunchList,
   },
   setup() {
     // Get user from store
@@ -48,7 +58,12 @@ export default {
       router.push({ name: "Welcome" });
     };
 
-    return { logout, user };
+    // Navigate home function for logo
+    const navigateHome = () => {
+      router.push({ name: "Home" });
+    };
+
+    return { logout, user, navigateHome };
   },
 };
 </script>
@@ -56,52 +71,58 @@ export default {
 <style lang="scss" scoped>
 .nav {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
-  height: 72px;
-  padding: 0 24px;
-  box-shadow: rgb(0 0 0 / 8%) 0px 1px 12px !important;
-  background: white;
-  .nav__left,
-  .nav__right {
-    display: flex;
-    align-items: center;
-    width: 50%;
-  }
-  .nav__right {
-    justify-content: flex-end;
-  }
-  .nav__link {
-    padding: 0 12px;
-  }
-  .nav__link--primary {
-    padding: 8px 12px;
-    background: blue;
-    color: white;
-    border: none;
-    border-radius: 3px;
-  }
-  .nav__logo {
-    display: flex;
-    align-items: center;
-    margin-right: 32px;
-    .nav__logo--img {
-      margin-right: 12px;
-      height: 32px;
-      width: 32px;
+  height: 100vh;
+  width: 260px;
+  background: #252628;
+  padding: 16px;
+  .nav__top {
+    width: 100%;
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-right: 32px;
+      .logo__img {
+        margin-right: 10px;
+        width: 20px;
+      }
+      .logo__text {
+        font-weight: 800;
+        font-size: 16px;
+      }
     }
-    .nav__logo--text {
-      font-weight: 800;
-      font-size: 16px;
+    .links {
+      display: flex;
+      flex-direction: column;
+      margin: 32px 0 0;
+      width: 100%;
+      .links__title {
+        font-size: 12px;
+        opacity: 0.7;
+        margin: 16px 0 16px -16px;
+        padding: 8px 8px 4px 24px;
+      }
+      .nav__link {
+        // width: 100%;
+        margin: 0 0 0 -16px;
+        padding: 8px 8px 8px 24px;
+      }
+      .router-link-active {
+        font-weight: 600;
+        color: white;
+        background: #1e1f21;
+      }
     }
   }
-}
-
-.router-link {
-  font-size: 14px;
-}
-
-.router-link-active {
-  font-weight: 600;
-  color: blue;
+  .nav__bottom {
+    border-top: 0.5px solid #e2e2e25f;
+    width: 100%;
+    padding: 16px 0 8px;
+    .nav__link--logout:hover {
+      cursor: pointer;
+    }
+  }
 }
 </style>

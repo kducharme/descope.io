@@ -69,7 +69,7 @@ export default {
   height: 72px;
   padding: 0 24px;
   box-shadow: rgb(0 0 0 / 8%) 0px 1px 12px !important;
-  background: white;
+  background: #121315;
   .nav__left,
   .nav__right {
     display: flex;
@@ -111,6 +111,7 @@ export default {
 
 .router-link-active {
   font-weight: 600;
-  color: blue;
+  color: #646ECB;
+  
 }
 </style>

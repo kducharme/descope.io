@@ -1,10 +1,10 @@
 <template>
-  <div>List of launches — user is logged in</div>
+  <div>history of previous launches</div>
 </template>
 
 <script>
 export default {
-  name: "LaunchList",
+  name: "LaunchHistory",
   components: {},
   setup() {
     // Create data / vars

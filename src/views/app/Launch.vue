@@ -40,7 +40,6 @@ export default {
 
       data.value = launch[0];
       dataLoaded.value = true;
-      console.log(data.value);
     };
 
     // Run get data function
@@ -53,15 +52,13 @@ export default {
 
 <style lang="scss" scoped>
 .launch {
-  background: rgb(226, 226, 226);
-  width: 100vw;
+  width: calc(100vw - 260px);
   height: calc(100vh - 72px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px 0 0;
   .doc {
-    background: white;
     height: 100%;
     width: 80vw;
     padding: 32px;

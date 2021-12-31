@@ -7,12 +7,13 @@ import Signup from "../views/marketing/Signup.vue";
 import ConfirmEmail from "../views/marketing/ConfirmEmail.vue";
 
 // App pages
-import LaunchList from "../views/app/LaunchList.vue";
+import Home from "../views/app/Home.vue";
 import Launch from "../views/app/Launch.vue";
+import LaunchHistory from "../views/app/LaunchHistory.vue";
 
 const routes = [
   {
-    path: "/",
+    path: "/welcome",
     name: "Welcome",
     component: Welcome,
   },
@@ -32,9 +33,14 @@ const routes = [
     component: ConfirmEmail,
   },
   {
-    path: "/launches/",
-    name: "LaunchList",
-    component: LaunchList,
+    path: "/",
+    name: "Home",
+    component: Home,
+  },
+  {
+    path: "/history/",
+    name: "LaunchHistory",
+    component: LaunchHistory,
   },
   {
     path: "/launch/:launchId",

@@ -6,7 +6,7 @@
       <p v-if="statusMsg" class="message__status">{{ statusMsg }}</p>
     </div>
     <button @click="createLaunch" class="btn btn__primary">
-      Create new launch
+      New launch
     </button>
   </div>
 </template>
@@ -20,8 +20,6 @@ import { useRouter } from "vue-router";
 export default {
   name: "TheCreateLaunchButton",
   setup() {
-    // Set active launch
-    // const launchId = this.$route.params.id;
 
     // Set active user
     const user = supabase.auth.user();
@@ -42,7 +40,6 @@ export default {
 
       // Generate unique id for launch
       id.value = uuidv4();
-      console.log(id.value);
 
       try {
         const { error } = await supabase.from("launches").insert([
@@ -88,14 +85,16 @@ export default {
 
 <style lang="scss" scoped>
 .btn {
-  padding: 8px 12px;
+  padding: 6px 12px;
   border-radius: 5px;
 }
 
 .btn__primary {
-  background: blue;
+  background: #3D52D5;
   color: white;
   margin-right: 12px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .message {
