@@ -10,7 +10,7 @@
       </div>
       <div class="app__right">
         <Subnav />
-        <router-view />
+        <router-view :key="$route.fullPath" />
       </div>
     </div>
   </div>

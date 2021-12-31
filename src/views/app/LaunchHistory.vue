@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "LaunchHistory",
+  name: "Completed",
   components: {},
   setup() {
     // Create data / vars

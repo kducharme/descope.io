@@ -1,10 +1,13 @@
 <template>
-  <div v-if="dataLoaded" class="launchList">
-    <div class="doc" v-for="(launch, index) in data" :key="index">
-      <p class="launchList__launch" @click="displayLaunch(launch)">
-        {{ launch.name }}
-      </p>
-    </div>
+  <div v-if="dataLoaded" class="launches">
+    <router-link
+      class="launches__link"
+      :to="{ name: 'Launch', params: { launchId: launch.uniqueId } }"
+      v-for="(launch) in data"
+      :key="launch.uniqueId"
+    >
+      {{ launch.name }}</router-link
+    >
   </div>
 </template>
 <script>
@@ -47,16 +50,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.launchList {
+.launches {
   display: flex;
   flex-direction: column;
-  .launchList__launch {
+  .launches__link {
     margin: 0 0 0 -16px;
     padding: 8px 8px 8px 24px;
   }
-  .launchList__launch:hover {
+  .launchList__link:hover {
     background: #1e1f2191;
     cursor: pointer;
   }
+}
+.router-link-active {
+  font-weight: 600;
+  color: white;
+  background: #1e1f21;
 }
 </style>

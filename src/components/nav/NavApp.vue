@@ -19,7 +19,7 @@
             v-if="user"
             >Archive</router-link
           >
-          <p class="links__title">Active launches</p>
+          <p class="links__title">Launches</p>
           <TheLaunchList />
         </div>
       </div>
@@ -83,7 +83,7 @@ export default {
     .logo {
       display: flex;
       align-items: center;
-      margin-right: 32px;
+      padding: 0 8px;
       .logo__img {
         margin-right: 10px;
         width: 20px;
@@ -101,7 +101,7 @@ export default {
       .links__title {
         font-size: 12px;
         opacity: 0.7;
-        margin: 16px 0 16px -16px;
+        margin: 16px 0 8px -16px;
         padding: 8px 8px 4px 24px;
       }
       .nav__link {

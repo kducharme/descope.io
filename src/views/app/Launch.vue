@@ -1,8 +1,9 @@
 <template>
-  <div v-if="dataLoaded" class="launch">
+  <div v-if="dataLoaded" class="launch" :key="data.uniqueId">
     <div class="doc">
-      <LaunchDocName :name="this.data.name" />
-      <LaunchDocBody :body="this.data.content" />
+      <!-- <LaunchDocName :name="this.data.name" />
+      <LaunchDocBody :body="this.data.content" /> -->
+      {{ data.name }}
     </div>
   </div>
 </template>
@@ -11,14 +12,14 @@
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
-import LaunchDocBody from "./LaunchDocBody.vue";
-import LaunchDocName from "./LaunchDocName.vue";
+// import LaunchDocBody from "./LaunchDocBody.vue";
+// import LaunchDocName from "./LaunchDocName.vue";
 
 export default {
   name: "Launch",
   components: {
-    LaunchDocBody,
-    LaunchDocName
+    // LaunchDocBody,
+    // LaunchDocName
   },
   setup() {
     // Setup ref to router
@@ -28,8 +29,6 @@ export default {
     const launchId = router.currentRoute.value.fullPath.split("/").pop();
     const data = ref([]);
     const dataLoaded = ref(null);
-
-    console.log(launchId);
 
     // Get data
     const getData = async () => {
@@ -44,6 +43,8 @@ export default {
 
     // Run get data function
     getData();
+
+    console.log('loaded')
 
     return { data, dataLoaded };
   },
