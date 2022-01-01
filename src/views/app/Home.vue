@@ -1,5 +1,5 @@
 <template>
-  <div>List of launches — user is logged in</div>
+  <div>I am the home page.</div>
 </template>
 
 <script>

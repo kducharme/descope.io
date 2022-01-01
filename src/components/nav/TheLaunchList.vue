@@ -3,10 +3,12 @@
     <router-link
       class="launches__link"
       :to="{ name: 'Launch', params: { launchId: launch.uniqueId } }"
-      v-for="(launch) in data"
+      v-for="launch in data"
       :key="launch.uniqueId"
     >
-      {{ launch.name }}</router-link
+      <img src="../../assets/images/launch.svg" class="launches__img" />
+      <p>{{ launch.name }}</p>
+      </router-link
     >
   </div>
 </template>
@@ -54,8 +56,14 @@ export default {
   display: flex;
   flex-direction: column;
   .launches__link {
+    display: flex;
     margin: 0 0 0 -16px;
     padding: 8px 8px 8px 24px;
+    .launches__img {
+      width: 14px;
+      opacity: .8;
+      margin-right: 8px;
+    }
   }
   .launchList__link:hover {
     background: #1e1f2191;

@@ -73,8 +73,12 @@ button {
   font-size: 14px;
 }
 
+input {
+  color: #1e1f21;
+}
+
 body {
-  background: #1E1F21;
+  background: #1e1f21;
 }
 
 .app {

@@ -3,20 +3,24 @@
     <nav class="nav">
       <div class="nav__top">
         <div class="logo" @click="navigateHome">
-          <img
-            src="../../assets/images/launch_logo_light.png"
-            class="logo__img"
-          />
+          <img src="../../assets/images/launch__purple.svg" class="logo__img" />
           <p class="logo__text">LaunchDocs</p>
         </div>
+        <div class="actions">
+          <BaseButton
+            :priority="priority"
+            :text="text"
+            :action="showCreateModal"
+            class="actions__create"
+          />
+          <TheCreateLaunchModal v-if="showCreateLaunchModal" />
+        </div>
+
         <div class="links">
-          <router-link class="nav__link" :to="{ name: 'Home' }" v-if="user"
+          <router-link class="nav__link" :to="{ name: 'Home' }"
             >Home</router-link
           >
-          <router-link
-            class="nav__link"
-            :to="{ name: 'LaunchHistory' }"
-            v-if="user"
+          <router-link class="nav__link" :to="{ name: 'LaunchHistory' }"
             >Archive</router-link
           >
           <p class="links__title">Launches</p>
@@ -26,28 +30,36 @@
 
       <!-- User settings  -->
       <div class="nav__bottom">
-        <section @click="logout" v-if="user" class="nav__link--logout">
-          Logout
-        </section>
+        <section @click="logout" class="nav__link--logout">Logout</section>
       </div>
     </nav>
   </header>
 </template>
 
 <script>
+import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
-import store from "../../store/index";
-import { computed } from "vue";
 import TheLaunchList from "./TheLaunchList.vue";
+import BaseButton from "../global/BaseButton.vue";
+import TheCreateLaunchModal from "../single/TheCreateLaunchModal.vue";
 
 export default {
   components: {
     TheLaunchList,
+    BaseButton,
+    TheCreateLaunchModal,
+  },
+  data() {
+    return {
+      priority: "Primary",
+      text: "New launch"
+    };
   },
   setup() {
-    // Get user from store
-    const user = computed(() => store.state.user);
+
+    // Create data
+    const showCreateLaunchModal = ref(null);
 
     // Setup ref to router
     const router = useRouter();
@@ -58,12 +70,17 @@ export default {
       router.push({ name: "Welcome" });
     };
 
-    // Navigate home function for logo
+    // Navigate home function (when user clicks on logo)
     const navigateHome = () => {
       router.push({ name: "Home" });
     };
 
-    return { logout, user, navigateHome };
+    return { logout, navigateHome, showCreateLaunchModal };
+  },
+  methods: {
+    showCreateModal() {
+      console.log("woo");
+    },
   },
 };
 </script>
@@ -85,18 +102,26 @@ export default {
       align-items: center;
       padding: 0 8px;
       .logo__img {
-        margin-right: 10px;
-        width: 20px;
+        margin-right: 8px;
+        width: 22px;
       }
       .logo__text {
         font-weight: 800;
         font-size: 16px;
       }
     }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      .actions__create {
+        margin-top: 20px;
+      }
+    }
     .links {
       display: flex;
       flex-direction: column;
-      margin: 32px 0 0;
+      margin: 20px 0 0;
       width: 100%;
       .links__title {
         font-size: 12px;

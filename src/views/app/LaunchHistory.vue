@@ -1,5 +1,5 @@
 <template>
-  <div>history of previous launches</div>
+  <div>I am the history page</div>
 </template>
 
 <script>
