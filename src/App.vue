@@ -32,31 +32,20 @@ export default {
     Subnav,
   },
   setup() {
-
-    // Create data / vars
-    // const appReady = ref(null);
-
-    // Get user from store
-    // const user = computed(() => store.state.user);
-
-    // Check to see if user is already logged in
-    // const loggedUser = supabase.auth.user();
-
-    // If user does not exist, need to make app ready
-    // if (!loggedUser) {
-      //   appReady.value = true;
-    // }
-
     // Runs when there is a auth state change
     // if user is logged in, this will fire
     supabase.auth.onAuthStateChange((_, session) => {
-      store.dispatch("getActiveUser", {
-        session
-      });
-
+      if (session) {
+        store.dispatch("setActiveUser", {
+          session,
+        });
+      }
+      if (!session) {
+        store.dispatch("resetActiveUser");
+      }
     });
 
-    return {store };
+    return { store };
   },
 };
 </script>

@@ -1,26 +1,3 @@
-
-// import { reactive } from 'vue';
-
-
-
-// const state = reactive({
-//     // Core data
-//     user: null,
-//     launches: [],
-
-// });
-
-// const methods = {
-//     setUser(payload) {
-//         state.user = payload ? payload.user : null;
-//     }
-// }
-
-// export default {
-//     state,
-//     methods
-// }
-
 // import Vue from 'vue'
 import Vuex from 'vuex'
 import { supabase } from "../supabase/init";
@@ -41,6 +18,9 @@ export default new Vuex.Store({
         SET_ACTIVE_USER: (state, user) => {
             state.activeUser = user;
         },
+        RESET_ACTIVE_USER: (state) => {
+            state.activeUser = null;
+        },
         SET_LAUNCHES: (state, launches) => {
             state.launches = launches;
         },
@@ -49,18 +29,21 @@ export default new Vuex.Store({
         },
     },
     actions: {
-        getActiveUser(context, payload) {
-            // const user = supabase.auth.user();
+        setActiveUser(context, payload) {
             context.commit("SET_ACTIVE_USER", payload.session.user);
             context.commit("SET_APP_STATUS", true);
-            
+
+        },
+        resetActiveUser(context) {
+            context.commit("SET_ACTIVE_USER");
+
         },
         async getLaunches(context) {
             // Get data from supabase
             const { data: launch } = await supabase
-            .from("launches")
-            .select("*")
-            
+                .from("launches")
+                .select("*")
+
             context.commit("SET_LAUNCHES", launch);
         },
     }
