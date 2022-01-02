@@ -1,6 +1,7 @@
 <template>
   <header>
     <nav class="nav">
+      <TheCreateLaunchModal v-if="showCreateLaunchModal" />
       <div class="nav__top">
         <div class="logo" @click="navigateHome">
           <img src="../../assets/images/launch__purple.svg" class="logo__img" />
@@ -13,7 +14,6 @@
             :action="showCreateModal"
             class="actions__create"
           />
-          <TheCreateLaunchModal v-if="showCreateLaunchModal" />
         </div>
 
         <div class="links">
@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import TheLaunchList from "./TheLaunchList.vue";
@@ -53,14 +52,11 @@ export default {
   data() {
     return {
       priority: "Primary",
-      text: "New launch"
+      text: "New launch",
+      showCreateLaunchModal: false,
     };
   },
   setup() {
-
-    // Create data
-    const showCreateLaunchModal = ref(null);
-
     // Setup ref to router
     const router = useRouter();
 
@@ -75,11 +71,11 @@ export default {
       router.push({ name: "Home" });
     };
 
-    return { logout, navigateHome, showCreateLaunchModal };
+    return { logout, navigateHome };
   },
   methods: {
     showCreateModal() {
-      console.log("woo");
+      this.showCreateLaunchModal = true;
     },
   },
 };
@@ -125,12 +121,10 @@ export default {
       width: 100%;
       .links__title {
         font-size: 12px;
-        opacity: 0.7;
         margin: 16px 0 8px -16px;
         padding: 8px 8px 4px 24px;
       }
       .nav__link {
-        // width: 100%;
         margin: 0 0 0 -16px;
         padding: 8px 8px 8px 24px;
       }

@@ -1,33 +1,42 @@
 <template>
   <div class="modal">
-    <!-- Status Message -->
-    <div v-if="errorMsg || statusMsg" class="message">
-      <p v-if="errorMsg" class="message__error">{{ errorMsg }}</p>
-      <p v-if="statusMsg" class="message__status">{{ statusMsg }}</p>
+    <div class="modal__bg"></div>
+
+    <div class="modal__content">
+      <!-- Status Messages -->
+      <div v-if="errorMsg || statusMsg" class="message">
+        <p v-if="errorMsg" class="message__error">{{ errorMsg }}</p>
+        <p v-if="statusMsg" class="message__status">{{ statusMsg }}</p>
+      </div>
+
+      <!-- Create Launch Form -->
+      <form @submit.prevent="createLaunch" class="form">
+        <h1 class="form__title">Create a new launch</h1>
+        <p class="form__description">
+          Sed ut perspiciatis unde omnis iste natus error sit voluptat
+          accusantium doloremque laudantium.
+        </p>
+        <div class="form__input">
+          <label for="launchName">Launch name</label>
+          <input type="text" required id="launchName" v-model="launchName" />
+        </div>
+        <div class="form__input">
+          <label for="team">Team</label>
+          <div class="form__select" id="team">Select team</div>
+        </div>
+        <div class="form__input">
+          <label for="owner">Owner</label>
+          <div class="form__select" id="owner">{{ user.email }}</div>
+        </div>
+        <BaseButton
+          type="submit"
+          :priority="priority"
+          :text="text"
+          :action="showCreateModal"
+          class="form__button"
+        />
+      </form>
     </div>
-
-    <!-- Create Launch Form -->
-
-    <form @submit.prevent="createLaunch">
-      <h1>Log in</h1>
-      <div>
-        <label for="email">Email</label>
-        <input type="text" required id="email" v-model="email" />
-      </div>
-      <div>
-        <label for="password">Password</label>
-        <input type="password" required id="password" v-model="password" />
-      </div>
-      <BaseButton
-        type="submit"
-        :priority="priority"
-        :text="text"
-        :action="showCreateModal"
-      />
-    </form>
-
-    <!-- Create Launch Button -->
-    <button @click="createLaunch" class="btn btn__primary">New launch</button>
   </div>
 </template>
 
@@ -60,8 +69,6 @@ export default {
 
     // Set active user
     const user = supabase.auth.user();
-
-    console.log(user)
 
     const createLaunch = async () => {
       // Generate unique id for launch
@@ -102,6 +109,7 @@ export default {
       launchName,
       errorMsg,
       statusMsg,
+      user,
     };
   },
 };
@@ -110,11 +118,58 @@ export default {
 <style lang="scss" scoped>
 .modal {
   display: flex;
-  padding: fixed;
+  position: fixed;
   top: 0;
-  left: 0;
+  right: 0;
   width: 100vw;
   height: 100vh;
-  background: white;
+  .modal__bg {
+    width: calc(100vw - 400px);
+    background: #3d3e41;
+    opacity: 0.6;
+  }
+
+  .modal__content {
+    width: 400px;
+    background: #1e1f21;
+    padding: 24px;
+    // border-left: 0.5px solid #e2e2e25f;
+    .form {
+      display: flex;
+      flex-direction: column;
+      .form__title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0 0 8px;
+      }
+      .form__description {
+        margin: 0 0 16px;
+
+      }
+      .form__input {
+        display: flex;
+        flex-direction: column;
+        margin: 12px 0;
+        label {
+          font-size: 12px;
+          padding: 0 0 6px;
+        }
+        input {
+          background: #252628;
+          border: 1px solid #e2e2e25f;
+          padding: 8px;
+        }
+        .form__select {
+          background: #252628;
+          border: 1px solid #e2e2e25f;
+          padding: 8px;
+        }
+      }
+      .form__button {
+        margin: 20px 0 0;
+        // max-width: 132px;
+      }
+    }
+  }
 }
 </style>

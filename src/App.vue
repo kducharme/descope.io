@@ -1,12 +1,12 @@
 <template>
-  <div v-if="appReady">
-    <div class="marketing" v-if="!user">
+  <div v-if="store.state.appReady">
+    <div class="marketing" v-if="!store.state.activeUser">
       <NavMarketing />
       <router-view />
     </div>
-    <div class="app" v-if="user">
+    <div class="app" v-if="store.state.activeUser">
       <div class="app__left">
-        <NavApp v-if="user" />
+        <NavApp />
       </div>
       <div class="app__right">
         <Subnav />
@@ -20,10 +20,10 @@
 import NavApp from "./components/nav/NavApp.vue";
 import NavMarketing from "./components/nav/NavMarketing.vue";
 import Subnav from "./components/nav/Subnav.vue";
-import { ref } from "vue";
+// import { ref } from "vue";
 import { supabase } from "./supabase/init";
 import store from "./store/index";
-import { computed } from "vue";
+// import { computed } from "vue";
 
 export default {
   components: {
@@ -32,28 +32,31 @@ export default {
     Subnav,
   },
   setup() {
+
     // Create data / vars
-    const appReady = ref(null);
+    // const appReady = ref(null);
 
     // Get user from store
-    const user = computed(() => store.state.user);
+    // const user = computed(() => store.state.user);
 
     // Check to see if user is already logged in
-    const loggedUser = supabase.auth.user();
+    // const loggedUser = supabase.auth.user();
 
     // If user does not exist, need to make app ready
-    if (!loggedUser) {
-      appReady.value = true;
-    }
+    // if (!loggedUser) {
+      //   appReady.value = true;
+    // }
 
     // Runs when there is a auth state change
     // if user is logged in, this will fire
     supabase.auth.onAuthStateChange((_, session) => {
-      store.methods.setUser(session);
-      appReady.value = true;
+      store.dispatch("getActiveUser", {
+        session
+      });
+
     });
 
-    return { appReady, user, loggedUser };
+    return {store };
   },
 };
 </script>

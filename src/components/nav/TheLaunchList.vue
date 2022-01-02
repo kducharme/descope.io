@@ -61,7 +61,6 @@ export default {
     padding: 8px 8px 8px 24px;
     .launches__img {
       width: 14px;
-      opacity: .8;
       margin-right: 8px;
     }
   }
