@@ -1,13 +1,28 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import Login from "../views/Login.vue";
-import Register from "../views/Register.vue";
+
+// Marketing pages
+import Welcome from "../views/marketing/Welcome.vue";
+import Login from "../views/marketing/Login.vue";
+import Signup from "../views/marketing/Signup.vue";
+import ConfirmEmail from "../views/marketing/ConfirmEmail.vue";
+
+// App pages
+import Home from "../views/app/Home.vue";
+import Launch from "../views/app/Launch.vue";
+import LaunchHistory from "../views/app/LaunchHistory.vue";
+
+// Getting subdomain info
+// const host = window.location.host;
+// const parts = host.split('.');
+// const domainLength = 3; // route1.example.com => domain length = 3
 
 const routes = [
+
+  // Marketing pages
   {
-    path: "/",
-    name: "Home",
-    component: Home,
+    path: "/welcome",
+    name: "Welcome",
+    component: Welcome,
   },
   {
     path: "/login",
@@ -15,9 +30,31 @@ const routes = [
     component: Login,
   },
   {
-    path: "/register",
-    name: "Register",
-    component: Register,
+    path: "/signup",
+    name: "Signup",
+    component: Signup,
+  },
+  {
+    path: "/confirm",
+    name: "ConfirmEmail",
+    component: ConfirmEmail,
+  },
+
+  // App pages
+  {
+    path: "/",
+    name: "Home",
+    component: Home,
+  },
+  {
+    path: "/history/",
+    name: "LaunchHistory",
+    component: LaunchHistory,
+  },
+  {
+    path: "/launch/:launchId",
+    name: "Launch",
+    component: Launch,
   },
 ];
 
