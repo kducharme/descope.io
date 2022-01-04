@@ -1,5 +1,9 @@
 <template>
-  <div v-if="store.state.appReady" class="app">
+  <div
+    v-if="store.state.appReady"
+    id="app"
+    class="app"
+  >
     <component :is="modal"></component>
     <component :is="nav"></component>
     <router-view :key="$route.fullPath" />
@@ -23,6 +27,7 @@ export default {
     TheOnboardingModal,
   },
   setup() {
+
     // Create data
     const modal = shallowRef(null);
     const nav = shallowRef(null);
@@ -37,6 +42,8 @@ export default {
     }
     if (!user) {
       nav.value = NavMarketing;
+      document.querySelector('#app').classList.remove('app');
+      document.querySelector('#app').classList.add('marketing');
     }
 
     // Runs when there is a auth state change
@@ -101,6 +108,11 @@ body {
 }
 
 .app {
+  display: flex;
+  flex-direction: row;
+}
+
+.marketing {
   display: flex;
   flex-direction: column;
 }

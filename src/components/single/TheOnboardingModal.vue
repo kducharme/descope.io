@@ -1,7 +1,5 @@
 <template>
-  <div class="modal">
-    <div class="modal__bg"></div>
-
+  <div class="modal" id="onboarding_modal">
     <div class="modal__content">
       <!-- Status Messages -->
       <div v-if="errorMsg" class="message">
@@ -44,7 +42,7 @@ import store from "../../store/index";
 export default {
   name: "TheOnboardingModal",
   components: {
-    BaseButton
+    BaseButton,
   },
   data() {
     return {
@@ -68,10 +66,11 @@ export default {
           lastname: lastName.value,
           email: user.email,
           updated_at: new Date(),
-          onboarded: true
+          onboarded: true,
         };
         let { error } = await supabase.from("profiles").upsert(updates);
         store.state.onboarded = true;
+        document.querySelector("#onboarding_modal").remove();
         if (error) {
           throw error;
         }
@@ -93,18 +92,17 @@ export default {
 <style lang="scss" scoped>
 .modal {
   display: flex;
+  justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  .modal__bg {
-    width: calc(100vw - 440px);
-    background: #3d3e41;
-    opacity: 0.6;
-  }
+  background: #333536bb;
 
   .modal__content {
+    position: fixed;
+    margin: 24px 0 0;
     width: 440px;
     background: #1e1f21;
     padding: 24px;
