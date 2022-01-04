@@ -9,7 +9,7 @@ export default new Vuex.Store({
         appReady: true,
 
         activeUser: null,
-        onboarded: true,
+        onboarded: null,
         organization: null,
         // organizationUsers: [],
 

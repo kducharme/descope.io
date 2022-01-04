@@ -1,11 +1,11 @@
 <template>
   <div v-if="store.state.appReady">
-    <div class="marketing" v-if="!store.state.activeUser">
+    <div class="marketing" v-if="!store.state.activeUser" v-cloak>
       <NavMarketing />
       <router-view />
     </div>
-    <div class="app" v-if="store.state.activeUser">
-      <TheOnboardingModal v-if="!store.state.onboarded" />
+    <div class="app" v-if="store.state.activeUser" v-cloak>
+      <component :is="modal"></component>
       <div class="app__left">
         <NavApp />
       </div>
@@ -24,6 +24,7 @@ import NavMarketing from "./components/nav/NavMarketing.vue";
 import Subnav from "./components/nav/Subnav.vue";
 import { supabase } from "./supabase/init";
 import store from "./store/index";
+import { shallowRef } from "vue";
 
 export default {
   components: {
@@ -33,6 +34,9 @@ export default {
     TheOnboardingModal,
   },
   setup() {
+    // Create data
+    const modal = shallowRef(null);
+
     // Runs when there is a auth state change
     supabase.auth.onAuthStateChange((_, session) => {
       if (session) {
@@ -51,7 +55,6 @@ export default {
     });
 
     const checkOnboardedStatus = async (session) => {
-
       // TODO - check if profile exists - then, if it does, check if onboarded
       const { data: profile } = await supabase
         .from("profiles")
@@ -59,12 +62,15 @@ export default {
         .eq("id", session.user.id)
         .single();
 
-      store.dispatch("setUserOnboardedStatus", {
-        profile,
-      });
+      if (!profile) {
+        modal.value = TheOnboardingModal;
+      }
+      if (profile) {
+        modal.value = null;
+      }
     };
 
-    return { store };
+    return { store, modal };
   },
 };
 </script>
