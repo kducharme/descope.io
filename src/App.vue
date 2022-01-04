@@ -5,7 +5,7 @@
       <router-view />
     </div>
     <div class="app" v-if="store.state.activeUser">
-      <TheOnboardingModal v-if="!store.state.onboarded"/>
+      <TheOnboardingModal v-if="!store.state.onboarded" />
       <div class="app__left">
         <NavApp />
       </div>
@@ -34,18 +34,35 @@ export default {
   },
   setup() {
     // Runs when there is a auth state change
-    // if user is logged in, this will fire
     supabase.auth.onAuthStateChange((_, session) => {
-      console.log(session)
       if (session) {
+        // Set the active user in Vuex store
+        // Set the active user in Vuex store
         store.dispatch("setActiveUser", {
           session,
         });
+
+        // Check if the user has been onboarded
+        checkOnboardedStatus(session);
       }
       if (!session) {
         store.dispatch("resetActiveUser");
       }
     });
+
+    const checkOnboardedStatus = async (session) => {
+
+      // TODO - check if profile exists - then, if it does, check if onboarded
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      store.dispatch("setUserOnboardedStatus", {
+        profile,
+      });
+    };
 
     return { store };
   },

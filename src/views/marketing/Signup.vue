@@ -9,14 +9,6 @@
     <form @submit.prevent="register">
       <h1>Create new account</h1>
       <div>
-        <label for="firstName">First name</label>
-        <input type="text" required id="firstName" v-model="firstName" />
-      </div>
-      <div>
-        <label for="lastName">Last name</label>
-        <input type="text" required id="lastName" v-model="lastName" />
-      </div>
-      <div>
         <label for="email">Email</label>
         <input type="text" required id="email" v-model="email" />
       </div>
@@ -90,7 +82,6 @@ export default {
       console.log('hi')
       try {
         const user = supabase.auth.user();
-        console.log(user)
         const updates = {
           id: user.id,
           firstname: firstName.value,

@@ -9,7 +9,7 @@ export default new Vuex.Store({
         appReady: true,
 
         activeUser: null,
-        onboarded: false,
+        onboarded: true,
         organization: null,
         // organizationUsers: [],
 
@@ -21,6 +21,9 @@ export default new Vuex.Store({
         },
         RESET_ACTIVE_USER: (state) => {
             state.activeUser = null;
+        },
+        SET_USER_ONBOARDED_STATUS: (state, status) => {
+            state.onboarded = status;
         },
         SET_LAUNCHES: (state, launches) => {
             state.launches = launches;
@@ -37,7 +40,15 @@ export default new Vuex.Store({
         },
         resetActiveUser(context) {
             context.commit("SET_ACTIVE_USER");
-
+        },
+        setUserOnboardedStatus(context, payload) {
+            console.log(payload.profile.onboarded)
+            if (payload.profile.onboarded) {
+                context.commit("SET_USER_ONBOARDED_STATUS", true);
+            }
+            if (!payload.profile.onboarded) {
+                context.commit("SET_USER_ONBOARDED_STATUS", false);
+            }
         },
         async getLaunches(context) {
             // Get data from supabase
