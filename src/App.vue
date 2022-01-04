@@ -1,9 +1,5 @@
 <template>
-  <div
-    v-if="store.state.appReady"
-    id="app"
-    class="app"
-  >
+  <div v-if="store.state.appReady" id="appContent">
     <component :is="modal"></component>
     <component :is="nav"></component>
     <router-view :key="$route.fullPath" />
@@ -27,7 +23,6 @@ export default {
     TheOnboardingModal,
   },
   setup() {
-
     // Create data
     const modal = shallowRef(null);
     const nav = shallowRef(null);
@@ -42,14 +37,14 @@ export default {
     }
     if (!user) {
       nav.value = NavMarketing;
-      document.querySelector('#app').classList.remove('app');
-      document.querySelector('#app').classList.add('marketing');
     }
 
     // Runs when there is a auth state change
     supabase.auth.onAuthStateChange((_, session) => {
       if (session) {
         nav.value = NavApp;
+        document.querySelector("#appContent").classList.add("app");
+        document.querySelector("#appContent").classList.remove("marketing");
         store.dispatch("setActiveUser", {
           session,
         });
@@ -59,6 +54,8 @@ export default {
       }
       if (!session) {
         nav.value = NavMarketing;
+        document.querySelector("#appContent").classList.remove("app");
+        document.querySelector("#appContent").classList.add("marketing");
         store.dispatch("resetActiveUser");
       }
     });

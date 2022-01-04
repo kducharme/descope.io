@@ -14,7 +14,7 @@
           accusantium doloremque laudantium.
         </p>
         <div class="form__input">
-          <label for="firstName">First name</label>
+          <label for="firstName">Full name</label>
           <input type="text" required id="firstName" v-model="firstName" />
         </div>
         <div class="form__input">
@@ -38,6 +38,7 @@ import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 import BaseButton from "../global/BaseButton.vue";
 import store from "../../store/index";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   name: "TheOnboardingModal",
@@ -55,9 +56,13 @@ export default {
     const firstName = ref(null);
     const lastName = ref(null);
     const errorMsg = ref(null);
+    const organization = ref(null);
 
     // Register function
     const createProfile = async () => {
+      // Generate unique id for organization
+      organization.value = uuidv4();
+
       try {
         const user = supabase.auth.user();
         const updates = {
@@ -67,6 +72,7 @@ export default {
           email: user.email,
           updated_at: new Date(),
           onboarded: true,
+          organization: organization.value
         };
         let { error } = await supabase.from("profiles").upsert(updates);
         store.state.onboarded = true;
