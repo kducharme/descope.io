@@ -15,19 +15,10 @@
         <label for="email">Email</label>
         <input type="text" required id="email" v-model="email" />
       </div>
-      <!-- <div>
+      <div>
         <label for="password">Password</label>
         <input type="password" required id="password" v-model="password" />
       </div>
-      <div>
-        <label for="confirmPassword">Confirm Password</label>
-        <input
-          type="password"
-          required
-          id="confirmPassword"
-          v-model="confirmPassword"
-        />
-      </div> -->
       <button type="submit">Sign up</button>
       <router-link :to="{ name: 'ConfirmEmail' }"
         >Already have an account? Log in.</router-link
@@ -49,7 +40,7 @@ export default {
     const firstName = ref(null);
     const lastName = ref(null);
     const email = ref(null);
-    // const password = ref(null);
+    const password = ref(null);
     // const confirmPassword = ref(null);
     const errorMsg = ref(null);
 
@@ -58,7 +49,7 @@ export default {
       try {
         let { error } = await supabase.auth.signUp({
           email: email.value,
-          // password: password.value,
+          password: password.value,
         });
         if (error) throw error;
 
@@ -99,6 +90,7 @@ export default {
       firstName,
       lastName,
       email,
+      password,
       errorMsg,
       register,
     };

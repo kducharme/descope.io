@@ -1,19 +1,8 @@
 <template>
-  <div v-if="store.state.appReady">
-    <div class="marketing" v-if="!store.state.activeUser" v-cloak>
-      <NavMarketing />
-      <router-view />
-    </div>
-    <div class="app" v-if="store.state.activeUser" v-cloak>
-      <component :is="modal"></component>
-      <div class="app__left">
-        <NavApp />
-      </div>
-      <div class="app__right">
-        <Subnav />
-        <router-view :key="$route.fullPath" />
-      </div>
-    </div>
+  <div v-if="store.state.appReady" class="app">
+    <component :is="modal"></component>
+    <component :is="nav"></component>
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 
@@ -36,12 +25,24 @@ export default {
   setup() {
     // Create data
     const modal = shallowRef(null);
+    const nav = shallowRef(null);
+
+    // Set active user
+    const user = supabase.auth.user();
+
+    // Configures the nav component
+
+    if (user) {
+      nav.value = NavApp;
+    }
+    if (!user) {
+      nav.value = NavMarketing;
+    }
 
     // Runs when there is a auth state change
     supabase.auth.onAuthStateChange((_, session) => {
       if (session) {
-        // Set the active user in Vuex store
-        // Set the active user in Vuex store
+        nav.value = NavApp;
         store.dispatch("setActiveUser", {
           session,
         });
@@ -50,6 +51,7 @@ export default {
         checkOnboardedStatus(session);
       }
       if (!session) {
+        nav.value = NavMarketing;
         store.dispatch("resetActiveUser");
       }
     });
@@ -70,7 +72,7 @@ export default {
       }
     };
 
-    return { store, modal };
+    return { store, modal, nav };
   },
 };
 </script>
@@ -100,6 +102,6 @@ body {
 
 .app {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 </style>
