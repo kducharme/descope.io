@@ -9,6 +9,14 @@
     <form @submit.prevent="register">
       <h1>Create new account</h1>
       <div>
+        <label for="firstName">First name</label>
+        <input type="text" required id="firstName" v-model="firstName" />
+      </div>
+      <div>
+        <label for="lastName">Last name</label>
+        <input type="text" required id="lastName" v-model="lastName" />
+      </div>
+      <div>
         <label for="email">Email</label>
         <input type="text" required id="email" v-model="email" />
       </div>
@@ -43,6 +51,8 @@ export default {
   setup() {
     // Create data / vars
     const router = useRouter();
+    const firstName = ref(null);
+    const lastName = ref(null);
     const email = ref(null);
     const password = ref(null);
     const confirmPassword = ref(null);
@@ -57,6 +67,11 @@ export default {
             password: password.value,
           });
           if (error) throw error;
+
+          // Check if the user has an active profile & set initial data
+          createProfile();
+
+          // Route user to the confirmation page
           router.push({ name: "ConfirmEmail" });
         } catch (error) {
           errorMsg.value = error.message;
@@ -71,8 +86,36 @@ export default {
         errorMsg.value = null;
       }, 5000);
     };
+    const createProfile = async () => {
+      console.log('hi')
+      try {
+        const user = supabase.auth.user();
+        console.log(user)
+        const updates = {
+          id: user.id,
+          firstname: firstName.value,
+          lastname: lastName.value,
+          email: email.value,
+          updated_at: new Date(),
+        };
+        let { error } = await supabase.from("profiles").upsert(updates);
+        if (error) {
+          throw error;
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
 
-    return { email, password, confirmPassword, errorMsg, register };
+    return {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      errorMsg,
+      register,
+    };
   },
 };
 </script>
@@ -93,6 +136,7 @@ form > div {
 
 input {
   border: 1px solid gray;
+  color: black;
 }
 
 button {

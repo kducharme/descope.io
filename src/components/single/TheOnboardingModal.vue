@@ -4,29 +4,24 @@
 
     <div class="modal__content">
       <!-- Status Messages -->
-      <div v-if="errorMsg || statusMsg" class="message">
+      <div v-if="errorMsg" class="message">
         <p v-if="errorMsg" class="message__error">{{ errorMsg }}</p>
-        <p v-if="statusMsg" class="message__status">{{ statusMsg }}</p>
       </div>
 
-      <!-- Create Launch Form -->
-      <form @submit.prevent="createLaunch" class="form">
-        <h1 class="form__title">Create a new launch</h1>
+      <!-- Onboarding Form -->
+      <form @submit.prevent="createProfile" class="form">
+        <h1 class="form__title">Welcome to LaunchDocs!</h1>
         <p class="form__description">
           Sed ut perspiciatis unde omnis iste natus error sit voluptat
           accusantium doloremque laudantium.
         </p>
         <div class="form__input">
-          <label for="launchName">Launch name</label>
-          <input type="text" required id="launchName" v-model="launchName" />
+          <label for="firstName">First name</label>
+          <input type="text" required id="firstName" v-model="firstName" />
         </div>
         <div class="form__input">
-          <label for="team">Team</label>
-          <div class="form__select" id="team">Select team</div>
-        </div>
-        <div class="form__input">
-          <label for="owner">Owner</label>
-          <div class="form__select" id="owner">{{ user.email }}</div>
+          <label for="lastName">Last name</label>
+          <input type="text" required id="lastName" v-model="lastName" />
         </div>
         <BaseButton
           type="submit"
@@ -43,73 +38,52 @@
 <script>
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
-import { v4 as uuidv4 } from "uuid";
-import { useRouter } from "vue-router";
 import BaseButton from "../global/BaseButton.vue";
+import store from "../../store/index";
 
 export default {
-  name: "TheCreateLaunchModal",
+  name: "TheOnboardingModal",
   components: {
-    BaseButton,
+    BaseButton
   },
   data() {
     return {
       priority: "Primary",
-      text: "Create launch",
+      text: "Save",
     };
   },
   setup() {
-    // Create data
-    const router = useRouter();
-    const team = ref(null);
-    const launchName = ref(null);
+    // Create data / vars
+    const firstName = ref(null);
+    const lastName = ref(null);
     const errorMsg = ref(null);
-    const statusMsg = ref(null);
-    const id = ref(null);
 
-    // Set active user
-    const user = supabase.auth.user();
-
-    const createLaunch = async () => {
-      // Generate unique id for launch
-      id.value = uuidv4();
-
+    // Register function
+    const createProfile = async () => {
       try {
-        const { error } = await supabase.from("launches").insert([
-          {
-            uniqueId: id.value,
-            name: launchName,
-            published: false,
-            created_by: user,
-          },
-        ]);
-        if (error) throw error;
-        routeToLaunch();
-
-        statusMsg.value = "Success";
-        setTimeout(() => {
-          statusMsg.value = null;
-        }, 5000);
+        const user = supabase.auth.user();
+        const updates = {
+          id: user.id,
+          firstname: firstName.value,
+          lastname: lastName.value,
+          email: user.email,
+          updated_at: new Date(),
+        };
+        let { error } = await supabase.from("profiles").upsert(updates);
+        store.state.onboarded = true;
+        if (error) {
+          throw error;
+        }
       } catch (error) {
-        errorMsg.value = `Error: ${error.message}`;
-        setTimeout(() => {
-          errorMsg.value = null;
-        }, 5000);
+        console.log(error.message);
       }
     };
 
-    // Route user to launch view
-    const routeToLaunch = () => {
-      router.push({ name: "Launch", params: { launchId: id.value } });
-      id.value = null;
-    };
     return {
-      createLaunch,
-      team,
-      launchName,
+      firstName,
+      lastName,
       errorMsg,
-      statusMsg,
-      user,
+      createProfile,
     };
   },
 };
@@ -144,7 +118,6 @@ export default {
       }
       .form__description {
         margin: 0 0 16px;
-
       }
       .form__input {
         display: flex;

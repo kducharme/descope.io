@@ -5,6 +5,7 @@
       <router-view />
     </div>
     <div class="app" v-if="store.state.activeUser">
+      <TheOnboardingModal v-if="!store.state.onboarded"/>
       <div class="app__left">
         <NavApp />
       </div>
@@ -17,24 +18,25 @@
 </template>
 
 <script>
+import TheOnboardingModal from "./components/single/TheOnboardingModal.vue";
 import NavApp from "./components/nav/NavApp.vue";
 import NavMarketing from "./components/nav/NavMarketing.vue";
 import Subnav from "./components/nav/Subnav.vue";
-// import { ref } from "vue";
 import { supabase } from "./supabase/init";
 import store from "./store/index";
-// import { computed } from "vue";
 
 export default {
   components: {
     NavApp,
     NavMarketing,
     Subnav,
+    TheOnboardingModal,
   },
   setup() {
     // Runs when there is a auth state change
     // if user is logged in, this will fire
     supabase.auth.onAuthStateChange((_, session) => {
+      console.log(session)
       if (session) {
         store.dispatch("setActiveUser", {
           session,

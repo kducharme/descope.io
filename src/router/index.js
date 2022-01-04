@@ -11,7 +11,14 @@ import Home from "../views/app/Home.vue";
 import Launch from "../views/app/Launch.vue";
 import LaunchHistory from "../views/app/LaunchHistory.vue";
 
+// Getting subdomain info
+// const host = window.location.host;
+// const parts = host.split('.');
+// const domainLength = 3; // route1.example.com => domain length = 3
+
 const routes = [
+
+  // Marketing pages
   {
     path: "/welcome",
     name: "Welcome",
@@ -32,6 +39,8 @@ const routes = [
     name: "ConfirmEmail",
     component: ConfirmEmail,
   },
+
+  // App pages
   {
     path: "/",
     name: "Home",
