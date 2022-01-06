@@ -8,8 +8,7 @@
     >
       <img src="../../assets/images/launch.svg" class="launches__img" />
       <p>{{ launch.name }}</p>
-      </router-link
-    >
+    </router-link>
   </div>
 </template>
 <script>
@@ -23,16 +22,29 @@ export default {
     // Create data
     const data = ref([]);
     const dataLoaded = ref(null);
+    const organization = ref(null);
 
     // Setup ref to router
     const router = useRouter();
 
+    // Set active user
+    const user = supabase.auth.user();
+
     // Get data
     const getData = async () => {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id);
+
+      organization.value = profile[0].organization;
+
       const { data: launch } = await supabase
         .from("launches")
         .select("*")
-        .eq("active", true);
+        .eq("organization", organization.value);
+
+        console.log(launch)
 
       data.value = launch;
       dataLoaded.value = true;

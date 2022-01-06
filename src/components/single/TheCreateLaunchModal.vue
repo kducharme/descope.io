@@ -82,7 +82,7 @@ export default {
         .select("*")
         .eq("id", user.id);
 
-      organization.value = profile;
+      organization.value = profile[0].organization;
 
       try {
         const { error } = await supabase.from("launches").insert([
@@ -90,8 +90,9 @@ export default {
             uniqueId: id.value,
             name: launchName.value,
             status: 'Draft',
+            active: true,
             created_by: user.id,
-            organization: organization.value[0].id,
+            organization: profile.value,
           },
         ]);
         if (error) throw error;
