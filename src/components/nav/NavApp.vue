@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav class="nav">
-      <TheCreateLaunchModal v-if="showCreateLaunchModal" />
+      <TheCreateLaunchModal v-if="store.state.createModal" />
       <div class="nav__top">
         <div class="logo" @click="navigateHome">
           <svg
@@ -55,6 +55,7 @@ import { useRouter } from "vue-router";
 import TheLaunchList from "./TheLaunchList.vue";
 import BaseButton from "../global/BaseButton.vue";
 import TheCreateLaunchModal from "../single/TheCreateLaunchModal.vue";
+import store from "../../store/index";
 
 export default {
   components: {
@@ -84,11 +85,11 @@ export default {
       router.push({ name: "Home" });
     };
 
-    return { logout, navigateHome };
+    return { store, logout, navigateHome };
   },
   methods: {
     showCreateModal() {
-      this.showCreateLaunchModal = true;
+      store.dispatch("showCreateLaunchModal");
     },
   },
 };

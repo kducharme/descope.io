@@ -13,14 +13,16 @@ export default new Vuex.Store({
         organization: null,
         // organizationUsers: [],
 
-        launches: []
+        launches: [],
+
+        // UI Elements
+        createModal: false
     },
     mutations: {
+        // SET STATE
+
         SET_ACTIVE_USER: (state, user) => {
             state.activeUser = user;
-        },
-        RESET_ACTIVE_USER: (state) => {
-            state.activeUser = null;
         },
         SET_USER_ONBOARDED_STATUS: (state, status) => {
             state.onboarded = status;
@@ -31,13 +33,40 @@ export default new Vuex.Store({
         SET_APP_STATUS: (state, status) => {
             state.appReady = status;
         },
+
+        // RESET STATE
+        RESET_ACTIVE_USER: (state) => {
+            state.activeUser = null;
+        },
+
+        // UI CONFIGRATUIONS
+        SHOW_CREATE_LAUNCH_MODAL: (state) => {
+            state.createModal = true;
+        },
+
+        HIDE_CREATE_LAUNCH_MODAL: (state) => {
+            state.createModal = false;
+        },
+
     },
     actions: {
+        // GET ACTIONS
+        async getLaunches(context) {
+            // Get data from supabase
+            const { data: launch } = await supabase
+                .from("launches")
+                .select("*")
+
+            context.commit("SET_LAUNCHES", launch);
+        },
+
+        // SET ACTIONS
         setActiveUser(context, payload) {
             context.commit("SET_ACTIVE_USER", payload.session.user);
             context.commit("SET_APP_STATUS", true);
-
         },
+
+        // RESET ACTIONS
         resetActiveUser(context) {
             context.commit("SET_ACTIVE_USER");
         },
@@ -50,13 +79,14 @@ export default new Vuex.Store({
                 context.commit("SET_USER_ONBOARDED_STATUS", false);
             }
         },
-        async getLaunches(context) {
-            // Get data from supabase
-            const { data: launch } = await supabase
-                .from("launches")
-                .select("*")
 
-            context.commit("SET_LAUNCHES", launch);
+        // UI CONFIG ACTIONS
+        showCreateLaunchModal(context) {
+            context.commit("SHOW_CREATE_LAUNCH_MODAL")
+        },
+
+        hideCreateLaunchModal(context) {
+            context.commit("HIDE_CREATE_LAUNCH_MODAL")
         },
     }
 });

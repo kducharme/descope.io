@@ -46,6 +46,7 @@ import { supabase } from "../../supabase/init";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "vue-router";
 import BaseButton from "../global/BaseButton.vue";
+import store from "../../store/index";
 
 export default {
   name: "TheCreateLaunchModal",
@@ -87,7 +88,7 @@ export default {
         const { error } = await supabase.from("launches").insert([
           {
             uniqueId: id.value,
-            name: launchName,
+            name: launchName.value,
             status: 'Draft',
             created_by: user.id,
             organization: organization.value[0].id,
@@ -95,6 +96,7 @@ export default {
         ]);
         if (error) throw error;
         routeToLaunch();
+        store.dispatch("hideCreateLaunchModal");
 
         statusMsg.value = "Success";
         setTimeout(() => {
