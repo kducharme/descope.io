@@ -63,6 +63,7 @@ export default {
     const router = useRouter();
     const team = ref(null);
     const launchName = ref(null);
+    const organization = ref(null);
     const errorMsg = ref(null);
     const statusMsg = ref(null);
     const id = ref(null);
@@ -74,13 +75,22 @@ export default {
       // Generate unique id for launch
       id.value = uuidv4();
 
+      // Get user's organization id
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id);
+
+      organization.value = profile;
+
       try {
         const { error } = await supabase.from("launches").insert([
           {
             uniqueId: id.value,
             name: launchName,
-            published: false,
-            created_by: user,
+            status: 'Draft',
+            created_by: user.id,
+            organization: organization.value[0].id,
           },
         ]);
         if (error) throw error;
