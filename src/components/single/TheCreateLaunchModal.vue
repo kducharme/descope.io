@@ -6,7 +6,6 @@
       <!-- Status Messages -->
       <div v-if="errorMsg || statusMsg" class="message">
         <p v-if="errorMsg" class="message__error">{{ errorMsg }}</p>
-        <p v-if="statusMsg" class="message__status">{{ statusMsg }}</p>
       </div>
 
       <!-- Create Launch Form -->
@@ -65,9 +64,7 @@ export default {
     const router = useRouter();
     const team = ref(null);
     const launchName = ref(null);
-    // const organization = ref(null);
     const errorMsg = ref(null);
-    const statusMsg = ref(null);
     const id = ref(null);
 
     // Closes modal when the background or "x" button  is clicked
@@ -80,13 +77,7 @@ export default {
       // Generate unique id for launch
       id.value = uuidv4();
 
-      // Get user's organization id
-      // const { data: profile } = await supabase
-      //   .from("profiles")
-      //   .select("*")
-      //   .eq("id", store.state.activeUser.id);
-
-      // organization.value = profile[0].organization;
+      // TODO - check if a launch already exists with that name
 
       try {
         const { error } = await supabase.from("launches").insert([
@@ -100,13 +91,10 @@ export default {
           },
         ]);
         if (error) throw error;
-        routeToLaunch();
-        store.dispatch("getLaunches");
-        store.dispatch("hideCreateLaunchModal");
-        statusMsg.value = "Success";
-        setTimeout(() => {
-          statusMsg.value = null;
-        }, 5000);
+        await store.dispatch("getLaunches");
+        await store.dispatch("hideCreateLaunchModal");
+        await routeToLaunch();
+
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
@@ -125,8 +113,6 @@ export default {
       team,
       launchName,
       errorMsg,
-      statusMsg,
-      // user,
       closeModal,
       store,
     };

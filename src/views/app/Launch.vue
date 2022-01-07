@@ -18,6 +18,8 @@ export default {
     // Setup ref to router
     const router = useRouter();
 
+    console.log(store.state.launches)
+
     // Create data
     const launchId = router.currentRoute.value.fullPath.split("/").pop();
     const data = ref([]);

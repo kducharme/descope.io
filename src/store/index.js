@@ -69,7 +69,8 @@ export default new Vuex.Store({
                 .from("launches")
                 .select("*")
                 .eq("organization", profile[0].organization)
-                
+                .order('name', { ascending: true })
+
                 context.commit("SET_LAUNCH_DATA", await launch);
         },
 
