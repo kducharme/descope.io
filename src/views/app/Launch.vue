@@ -1,8 +1,6 @@
 <template>
   <div v-if="dataLoaded" class="launch" :key="data.uniqueId">
     <div class="doc">
-      <!-- <LaunchDocName :name="this.data.name" />
-      <LaunchDocBody :body="this.data.content" /> -->
       {{ data.name }}
     </div>
   </div>
@@ -12,8 +10,7 @@
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
-// import LaunchDocBody from "./LaunchDocBody.vue";
-// import LaunchDocName from "./LaunchDocName.vue";
+import store from "../../store/index";
 
 export default {
   name: "Launch",
@@ -46,7 +43,7 @@ export default {
 
     console.log('loaded')
 
-    return { data, dataLoaded };
+    return { data, dataLoaded, store };
   },
 };
 </script>

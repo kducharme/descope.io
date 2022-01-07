@@ -1,6 +1,6 @@
 <template>
   <div class="modal">
-    <div class="modal__bg"></div>
+    <div class="modal__bg" @click="closeModal"></div>
 
     <div class="modal__content">
       <!-- Status Messages -->
@@ -72,6 +72,10 @@ export default {
     // Set active user
     const user = supabase.auth.user();
 
+    const closeModal = () => {
+      store.dispatch("hideCreateLaunchModal");
+    }
+
     const createLaunch = async () => {
       // Generate unique id for launch
       id.value = uuidv4();
@@ -92,7 +96,7 @@ export default {
             status: 'Draft',
             active: true,
             created_by: user.id,
-            organization: profile.value,
+            organization: organization.value,
           },
         ]);
         if (error) throw error;
@@ -123,6 +127,7 @@ export default {
       errorMsg,
       statusMsg,
       user,
+      closeModal
     };
   },
 };

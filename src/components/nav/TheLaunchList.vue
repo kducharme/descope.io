@@ -1,9 +1,9 @@
 <template>
-  <div v-if="dataLoaded" class="launches">
+  <div v-if="store.state.launches.length > 0" class="launches">
     <router-link
       class="launches__link"
       :to="{ name: 'Launch', params: { launchId: launch.uniqueId } }"
-      v-for="launch in data"
+      v-for="launch in store.state.launches"
       :key="launch.uniqueId"
     >
       <img src="../../assets/images/launch.svg" class="launches__img" />
@@ -12,42 +12,20 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
-import { supabase } from "../../supabase/init";
+// import { ref } from "vue";
+// import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
+import store from "../../store/index";
 
 export default {
   name: "TheLaunchList",
   setup() {
-    // Create data
-    const data = ref([]);
-    const dataLoaded = ref(null);
-    const organization = ref(null);
-
     // Setup ref to router
     const router = useRouter();
 
-    // Set active user
-    const user = supabase.auth.user();
-
     // Get data
     const getData = async () => {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id);
-
-      organization.value = profile[0].organization;
-
-      const { data: launch } = await supabase
-        .from("launches")
-        .select("*")
-        .eq("organization", organization.value);
-
-        console.log(launch)
-
-      data.value = launch;
-      dataLoaded.value = true;
+      store.dispatch("getLaunches");
     };
 
     // Run get data function
@@ -58,7 +36,7 @@ export default {
       router.push({ name: "Launch", params: { launchId: launch.uniqueId } });
     };
 
-    return { data, dataLoaded, displayLaunch };
+    return { displayLaunch, store };
   },
 };
 </script>

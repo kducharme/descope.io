@@ -20,15 +20,14 @@ export default new Vuex.Store({
     },
     mutations: {
         // SET STATE
-
+        SET_LAUNCH_DATA: (state, launches) => {
+            state.launches = launches;
+        },
         SET_ACTIVE_USER: (state, user) => {
             state.activeUser = user;
         },
         SET_USER_ONBOARDED_STATUS: (state, status) => {
             state.onboarded = status;
-        },
-        SET_LAUNCHES: (state, launches) => {
-            state.launches = launches;
         },
         SET_APP_STATUS: (state, status) => {
             state.appReady = status;
@@ -52,12 +51,22 @@ export default new Vuex.Store({
     actions: {
         // GET ACTIONS
         async getLaunches(context) {
+
+            const user = supabase.auth.user();
+
+            // Get the user's organization id
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id", user.id);
+
             // Get data from supabase
             const { data: launch } = await supabase
                 .from("launches")
                 .select("*")
-
-            context.commit("SET_LAUNCHES", launch);
+                .eq("organization", profile[0].organization)
+                
+                context.commit("SET_LAUNCH_DATA", await launch);
         },
 
         // SET ACTIONS
