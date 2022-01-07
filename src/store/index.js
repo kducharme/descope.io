@@ -11,8 +11,6 @@ export default new Vuex.Store({
         activeUser: null,
         onboarded: null,
         organization: null,
-        // organizationUsers: [],
-
         launches: [],
 
         // UI Elements
@@ -25,6 +23,9 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_USER: (state, user) => {
             state.activeUser = user;
+        },
+        SET_ORGANIZATION: (state, profile) => {
+            state.organization = profile[0].organization;
         },
         SET_USER_ONBOARDED_STATUS: (state, status) => {
             state.onboarded = status;
@@ -59,6 +60,9 @@ export default new Vuex.Store({
                 .from("profiles")
                 .select("*")
                 .eq("id", user.id);
+
+                context.commit("SET_ORGANIZATION", await profile);
+
 
             // Get data from supabase
             const { data: launch } = await supabase

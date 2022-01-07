@@ -8,16 +8,12 @@
 
 <script>
 import { ref } from "vue";
-import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import store from "../../store/index";
 
 export default {
   name: "Launch",
-  components: {
-    // LaunchDocBody,
-    // LaunchDocName
-  },
+  components: {},
   setup() {
     // Setup ref to router
     const router = useRouter();
@@ -28,22 +24,19 @@ export default {
     const dataLoaded = ref(null);
 
     // Get data
-    const getData = async () => {
-      const { data: launch } = await supabase
-        .from("launches")
-        .select("*")
-        .eq("uniqueId", launchId);
-
-      data.value = launch[0];
-      dataLoaded.value = true;
+    const getData = () => {
+      store.state.launches.forEach((launch) => {
+        if (launch.uniqueId === launchId) {
+          dataLoaded.value = true;
+          data.value = launch;
+        }
+      });
     };
 
     // Run get data function
     getData();
 
-    console.log('loaded')
-
-    return { data, dataLoaded, store };
+    return { data, dataLoaded };
   },
 };
 </script>

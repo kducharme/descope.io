@@ -26,13 +26,14 @@
         </div>
         <div class="form__input">
           <label for="owner">Owner</label>
-          <div class="form__select" id="owner">{{ user.email }}</div>
+          <div class="form__select" id="owner">
+            {{ store.state.activeUser.email }}
+          </div>
         </div>
         <BaseButton
           type="submit"
           :priority="priority"
           :text="text"
-          :action="showCreateModal"
           class="form__button"
         />
       </form>
@@ -64,45 +65,44 @@ export default {
     const router = useRouter();
     const team = ref(null);
     const launchName = ref(null);
-    const organization = ref(null);
+    // const organization = ref(null);
     const errorMsg = ref(null);
     const statusMsg = ref(null);
     const id = ref(null);
 
-    // Set active user
-    const user = supabase.auth.user();
-
+    // Closes modal when the background or "x" button  is clicked
     const closeModal = () => {
       store.dispatch("hideCreateLaunchModal");
-    }
+    };
 
+    // Creates a new launch in the db when the form is submitted
     const createLaunch = async () => {
       // Generate unique id for launch
       id.value = uuidv4();
 
       // Get user's organization id
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id);
+      // const { data: profile } = await supabase
+      //   .from("profiles")
+      //   .select("*")
+      //   .eq("id", store.state.activeUser.id);
 
-      organization.value = profile[0].organization;
+      // organization.value = profile[0].organization;
 
       try {
         const { error } = await supabase.from("launches").insert([
           {
             uniqueId: id.value,
             name: launchName.value,
-            status: 'Draft',
+            status: "Draft",
             active: true,
-            created_by: user.id,
-            organization: organization.value,
+            created_by: store.state.activeUser.id,
+            organization: store.state.organization,
           },
         ]);
         if (error) throw error;
         routeToLaunch();
+        store.dispatch("getLaunches");
         store.dispatch("hideCreateLaunchModal");
-
         statusMsg.value = "Success";
         setTimeout(() => {
           statusMsg.value = null;
@@ -126,8 +126,9 @@ export default {
       launchName,
       errorMsg,
       statusMsg,
-      user,
-      closeModal
+      // user,
+      closeModal,
+      store,
     };
   },
 };
@@ -162,7 +163,6 @@ export default {
       }
       .form__description {
         margin: 0 0 16px;
-
       }
       .form__input {
         display: flex;
