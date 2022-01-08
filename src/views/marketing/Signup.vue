@@ -67,7 +67,6 @@ export default {
       return;
     };
     const createProfile = async () => {
-      console.log("hi");
       try {
         const user = supabase.auth.user();
         const updates = {

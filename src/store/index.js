@@ -1,12 +1,14 @@
 // import Vue from 'vue'
 import Vuex from 'vuex'
 import { supabase } from "../supabase/init";
+import ENUM from "@/enums";
 
 // Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
         appReady: true,
+        database: ENUM.INIT,
 
         activeUser: null,
         onboarded: null,
@@ -20,7 +22,12 @@ export default new Vuex.Store({
         // SET STATE
         SET_LAUNCH_DATA: (state, launches) => {
             state.launches = launches;
+            state.database = ENUM.LOADED;
         },
+        SET_DATABASE_STATE: (state, databaseState) => {
+            state.database = databaseState;
+        },
+
         SET_ACTIVE_USER: (state, user) => {
             state.activeUser = user;
         },
@@ -52,6 +59,7 @@ export default new Vuex.Store({
     actions: {
         // GET ACTIONS
         async getLaunches(context) {
+            context.commit('SET_DATABASE_STATE', ENUM.LOADING);
 
             const user = supabase.auth.user();
 
@@ -61,17 +69,26 @@ export default new Vuex.Store({
                 .select("*")
                 .eq("id", user.id);
 
-                context.commit("SET_ORGANIZATION", await profile);
+            context.commit("SET_ORGANIZATION", await profile);
 
 
             // Get data from supabase
             const { data: launch } = await supabase
                 .from("launches")
                 .select("*")
-                .eq("organization", profile[0].organization)
-                .order('name', { ascending: true })
+                .eq("organization", profile[0].organization);
 
-                context.commit("SET_LAUNCH_DATA", await launch);
+            launch.forEach(launch => {
+                launch.name_low = launch.name.toLowerCase();
+            })
+
+            launch.sort((a,b) => {
+                if (a.name_low < b.name_low) { return -1; }
+                if (a.name_low > b.name_low) { return 1; }
+                return 0;
+            })
+
+            context.commit("SET_LAUNCH_DATA", await launch);
         },
 
         // SET ACTIONS
@@ -85,7 +102,6 @@ export default new Vuex.Store({
             context.commit("SET_ACTIVE_USER");
         },
         setUserOnboardedStatus(context, payload) {
-            console.log(payload.profile.onboarded)
             if (payload.profile.onboarded) {
                 context.commit("SET_USER_ONBOARDED_STATUS", true);
             }

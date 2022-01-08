@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-// import { ref } from "vue";
+import { ref } from "vue";
 // import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import store from "../../store/index";
@@ -20,12 +20,17 @@ import store from "../../store/index";
 export default {
   name: "TheLaunchList",
   setup() {
-    // Setup ref to router
+    
+    // Setup variables and data
     const router = useRouter();
+    const launches = ref(null);
 
-    // Get data
+    // Get data from store
     const getData = async () => {
       store.dispatch("getLaunches");
+      launches.value = store.state.launches;
+
+      await launches.value.sort();
     };
 
     // Run get data function

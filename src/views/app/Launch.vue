@@ -1,8 +1,6 @@
 <template>
-  <div v-if="dataLoaded" class="launch" :key="data.uniqueId">
-    <div class="doc">
-      {{ data.name }}
-    </div>
+  <div class="launch">
+    <div class="doc">{{ data.name }}</div>
   </div>
 </template>
 
@@ -14,11 +12,10 @@ import store from "../../store/index";
 export default {
   name: "Launch",
   components: {},
+  watch: {},
   setup() {
     // Setup ref to router
     const router = useRouter();
-
-    console.log(store.state.launches)
 
     // Create data
     const launchId = router.currentRoute.value.fullPath.split("/").pop();
@@ -26,8 +23,12 @@ export default {
     const dataLoaded = ref(null);
 
     // Get data
-    const getData = () => {
-      store.state.launches.forEach((launch) => {
+    const getData = async () => {
+
+      // TODO - need to refactor this
+      await store.dispatch("getLaunches");
+
+      await store.state.launches.forEach((launch) => {
         if (launch.uniqueId === launchId) {
           dataLoaded.value = true;
           data.value = launch;
@@ -38,7 +39,7 @@ export default {
     // Run get data function
     getData();
 
-    return { data, dataLoaded };
+    return { data, dataLoaded, store };
   },
 };
 </script>

@@ -52,12 +52,7 @@ export default {
       router.push({ name: "Welcome" });
     };
 
-    // Create new draft launch
-    const createLaunch = () => {
-      console.log('hi');
-    }
-
-    return { logout, user, createLaunch };
+    return { logout, user };
   },
 };
 </script>
