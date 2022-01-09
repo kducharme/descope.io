@@ -1,6 +1,6 @@
 <template>
-  <div class="launch">
-    <div class="doc">{{ data.name }}</div>
+  <div class="launch" v-if="store.state.appReady">
+    <Subnav :name="launch.name" />
   </div>
 </template>
 
@@ -8,30 +8,31 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import store from "../../store/index";
+import Subnav from "../../components/nav/Subnav.vue";
 
 export default {
   name: "Launch",
-  components: {},
-  watch: {},
+  components: {
+    Subnav,
+  },
   setup() {
     // Setup ref to router
     const router = useRouter();
 
     // Create data
     const launchId = router.currentRoute.value.fullPath.split("/").pop();
-    const data = ref([]);
+    const launch = ref([]);
     const dataLoaded = ref(null);
 
     // Get data
     const getData = async () => {
-
       // TODO - need to refactor this
       await store.dispatch("getLaunches");
 
-      await store.state.launches.forEach((launch) => {
-        if (launch.uniqueId === launchId) {
+      await store.state.launches.forEach((l) => {
+        if (l.uniqueId === launchId) {
           dataLoaded.value = true;
-          data.value = launch;
+          launch.value = l;
         }
       });
     };
@@ -39,23 +40,18 @@ export default {
     // Run get data function
     getData();
 
-    return { data, dataLoaded, store };
+    return { launch, dataLoaded, store };
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .launch {
-  width: calc(100vw - 260px);
-  height: calc(100vh - 72px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 0 0;
-  .doc {
-    height: 100%;
-    width: 80vw;
-    padding: 32px;
-  }
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+  // width: calc(100vw - 260px);
+  // height: calc(100vh - 72px);
+  // margin: 0;
 }
 </style>

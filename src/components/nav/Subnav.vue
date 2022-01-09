@@ -1,47 +1,44 @@
 <template>
   <header>
     <nav class="subnav">
-      <div class="subnav__left">I am the subnav</div>
-      <div class="subnav__right">
-        <!-- <BaseButton :type="type" :text="text" :action="action" /> -->
+      <div class="top">
+        <h2 class="title">{{ props.name }}</h2>
       </div>
+      <div class="bottom">Links</div>
     </nav>
   </header>
 </template>
 
 <script>
-// import BaseButton from "../global/BaseButton.vue";
-
 export default {
-  components: {
-    // BaseButton,
+  name: "BaseButton",
+  props: {
+    name: {
+      type: String,
+    },
   },
-  data() {
-    return {};
+  setup(props) {
+    console.log(props);
+
+    return { props };
   },
-  setup() {},
 };
 </script>
 
 <style lang="scss" scoped>
 .subnav {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
+  flex-direction: column;
   width: calc(100vw - 260px);
-  background: #1e1f21;
-  padding: 0 16px;
+  padding: 16px 24px;
   border-bottom: 0.5px solid #e2e2e25f;
-  .subnav__left,
-  .subnav__right {
-    width: 50%;
-  }
-  .subnav__right {
+  .top {
     display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
+    margin: 0 0 12px;
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+    }
   }
 }
 </style>

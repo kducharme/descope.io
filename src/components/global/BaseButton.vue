@@ -17,7 +17,7 @@
 import { ref } from "vue";
 
 export default {
-  name: "LaunchDocName",
+  name: "BaseButton",
   props: {
     text: {
       type: String,

@@ -1,14 +1,12 @@
 // import Vue from 'vue'
 import Vuex from 'vuex'
 import { supabase } from "../supabase/init";
-import ENUM from "@/enums";
 
 // Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
         appReady: true,
-        database: ENUM.INIT,
 
         activeUser: null,
         onboarded: null,
@@ -22,12 +20,7 @@ export default new Vuex.Store({
         // SET STATE
         SET_LAUNCH_DATA: (state, launches) => {
             state.launches = launches;
-            state.database = ENUM.LOADED;
         },
-        SET_DATABASE_STATE: (state, databaseState) => {
-            state.database = databaseState;
-        },
-
         SET_ACTIVE_USER: (state, user) => {
             state.activeUser = user;
         },
@@ -59,7 +52,6 @@ export default new Vuex.Store({
     actions: {
         // GET ACTIONS
         async getLaunches(context) {
-            context.commit('SET_DATABASE_STATE', ENUM.LOADING);
 
             const user = supabase.auth.user();
 
