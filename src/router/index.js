@@ -12,7 +12,7 @@ import Launch from "../views/app/Launch.vue";
 import Archive from "../views/app/LaunchHistory.vue";
 import Overview from "../views/app/Overview.vue";
 import Requirements from "../views/app/Requirements.vue";
-// import Feedback from "../views/app/Feedback.vue";
+import Feedback from "../views/app/Feedback.vue";
 
 const routes = [
 
@@ -53,16 +53,22 @@ const routes = [
     path: "/launch/:id",
     name: "launch",
     component: Launch,
+    redirect: { name: 'overview' },
     children: [
       {
-        path: "/launch/:id/overview",
+        path: "overview",
         name: "overview",
         component: Overview,
       },
       {
-        path: "/launch/:id/requirements",
+        path: "requirements",
         name: "requirements",
         component: Requirements,
+      },
+      {
+        path: "feedback",
+        name: "feedback",
+        component: Feedback,
       },
     ]
   },

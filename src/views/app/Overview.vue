@@ -1,15 +1,18 @@
 <template>
   <div class="body">
     <span>
-      I am the overview page
+      {{ store.state.activeLaunch.launch.name}}
     </span>
   </div>
 </template>
 
 <script>
+import store from "../../store/index";
 export default {
   name: "Overview",
-  setup() {},
+  setup() {
+    return {store};
+  },
 };
 </script>
 

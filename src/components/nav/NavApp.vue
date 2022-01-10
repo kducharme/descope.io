@@ -142,7 +142,7 @@ export default {
         margin: 0 0 0 -16px;
         padding: 10px 8px 10px 24px;
       }
-      .router-link-active {
+      .router-link-active, .router-link-exact-active {
         color: white;
         background: #414346;
       }

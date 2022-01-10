@@ -4,15 +4,19 @@
       <div class="top">
         <h2 class="title">{{ store.state.activeLaunch.launch.name }}</h2>
       </div>
-      <div class="bottom"></div>
-      <router-link class="nav__link" :to="{ name: 'overview' }"
-        >Overview</router-link
-      >
-      <router-link class="nav__link" :to="{ name: 'requirements' }"
-        >Requirements</router-link
-      >
-      <router-view />
+      <div class="bottom">
+        <router-link class="nav__link" :to="{ name: 'overview' }"
+          >Overview</router-link
+        >
+        <router-link class="nav__link" :to="{ name: 'requirements' }"
+          >Requirements</router-link
+        >
+        <router-link class="nav__link" :to="{ name: 'feedback' }"
+          >Feedback</router-link
+        >
+      </div>
     </nav>
+    <router-view />
   </div>
 </template>
 
@@ -50,9 +54,6 @@ export default {
     };
 
     getData();
-    // // Run get data function
-    // if (launchId.value !== store.state.activeLaunch.uniqueId) {
-    // }
 
     return { launch, dataLoaded, store, launchId };
   },
@@ -60,22 +61,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.launch {
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
-  // width: calc(100vw - 260px);
-  // height: calc(100vh - 72px);
-  // margin: 0;
-}
-
-.nav__link {
-  margin: 0 12px;
-}
-
-.router-link-active {
-  color: white;
-  font-weight: 600;
-  border-bottom: 1px solid white;
+// Subnav styling
+.subnav {
+  display: flex;
+  flex-direction: column;
+  width: calc(100vw - 260px);
+  padding: 0 24px;
+  border-bottom: 0.5px solid #e2e2e25f;
+  .top {
+    display: flex;
+    margin: 0 0 12px;
+    .title {
+      height: 24px;
+      font-size: 16px;
+      font-weight: 600;
+      margin: 20px 0 8px;
+    }
+  }
+  .bottom {
+    display: flex;
+    flex-direction: row;
+    .nav__link {
+      margin: 0 12px;
+      padding: 0 0 8px;
+    }
+    .nav__link:first-child {
+      margin: 0 12px 0 0;
+    }
+    .router-link-active {
+      color: white;
+      font-weight: 600;
+      border-bottom: 1px solid white;
+    }
+  }
 }
 </style>
