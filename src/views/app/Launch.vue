@@ -1,5 +1,5 @@
 <template>
-  <div class="launch" v-if="store.state.appReady">
+  <div class="launch" v-if="store.state.activeLaunch">
     <nav class="subnav">
       <div class="top">
         <h2 class="title">{{ store.state.activeLaunch.launch.name }}</h2>
@@ -49,9 +49,7 @@ export default {
       });
     };
 
-    console.log(store.state.activeLaunch.launch.uniqueId)
-
-      getData();
+    getData();
     // // Run get data function
     // if (launchId.value !== store.state.activeLaunch.uniqueId) {
     // }
