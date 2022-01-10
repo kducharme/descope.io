@@ -2,27 +2,23 @@
   <div v-if="store.state.launches.length > 0" class="launches">
     <router-link
       class="launches__link"
-      :to="{ name: 'Launch', params: { launchId: launch.uniqueId } }"
+      :to="{ name: 'launch', params: { id: launch.uniqueId },}"
       v-for="launch in store.state.launches"
       :key="launch.uniqueId"
     >
-      <img src="../../assets/images/launch.svg" class="launches__img" />
-      <p>{{ launch.name }}</p>
+      <img src="../../assets/images/launch.svg" class="launch__img" />
+      <p class="launch__text">{{ launch.name }}</p>
     </router-link>
   </div>
 </template>
 <script>
 import { ref } from "vue";
-// import { supabase } from "../../supabase/init";
-import { useRouter } from "vue-router";
 import store from "../../store/index";
 
 export default {
   name: "TheLaunchList",
   setup() {
-    
     // Setup variables and data
-    const router = useRouter();
     const launches = ref(null);
 
     // Get data from store
@@ -36,12 +32,7 @@ export default {
     // Run get data function
     getData();
 
-    // Route user to launch view
-    const displayLaunch = (launch) => {
-      router.push({ name: "Launch", params: { launchId: launch.uniqueId } });
-    };
-
-    return { displayLaunch, store };
+    return { store };
   },
 };
 </script>
@@ -53,8 +44,14 @@ export default {
   .launches__link {
     display: flex;
     margin: 0 0 0 -16px;
-    padding: 8px 8px 8px 24px;
-    .launches__img {
+    padding: 10px 8px 10px 24px;
+    .launch__text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
+    }
+    .launch__img {
       width: 14px;
       margin-right: 8px;
     }
@@ -65,8 +62,8 @@ export default {
   }
 }
 .router-link-active {
-  font-weight: 600;
+  // font-weight: 600;
   color: white;
-  background: #1e1f21;
+  background: #414346;
 }
 </style>

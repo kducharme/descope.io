@@ -27,6 +27,7 @@ export default {
     const modal = shallowRef(null);
     const nav = shallowRef(null);
 
+
     // Set active user
     const user = supabase.auth.user();
 
@@ -94,6 +95,11 @@ button {
   color: white;
   font-family: "Avenir";
   font-size: 14px;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
 }
 
 input {
@@ -102,6 +108,9 @@ input {
 
 body {
   background: #1e1f21;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .app {

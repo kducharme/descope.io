@@ -8,10 +8,14 @@ export default new Vuex.Store({
     state: {
         appReady: true,
 
+        // User Data
         activeUser: null,
         onboarded: null,
         organization: null,
+
+        // Launch Data
         launches: [],
+        activeLaunch: null,
 
         // UI Elements
         createModal: false
@@ -20,6 +24,9 @@ export default new Vuex.Store({
         // SET STATE
         SET_LAUNCH_DATA: (state, launches) => {
             state.launches = launches;
+        },
+        SET_ACTIVE_LAUNCH: (state, launch) => {
+            state.activeLaunch = launch;
         },
         SET_ACTIVE_USER: (state, user) => {
             state.activeUser = user;
@@ -88,7 +95,11 @@ export default new Vuex.Store({
             context.commit("SET_ACTIVE_USER", payload.session.user);
             context.commit("SET_APP_STATUS", true);
         },
-
+        setActiveLaunch(context, payload) {
+            if (payload.launch.uniqueId.length === 36) {
+                context.commit("SET_ACTIVE_LAUNCH", payload);
+            }
+        },
         // RESET ACTIONS
         resetActiveUser(context) {
             context.commit("SET_ACTIVE_USER");

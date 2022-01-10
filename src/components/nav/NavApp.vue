@@ -30,10 +30,10 @@
         </div>
 
         <div class="links">
-          <router-link class="nav__link" :to="{ name: 'Home' }"
+          <router-link class="nav__link" :to="{ name: 'home' }"
             >Home</router-link
           >
-          <router-link class="nav__link" :to="{ name: 'LaunchHistory' }"
+          <router-link class="nav__link" :to="{ name: 'archive' }"
             >Archive</router-link
           >
           <p class="links__title">Launches</p>
@@ -140,12 +140,11 @@ export default {
       }
       .nav__link {
         margin: 0 0 0 -16px;
-        padding: 8px 8px 8px 24px;
+        padding: 10px 8px 10px 24px;
       }
       .router-link-active {
-        font-weight: 600;
         color: white;
-        background: #1e1f21;
+        background: #414346;
       }
     }
   }

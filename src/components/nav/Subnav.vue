@@ -18,7 +18,6 @@ export default {
     },
   },
   setup(props) {
-    console.log(props);
 
     return { props };
   },
@@ -36,6 +35,7 @@ export default {
     display: flex;
     margin: 0 0 12px;
     .title {
+      height: 24px;
       font-size: 16px;
       font-weight: 600;
     }
