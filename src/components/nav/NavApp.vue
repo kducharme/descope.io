@@ -102,9 +102,9 @@ export default {
   align-items: flex-start;
   justify-content: space-between;
   height: 100vh;
-  width: 260px;
-  background: #252628;
   padding: 16px;
+  width: 240px;
+  background: #252628;
   .nav__top {
     width: 100%;
     .logo {

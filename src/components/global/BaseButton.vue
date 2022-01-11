@@ -60,6 +60,12 @@ export default {
   color: white;
 }
 
+.btn__primary:hover {
+  cursor: pointer;
+  background: #3549c5;
+
+}
+
 .btn__full {
   width: 100%;
 }

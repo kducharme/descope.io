@@ -106,6 +106,10 @@ input {
   color: #1e1f21;
 }
 
+div, span, section, article, nav{
+  box-sizing:border-box
+}
+
 body {
   background: #1e1f21;
   margin: 0;

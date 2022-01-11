@@ -92,8 +92,8 @@ export default {
         ]);
         if (error) throw error;
         await store.dispatch("getLaunches");
-        await store.dispatch("hideCreateLaunchModal");
         await routeToLaunch();
+        await store.dispatch("hideCreateLaunchModal");
 
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
@@ -105,7 +105,7 @@ export default {
 
     // Route user to launch view
     const routeToLaunch = () => {
-      router.push({ name: "Launch", params: { launchId: id.value } });
+      router.push({ name: "launch", params: { id: id.value } });
       id.value = null;
     };
     return {
