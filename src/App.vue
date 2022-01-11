@@ -91,6 +91,8 @@ h2,
 h3,
 p,
 a,
+div,
+input,
 button {
   color: white;
   font-family: "Avenir";
@@ -102,9 +104,6 @@ a {
   text-decoration: none;
 }
 
-input {
-  color: #1e1f21;
-}
 
 div, span, section, article, nav{
   box-sizing:border-box

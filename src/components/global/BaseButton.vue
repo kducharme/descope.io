@@ -48,7 +48,7 @@ export default {
 
 <style lang="scss" scoped>
 .btn {
-  height: 32px;
+  // height: 32px;
   border: none;
   border-radius: 2px;
   font-weight: 600;
@@ -56,6 +56,7 @@ export default {
 }
 
 .btn__primary {
+  padding: 6px 12px;
   background: #3d52d5;
   color: white;
 }
@@ -66,7 +67,15 @@ export default {
 
 }
 
+.btn__secondary {
+  background: transparent;
+  border: 1px solid #e2e2e25f;
+  padding: 8px 12px;
+  font-weight: 400;
+}
+
 .btn__full {
+  background: #3d52d5;
   width: 100%;
 }
 </style>

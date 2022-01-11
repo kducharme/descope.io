@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav class="nav">
-      <TheCreateLaunchModal v-if="store.state.createModal" />
+      <TheCreateLaunchModal v-if="store.state.createLaunchModal" />
       <div class="nav__top">
         <div class="logo" @click="navigateHome">
           <svg
@@ -67,7 +67,6 @@ export default {
     return {
       priority: "Primary",
       text: "New launch",
-      showCreateLaunchModal: false,
     };
   },
   setup() {

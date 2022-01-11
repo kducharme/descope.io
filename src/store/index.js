@@ -18,7 +18,8 @@ export default new Vuex.Store({
         activeLaunch: null,
 
         // UI Elements
-        createModal: false
+        createLaunchModal: false,
+        addFeedbackModal: false
     },
     mutations: {
         // SET STATE
@@ -48,13 +49,17 @@ export default new Vuex.Store({
 
         // UI CONFIGRATUIONS
         SHOW_CREATE_LAUNCH_MODAL: (state) => {
-            state.createModal = true;
+            state.createLaunchModal = true;
         },
-
         HIDE_CREATE_LAUNCH_MODAL: (state) => {
-            state.createModal = false;
+            state.createLaunchModal = false;
         },
-
+        SHOW_ADD_FEEDBACK_MODAL: (state) => {
+            state.addFeedbackModal = true;
+        },
+        HIDE_ADD_FEEDBACK_MODAL: (state) => {
+            state.addFeedbackModal = false;
+        },
     },
     actions: {
         // GET ACTIONS
@@ -120,6 +125,13 @@ export default new Vuex.Store({
 
         hideCreateLaunchModal(context) {
             context.commit("HIDE_CREATE_LAUNCH_MODAL")
+        },
+        showAddFeedbackModal(context) {
+            context.commit("SHOW_ADD_FEEDBACK_MODAL")
+        },
+
+        hideAddFeedbackModal(context) {
+            context.commit("HIDE_ADD_FEEDBACK_MODAL")
         },
     }
 });
