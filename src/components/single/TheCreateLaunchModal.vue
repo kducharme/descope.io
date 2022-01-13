@@ -80,12 +80,12 @@ export default {
       try {
         const { error } = await supabase.from("launches").insert([
           {
-            launch_id: id.value,
+            id: id.value,
             name: launchName.value,
             status: "Draft",
             active: true,
             created_by: store.state.activeUser.id,
-            organization: store.state.organization,
+            organization_id: store.state.organization,
           },
         ]);
         if (error) throw error;

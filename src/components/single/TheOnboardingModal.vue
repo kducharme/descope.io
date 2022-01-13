@@ -72,7 +72,7 @@ export default {
           email: user.email,
           updated_at: new Date(),
           onboarded: true,
-          organization: organization.value
+          organization_id: organization.value
         };
         let { error } = await supabase.from("profiles").upsert(updates);
         store.state.onboarded = true;

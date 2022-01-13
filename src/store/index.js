@@ -33,7 +33,7 @@ export default new Vuex.Store({
             state.activeUser = user;
         },
         SET_ORGANIZATION: (state, profile) => {
-            state.organization = profile[0].organization;
+            state.organization = profile[0].organization_id;
         },
         SET_USER_ONBOARDED_STATUS: (state, status) => {
             state.onboarded = status;
@@ -73,14 +73,16 @@ export default new Vuex.Store({
                 .select("*")
                 .eq("id", user.id);
 
-            context.commit("SET_ORGANIZATION", await profile);
-
+                
+                context.commit("SET_ORGANIZATION", await profile);
+                
+                console.log(profile)
 
             // Get data from supabase
             const { data: launch } = await supabase
                 .from("launches")
                 .select("*")
-                .eq("organization", profile[0].organization);
+                .eq("organization_id", profile[0].organization_id);
 
             launch.forEach(launch => {
                 launch.name_low = launch.name.toLowerCase();
@@ -101,7 +103,7 @@ export default new Vuex.Store({
             context.commit("SET_APP_STATUS", true);
         },
         setActiveLaunch(context, payload) {
-            if (payload.launch.launch_id.length === 36) {
+            if (payload.launch.id.length === 36) {
                 context.commit("SET_ACTIVE_LAUNCH", payload);
             }
         },

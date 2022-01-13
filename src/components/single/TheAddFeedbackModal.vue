@@ -12,17 +12,12 @@
       <div class="header">
         <h1 class="title">Add feedback</h1>
       </div>
-      <form @submit.prevent="createLaunch" class="form">
+      <form @submit.prevent="saveFeedback" class="form">
         <div class="form__input">
           <label for="imageUpload">Image</label>
-          <input
-            ref="image"
-            type="file"
-            id="imageUpload"
-            @change="handleFileUpload()"
-          />
+          <input ref="image" type="file" id="imageUpload" />
         </div>
-        <!-- <div class="form__input">
+        <div class="form__input">
           <label for="launchName">Notes</label>
           <textarea
             type="textarea"
@@ -65,7 +60,7 @@
             />
             <label class="radio__text" for="low">Low</label>
           </div> -->
-        <!-- </div> -->
+        </div>
         <BaseButton
           type="submit"
           :priority="priority"
@@ -79,14 +74,14 @@
 
 <script>
 import { ref } from "vue";
-// import { supabase } from "../../supabase/init";
+import { supabase } from "../../supabase/init";
 import { v4 as uuidv4 } from "uuid";
 // import { useRouter } from "vue-router";
 import BaseButton from "../global/BaseButton.vue";
 import store from "../../store/index";
 
 export default {
-  name: "TheCreateLaunchModal",
+  name: "TheAddFeedbackModal",
   components: {
     BaseButton,
   },
@@ -111,9 +106,11 @@ export default {
     };
 
     // Creates a new launch in the db when the form is submitted
-    const createLaunch = async () => {
+    const saveFeedback = async () => {
       // Generate unique id for launch
       id.value = uuidv4();
+
+      saveImageToDatabase();
 
       // TODO - check if a launch already exists with that name
 
@@ -143,9 +140,25 @@ export default {
       // }
     };
 
-    const handleFileUpload = async () => {
+    const saveImageToDatabase = async () => {
+      // const { data } = await supabase.storage.getBucket("feedback");
+      // console.log(data)
+      try {
+        const { error } = await supabase.storage
+          .from("launches")
+          .upload("feedback/" + id.value + ".png", image.value.files[0], {
+            cacheControl: "3600",
+            upsert: false,
+          });
+        if (error) throw error;
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
+      }
+
       // debugger;
-      console.log("selected file", image.value.files);
       //Upload to server
     };
 
@@ -155,14 +168,13 @@ export default {
     //   id.value = null;
     // };
     return {
-      createLaunch,
+      saveFeedback,
       details,
       image,
       feedbackPriority,
       errorMsg,
       closeModal,
       store,
-      handleFileUpload,
     };
   },
 };

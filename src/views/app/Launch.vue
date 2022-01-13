@@ -43,7 +43,7 @@ export default {
       await store.dispatch("getLaunches");
 
       await store.state.launches.forEach((launch) => {
-        if (launch.launch_id === launchId) {
+        if (launch.id === launchId) {
           dataLoaded.value = true;
           launch.value = launch;
           store.dispatch("setActiveLaunch", {
