@@ -25,8 +25,9 @@
             <th class="col col__actions">
               <input type="checkbox" id="select" />
             </th>
+            <th class="col col__image">Source</th>
             <th class="col col__image">Image</th>
-            <th class="col col__details">Description</th>
+            <th class="col col__details">Notes</th>
             <th class="col col__priority">Priority</th>
             <th class="col col__time">Added</th>
             <th class="col col__assignedby">Added by</th>
@@ -35,6 +36,7 @@
             <td class="col col__actions">
               <input type="checkbox" id="select" />
             </td>
+            <td class="col col__source">LaunchDocs</td>
             <td class="col col__image">
               <img
                 src="../../assets/images/feedback.png"
@@ -42,12 +44,16 @@
               />
             </td>
             <td class="col col__details">
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui
-              blanditiis praesentium voluptatum deleniti
+              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+              quae ab illo inventore veritatis et quasi architecto beatae vitae
+              dicta sunt explicabo.
             </td>
-            <td class="col col__priority">Pre-Launch</td>
+            <td class="col col__priority"><span class="tag">High</span></td>
             <td class="col col__time">24 min ago</td>
-            <td class="col col__assignedby">Cam Robert</td>
+            <td class="col col__assignedby">
+              <span class="initials">CR</span>Camden Ducharme
+            </td>
           </tr>
         </table>
       </div>
@@ -96,10 +102,11 @@ export default {
       display: flex;
       width: 50%;
       .form__select {
-        background: #252628;
-        border: 1px solid #e2e2e25f;
+        background: white;
+        border: 2px solid #cfd2de;
         padding: 8px;
         width: 220px;
+        border-radius: 3px;
       }
     }
     .actions__buttons {
@@ -134,12 +141,13 @@ export default {
       font-weight: 600;
     }
     td {
-      border-top: 0.5px solid #e2e2e25f;
-      border-bottom: 0.5px solid #e2e2e25f;
+      border-top: 1px solid #eeeff3;
+      border-bottom: 1px solid #eeeff3;
       height: 44px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      padding: 0 8px;
     }
     .table {
       width: calc(100vw - 240px - 48px);
@@ -162,16 +170,34 @@ export default {
       object-position: 50% 25%;
     }
     .col__details {
-      width: 32px;
+      max-width: 240px;
     }
     .col__priority {
-      width: 100px;
+      width: 64px;
+      max-width: 64px;
+      .tag {
+        background: #cf4d6f;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 3px;
+        font-size: 13px;
+      }
     }
     .col__time {
       width: 80px;
     }
     .col__assignedby {
-      width: 100px;
+      width: 140px;
+      .initials {
+        background: #3d52d5;
+        color: white;
+        height: 32px;
+        border-radius: 100%;
+        padding: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 8px;
+      }
     }
   }
 }

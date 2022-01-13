@@ -14,16 +14,52 @@
       </div>
       <form @submit.prevent="createLaunch" class="form">
         <div class="form__input">
-          <label for="launchName">Details</label>
-          <textarea type="textarea" required id="launchName" v-model="launchName" rows="4" cols="50" />
-        </div>
-        <div class="form__input">
-          <label for="team">Priority</label>
-          <div class="form__select" id="team">Select priority</div>
-        </div>
-        <div class="form__input">
           <label for="owner">Image</label>
-          <input type="file" id="myFile" name="filename">
+          <input type="file" id="myFile" name="filename" />
+        </div>
+        <div class="form__input">
+          <label for="launchName">Notes</label>
+          <textarea
+            type="textarea"
+            required
+            id="launchName"
+            v-model="launchName"
+            rows="4"
+            cols="50"
+          />
+        </div>
+        <div class="form__input">
+          <label for="launchName">Priority</label>
+          <div class="radio">
+            <input
+              class="radio__select"
+              type="radio"
+              id="high"
+              name="priority"
+              value="High"
+            />
+            <label class="radio__text" for="high">High</label>
+          </div>
+          <div class="radio">
+            <input
+              class="radio__select"
+              type="radio"
+              id="medium"
+              name="priority"
+              value="Medium"
+            />
+            <label class="radio__text" for="medium">Medium</label>
+          </div>
+          <div class="radio">
+            <input
+              class="radio__select"
+              type="radio"
+              id="low"
+              name="priority"
+              value="Low"
+            />
+            <label class="radio__text" for="low">Low</label>
+          </div>
         </div>
         <BaseButton
           type="submit"
@@ -82,6 +118,7 @@ export default {
             launch: store.state.activeLaunch.launch.uniqueId,
             completed: false,
             image: image.value,
+            source: 'LaunchDocs',
             description: details.value,
             priority: feedbackPriority.value,
             organization: store.state.organization,
@@ -133,25 +170,19 @@ export default {
   }
   .modal__content {
     width: 440px;
-    background: #1e1f21;
+    background: white;
+    padding: 24px;
     .header {
-      background: #252628;
-      padding: 24px;
+      display: flex;
       .title {
         font-size: 18px;
         font-weight: 600;
-      }
-      .title__project {
-        background: #1e1f21;
-        // font-size: 16px;
-        padding: 4px 8px;
-        margin: 0 0 0 8px;
+        margin: 0 0 8px;
       }
     }
     .form {
       display: flex;
       flex-direction: column;
-      padding: 24px;
       .form__input {
         display: flex;
         flex-direction: column;
@@ -160,15 +191,26 @@ export default {
           font-size: 12px;
           padding: 0 0 6px;
         }
-        input, textarea {
-          background: #252628;
-          border: 1px solid #e2e2e25f;
+        input,
+        textarea {
+          background: white;
+          border: 2px solid #eeeff3;
           padding: 8px;
+          resize: none;
         }
         .form__select {
-          background: #252628;
-          border: 1px solid #e2e2e25f;
+          background: white;
+          border: 2px solid #eeeff3;
           padding: 8px;
+        }
+        .radio {
+          margin: 6px 0;
+          .radio__select {
+            margin: 0 8px 0 0;
+          }
+          .radio__text {
+            font-size: 14px;
+          }
         }
       }
       .form__button {

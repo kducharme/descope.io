@@ -92,9 +92,8 @@ h3,
 p,
 a,
 div,
-input,
-button {
-  color: white;
+input {
+  color: #212430;
   font-family: "Avenir";
   font-size: 14px;
   margin: 0;
@@ -104,13 +103,19 @@ a {
   text-decoration: none;
 }
 
+input {
+  border: 2px solid #EEEFF3;
+  background: white;
+  padding: 8px;
+}
+
 
 div, span, section, article, nav{
   box-sizing:border-box
 }
 
 body {
-  background: #1e1f21;
+  background: white;
   margin: 0;
   padding: 0;
   box-sizing: border-box;

@@ -9,12 +9,10 @@
       </div>
 
       <!-- Create Launch Form -->
+      <div class="header">
+        <h1 class="title">Create new launch</h1>
+      </div>
       <form @submit.prevent="createLaunch" class="form">
-        <h1 class="form__title">Create a new launch</h1>
-        <p class="form__description">
-          Sed ut perspiciatis unde omnis iste natus error sit voluptat
-          accusantium doloremque laudantium.
-        </p>
         <div class="form__input">
           <label for="launchName">Launch name</label>
           <input type="text" required id="launchName" v-model="launchName" />
@@ -94,7 +92,6 @@ export default {
         await store.dispatch("getLaunches");
         await routeToLaunch();
         await store.dispatch("hideCreateLaunchModal");
-
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
@@ -129,49 +126,47 @@ export default {
   width: 100vw;
   height: 100vh;
   .modal__bg {
-    width: calc(100vw - 440px);
-    background: #3d3e41;
-    opacity: 0.6;
+    width: calc(100vw - 540px);
+    background: #212430;
+    opacity: 0.5;
   }
-
   .modal__content {
-    width: 440px;
-    background: #1e1f21;
+    width: 540px;
+    background: white;
     padding: 24px;
-    // border-left: 0.5px solid #e2e2e25f;
-    .form {
+    .header {
       display: flex;
-      flex-direction: column;
-      .form__title {
-        font-size: 18px;
+      // background: #eeeff3;
+      // border-bottom: 1px solid #CFD2DE;
+      .title {
+        font-size: 20px;
         font-weight: 600;
         margin: 0 0 8px;
       }
-      .form__description {
-        margin: 0 0 16px;
-      }
+    }
+    .form {
+      display: flex;
+      flex-direction: column;
       .form__input {
         display: flex;
         flex-direction: column;
         margin: 12px 0;
         label {
           font-size: 12px;
+          font-weight: 600;
+          color: #7c83a2;
           padding: 0 0 6px;
         }
-        input {
-          background: #252628;
-          border: 1px solid #e2e2e25f;
-          padding: 8px;
-        }
         .form__select {
-          background: #252628;
-          border: 1px solid #e2e2e25f;
+          border: 2px solid #eeeff3;
+          background: white;
           padding: 8px;
         }
       }
       .form__button {
         margin: 20px 0 0;
-        // max-width: 132px;
+        max-width: 132px;
+        height: 44px;
       }
     }
   }

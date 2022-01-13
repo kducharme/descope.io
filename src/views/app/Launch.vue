@@ -67,13 +67,13 @@ export default {
   flex-direction: column;
   width: calc(100vw - 240px);
   padding: 0 24px;
-  border-bottom: 0.5px solid #e2e2e25f;
+  border-bottom: 1px solid #EEEFF3;
   .top {
     display: flex;
     margin: 0 0 12px;
     .title {
-      height: 24px;
-      font-size: 16px;
+      height: 28px;
+      font-size: 18px;
       font-weight: 600;
       margin: 20px 0 8px;
     }
@@ -89,9 +89,9 @@ export default {
       margin: 0 12px 0 0;
     }
     .router-link-active {
-      color: white;
       font-weight: 600;
-      border-bottom: 1px solid white;
+      border-bottom: 2px solid #3d52d5;
+      border-radius: 2px;
     }
   }
 }

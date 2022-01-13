@@ -103,7 +103,7 @@ export default {
   height: 100vh;
   padding: 16px;
   width: 240px;
-  background: #252628;
+  background: #eeeff3;
   .nav__top {
     width: 100%;
     .logo {
@@ -141,9 +141,10 @@ export default {
         margin: 0 0 0 -16px;
         padding: 10px 8px 10px 24px;
       }
-      .router-link-active, .router-link-exact-active {
-        color: white;
-        background: #414346;
+      .router-link-active,
+      .router-link-exact-active {
+        font-weight: 500;
+        background: #dbdde6;
       }
     }
   }
@@ -151,6 +152,7 @@ export default {
     border-top: 0.5px solid #e2e2e25f;
     width: 100%;
     padding: 16px 0 8px;
+    color: white;
     .nav__link--logout:hover {
       cursor: pointer;
     }
