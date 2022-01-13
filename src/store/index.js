@@ -101,7 +101,7 @@ export default new Vuex.Store({
             context.commit("SET_APP_STATUS", true);
         },
         setActiveLaunch(context, payload) {
-            if (payload.launch.uniqueId.length === 36) {
+            if (payload.launch.launch_id.length === 36) {
                 context.commit("SET_ACTIVE_LAUNCH", payload);
             }
         },

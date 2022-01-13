@@ -14,10 +14,15 @@
       </div>
       <form @submit.prevent="createLaunch" class="form">
         <div class="form__input">
-          <label for="owner">Image</label>
-          <input type="file" id="myFile" name="filename" />
+          <label for="imageUpload">Image</label>
+          <input
+            ref="image"
+            type="file"
+            id="imageUpload"
+            @change="handleFileUpload()"
+          />
         </div>
-        <div class="form__input">
+        <!-- <div class="form__input">
           <label for="launchName">Notes</label>
           <textarea
             type="textarea"
@@ -59,8 +64,8 @@
               value="Low"
             />
             <label class="radio__text" for="low">Low</label>
-          </div>
-        </div>
+          </div> -->
+        <!-- </div> -->
         <BaseButton
           type="submit"
           :priority="priority"
@@ -74,9 +79,9 @@
 
 <script>
 import { ref } from "vue";
-import { supabase } from "../../supabase/init";
+// import { supabase } from "../../supabase/init";
 import { v4 as uuidv4 } from "uuid";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 import BaseButton from "../global/BaseButton.vue";
 import store from "../../store/index";
 
@@ -93,7 +98,7 @@ export default {
   },
   setup() {
     // Create data
-    const router = useRouter();
+    // const router = useRouter();
     const details = ref(null);
     const image = ref(null);
     const feedbackPriority = ref(null);
@@ -112,36 +117,43 @@ export default {
 
       // TODO - check if a launch already exists with that name
 
-      try {
-        const { error } = await supabase.from("launches").insert([
-          {
-            launch: store.state.activeLaunch.launch.uniqueId,
-            completed: false,
-            image: image.value,
-            source: 'LaunchDocs',
-            description: details.value,
-            priority: feedbackPriority.value,
-            organization: store.state.organization,
-            created_by: store.state.activeUser.id,
-          },
-        ]);
-        if (error) throw error;
-        await store.dispatch("getLaunches");
-        await routeToLaunch();
-        await store.dispatch("hideCreateLaunchModal");
-      } catch (error) {
-        errorMsg.value = `Error: ${error.message}`;
-        setTimeout(() => {
-          errorMsg.value = null;
-        }, 5000);
-      }
+      // try {
+      //   const { error } = await supabase.from("launches").insert([
+      //     {
+      //       feedback_id: id.value,
+      //       launch_id: store.state.activeLaunch.launch.launch_id,
+      //       organization_id: store.state.organization,
+      //       completed: false,
+      //       image: image.value,
+      //       source: "LaunchDocs",
+      //       description: details.value,
+      //       priority: feedbackPriority.value,
+      //       created_by: store.state.activeUser.id,
+      //     },
+      //   ]);
+      //   if (error) throw error;
+      //   await store.dispatch("getLaunches");
+      //   await routeToLaunch();
+      //   await store.dispatch("hideCreateLaunchModal");
+      // } catch (error) {
+      //   errorMsg.value = `Error: ${error.message}`;
+      //   setTimeout(() => {
+      //     errorMsg.value = null;
+      //   }, 5000);
+      // }
+    };
+
+    const handleFileUpload = async () => {
+      // debugger;
+      console.log("selected file", image.value.files);
+      //Upload to server
     };
 
     // Route user to launch view
-    const routeToLaunch = () => {
-      router.push({ name: "launch", params: { id: id.value } });
-      id.value = null;
-    };
+    // const routeToLaunch = () => {
+    //   router.push({ name: "launch", params: { id: id.value } });
+    //   id.value = null;
+    // };
     return {
       createLaunch,
       details,
@@ -150,6 +162,7 @@ export default {
       errorMsg,
       closeModal,
       store,
+      handleFileUpload,
     };
   },
 };

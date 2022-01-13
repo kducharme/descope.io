@@ -43,7 +43,7 @@ export default {
       await store.dispatch("getLaunches");
 
       await store.state.launches.forEach((launch) => {
-        if (launch.uniqueId === launchId) {
+        if (launch.launch_id === launchId) {
           dataLoaded.value = true;
           launch.value = launch;
           store.dispatch("setActiveLaunch", {
@@ -72,10 +72,10 @@ export default {
     display: flex;
     margin: 0 0 12px;
     .title {
-      height: 28px;
+      // height: 28px;
       font-size: 18px;
       font-weight: 600;
-      margin: 20px 0 8px;
+      margin: 16px 0 8px;
     }
   }
   .bottom {

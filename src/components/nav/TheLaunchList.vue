@@ -2,9 +2,9 @@
   <div v-if="store.state.launches.length > 0" class="launches">
     <router-link
       class="launches__link"
-      :to="{ name: 'launch', params: { id: launch.uniqueId },}"
+      :to="{ name: 'launch', params: { id: launch.launch_id },}"
       v-for="launch in store.state.launches"
-      :key="launch.uniqueId"
+      :key="launch.launch_id"
     >
       <img src="../../assets/images/launch__dark.svg" class="launch__img" />
       <p class="launch__text">{{ launch.name }}</p>
