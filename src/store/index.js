@@ -100,26 +100,37 @@ export default new Vuex.Store({
         },
 
         async getFeedback(context) {
+            // Create variables
+            const moment = require('moment')
+
             const { data: feedback } = await supabase
                 .from("feedback")
                 .select("*")
                 .eq("launch_id", context.state.activeLaunch.launch.id);
 
-
-            feedback.forEach(fb => {
+            for (const fb of feedback) {
                 fb._addedBy = context.state.profile.firstname + " " + context.state.profile.lastname;
                 fb._initials = context.state.profile.firstname.charAt(0) + context.state.profile.lastname.charAt(0);
+                fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
 
-                
-                // Set created at date
-                const moment = require('moment')
-                fb._dateAdded = moment(fb.created_at).startOf('hour').fromNow();
-            })
+                // Get images and add it to the feedback object
 
+                if (fb.image) {
+                    const { data: data } = await supabase.storage
+                        .from("launches")
+                        .download(`feedback/${fb.image}`)
+
+                    // const image = new File([data], `${fb.image}`);
+                    fb._image = data;
+
+                }
+                else {
+                    fb._image = null;
+                }
+            }
             context.commit("SET_FEEDBACK_DATA", await feedback);
 
         },
-
         // SET ACTIONS
         setActiveUser(context, payload) {
             context.commit("SET_ACTIVE_USER", payload.session.user);

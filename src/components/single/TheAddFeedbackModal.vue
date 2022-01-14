@@ -32,16 +32,19 @@
           <label for="priority">Priority</label>
           <div class="radio">
             <input
+              name="priority"
               class="radio__select"
               type="radio"
               id="high"
               value="High"
               v-model="feedbackPriority"
+              required
             />
             <label class="radio__text" for="high">High</label>
           </div>
           <div class="radio">
             <input
+              name="priority"
               class="radio__select"
               type="radio"
               id="medium"
@@ -52,6 +55,7 @@
           </div>
           <div class="radio">
             <input
+              name="priority"
               class="radio__select"
               type="radio"
               id="low"
@@ -96,6 +100,7 @@ export default {
     // const router = useRouter();
     const feedbackDetails = ref(null);
     const feedbackImage = ref(null);
+    const feedbackImageLink = ref(null);
     const feedbackPriority = ref(null);
     const errorMsg = ref(null);
     const id = ref(null);
@@ -113,6 +118,10 @@ export default {
 
       saveImageToDatabase();
 
+      if (feedbackImage.value.files[0]) {
+        feedbackImageLink.value = id.value + ".png";
+      }
+
       try {
         const { error } = await supabase.from("feedback").insert([
           {
@@ -120,7 +129,7 @@ export default {
             launch_id: store.state.activeLaunch.launch.id,
             organization_id: store.state.organization,
             completed: false,
-            image: id.value + ".png",
+            image: feedbackImageLink.value,
             source: "LaunchDocs",
             description: feedbackDetails.value,
             priority: feedbackPriority.value,

@@ -19,7 +19,7 @@
     <div class="feedback">
       <!-- Outstanding feedback -->
       <div class="feedback__outstanding">
-        <!-- <h2 class="title">Outstanding</h2> -->
+        <!-- Table header -->
         <table class="table">
           <tr>
             <th class="col col__actions">
@@ -32,27 +32,24 @@
             <th class="col col__time">Added</th>
             <th class="col col__assignedby">Added by</th>
           </tr>
-          <tr
-            v-for="feedback in store.state.feedback"
-            :key="feedback.id">
+
+          <!-- Table rows -->
+          <tr v-for="feedback in store.state.feedback" :key="feedback.id">
             <td class="col col__actions">
               <input type="checkbox" id="select" />
             </td>
             <td class="col col__source">{{ feedback.source }}</td>
-            <td class="col col__image">
-              <img
-                :src="`${ feedback.image }`"
-                class="col__image--asset"
-              />
-            </td>
+            <td class="col col__image" :id="`img_${feedback.id}`"></td>
             <td class="col col__details">
               {{ feedback.description }}
             </td>
-            <td class="col col__priority"><span class="tag">{{ feedback.priority }}</span></td>
+            <td class="col col__priority">
+              <span class="tag">{{ feedback.priority }}</span>
+            </td>
             <td class="col col__time">{{ feedback._dateAdded }}</td>
             <td class="col col__assignedby">
               <span class="initials">{{ feedback._initials }}</span>
-              {{ feedback._addedBy}}
+              {{ feedback._addedBy }}
             </td>
           </tr>
         </table>
@@ -80,8 +77,27 @@ export default {
     };
   },
   setup() {
+    // Define variables
 
-    return { store };
+    const loadImages = () => {
+      store.state.feedback.forEach((fb) => {
+        if (fb._image) {
+          const url = URL.createObjectURL(fb._image);
+          const img = new Image();
+          img.src = url;
+          img.height = '40';
+          img.width = '40';
+          document.querySelector(`#img_${fb.id}`).appendChild(img);
+        }
+      });
+    };
+
+    // loadImages();
+
+    return { store, loadImages };
+  },
+  mounted() {
+    this.loadImages();
   },
   methods: {
     showAddFeedbackModal() {
@@ -165,11 +181,12 @@ export default {
     }
     .col__image {
       width: 48px;
-    }
-    .col__image--asset {
-      height: 32px;
-      object-fit: cover;
-      object-position: 50% 25%;
+      .col__image > img {
+        height: 32px!important;
+        width: 32px;
+        object-fit: cover;
+        object-position: 50% 25%;
+      }
     }
     .col__details {
       max-width: 240px;
@@ -186,13 +203,14 @@ export default {
       }
     }
     .col__time {
-      width: 80px;
+      width: 88px;
+      max-width: 88px;
     }
     .col__assignedby {
       width: 140px;
       .initials {
-        background: #eeeff3;
-        color: #6D769C;
+        background: #ced1de;
+        color: white;
         height: 32px;
         border-radius: 100%;
         padding: 6px;
