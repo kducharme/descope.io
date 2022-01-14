@@ -25,8 +25,6 @@ export default {
     const getData = async () => {
       store.dispatch("getLaunches");
       launches.value = store.state.launches;
-
-      await launches.value.sort();
     };
 
     // Run get data function

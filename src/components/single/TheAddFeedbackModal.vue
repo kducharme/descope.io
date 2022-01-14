@@ -99,6 +99,7 @@ export default {
     const feedbackPriority = ref(null);
     const errorMsg = ref(null);
     const id = ref(null);
+    // const launchId = router.currentRoute.value.fullPath.split("/")[2];
 
     // Closes modal when the background or "x" button  is clicked
     const closeModal = () => {
@@ -127,6 +128,7 @@ export default {
           },
         ]);
         if (error) throw error;
+        await store.dispatch("getFeedback");
         await store.dispatch("hideAddFeedbackModal");
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
@@ -140,10 +142,14 @@ export default {
       try {
         const { error } = await supabase.storage
           .from("launches")
-          .upload("feedback/" + id.value + ".png", feedbackImage.value.files[0], {
-            cacheControl: "3600",
-            upsert: false,
-          });
+          .upload(
+            "feedback/" + id.value + ".png",
+            feedbackImage.value.files[0],
+            {
+              cacheControl: "3600",
+              upsert: false,
+            }
+          );
         if (error) throw error;
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;

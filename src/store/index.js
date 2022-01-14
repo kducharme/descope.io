@@ -27,7 +27,6 @@ export default new Vuex.Store({
         },
         SET_FEEDBACK_DATA: (state, feedback) => {
             state.feedback = feedback;
-            console.log(state.feedback)
         },
         SET_ACTIVE_LAUNCH: (state, launch) => {
             state.activeLaunch = launch;
@@ -99,13 +98,23 @@ export default new Vuex.Store({
         },
 
         async getFeedback(context, payload) {
+            if (payload) {
+                const { data: feedback } = await supabase
+                    .from("feedback")
+                    .select("*")
+                    .eq("launch_id", payload.launch.id);
 
-            const { data: feedback } = await supabase
-                .from("feedback")
-                .select("*")
-                .eq("launch_id", payload.launch.id);
+                context.commit("SET_FEEDBACK_DATA", await feedback);
+            }
+            else {
+                const { data: feedback } = await supabase
+                    .from("feedback")
+                    .select("*")
+                    .eq("launch_id", context.state.activeLaunch.launch.id);
 
-            context.commit("SET_FEEDBACK_DATA", await feedback);
+                context.commit("SET_FEEDBACK_DATA", await feedback);
+            }
+
         },
 
         // SET ACTIONS

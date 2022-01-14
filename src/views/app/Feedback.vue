@@ -80,17 +80,6 @@ export default {
     };
   },
   setup() {
-    // Setup variables and data
-    // const feedback = ref(null);
-
-    // // Get data from store
-    // const getFeedback = async () => {
-    //   store.dispatch("getFeedback");
-    //   feedback.value = store.state.feedback;
-    // };
-
-    // Run the get data function
-    // getFeedback();
 
     return { store };
   },
