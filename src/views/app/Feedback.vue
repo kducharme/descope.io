@@ -39,7 +39,9 @@
               <input type="checkbox" id="select" />
             </td>
             <td class="col col__source">{{ feedback.source }}</td>
-            <td class="col col__image" :id="`img_${feedback.id}`"></td>
+            <td class="col col__image">
+              <img :id="`img_${feedback.id}`" :src="`${feedback._image}`" class="col__image--asset" />
+            </td>
             <td class="col col__details">
               {{ feedback.description }}
             </td>
@@ -85,8 +87,8 @@ export default {
           const url = URL.createObjectURL(fb._image);
           const img = new Image();
           img.src = url;
-          img.height = '40';
-          img.width = '40';
+          img.height = "40";
+          img.width = "40";
           document.querySelector(`#img_${fb.id}`).appendChild(img);
         }
       });
@@ -97,7 +99,7 @@ export default {
     return { store, loadImages };
   },
   mounted() {
-    this.loadImages();
+    // this.loadImages();
   },
   methods: {
     showAddFeedbackModal() {
@@ -181,8 +183,8 @@ export default {
     }
     .col__image {
       width: 48px;
-      .col__image > img {
-        height: 32px!important;
+      .col__image--asset{
+        height: 32px !important;
         width: 32px;
         object-fit: cover;
         object-position: 50% 25%;

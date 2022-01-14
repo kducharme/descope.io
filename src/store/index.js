@@ -120,9 +120,8 @@ export default new Vuex.Store({
                         .from("launches")
                         .download(`feedback/${fb.image}`)
 
-                    // const image = new File([data], `${fb.image}`);
-                    fb._image = data;
-
+                    const url = URL.createObjectURL(data);
+                    fb._image = url;
                 }
                 else {
                     fb._image = null;
