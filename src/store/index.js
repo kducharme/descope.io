@@ -1,6 +1,6 @@
-// import Vue from 'vue'
 import Vuex from 'vuex'
 import { supabase } from "../supabase/init";
+
 
 export default new Vuex.Store({
     state: {
@@ -110,14 +110,10 @@ export default new Vuex.Store({
                 fb._addedBy = context.state.profile.firstname + " " + context.state.profile.lastname;
                 fb._initials = context.state.profile.firstname.charAt(0) + context.state.profile.lastname.charAt(0);
 
+                
                 // Set created at date
-                const date = new Date(fb.created_at)
-                const dateFormat = 
-                    date.toLocaleString('default', { month: 'short' }) + " " +
-                    date.getUTCDate() + ", " +
-                    date.getUTCFullYear();
-
-                fb._dateAdded = dateFormat;
+                const moment = require('moment')
+                fb._dateAdded = moment(fb.created_at).startOf('hour').fromNow();
             })
 
             context.commit("SET_FEEDBACK_DATA", await feedback);

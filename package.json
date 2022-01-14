@@ -12,11 +12,13 @@
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9",
     "core-js": "^3.6.5",
+    "moment": "^2.29.1",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
     "uid": "^2.0.0",
     "uuid": "^8.3.2",
     "vue": "^3.0.0",
+    "vue-moment": "^4.1.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.2"
   },
