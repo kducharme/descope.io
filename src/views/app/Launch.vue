@@ -49,6 +49,9 @@ export default {
           store.dispatch("setActiveLaunch", {
             launch,
           });
+          store.dispatch("getFeedback", {
+            launch
+          });
         }
       });
     };
@@ -67,7 +70,7 @@ export default {
   flex-direction: column;
   width: calc(100vw - 240px);
   padding: 0 24px;
-  border-bottom: 1px solid #EEEFF3;
+  border-bottom: 1px solid #eeeff3;
   .top {
     display: flex;
     margin: 0 0 12px;

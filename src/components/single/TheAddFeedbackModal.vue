@@ -15,15 +15,15 @@
       <form @submit.prevent="saveFeedback" class="form">
         <div class="form__input">
           <label for="imageUpload">Image</label>
-          <input ref="image" type="file" id="imageUpload" />
+          <input ref="feedbackImage" type="file" id="imageUpload" />
         </div>
         <div class="form__input">
-          <label for="launchName">Notes</label>
+          <label for="feedbackDetails">Details</label>
           <textarea
             type="textarea"
             required
-            id="launchName"
-            v-model="launchName"
+            id="feedbackDetails"
+            v-model="feedbackDetails"
             rows="4"
             cols="50"
           />
@@ -59,7 +59,7 @@
               value="Low"
             />
             <label class="radio__text" for="low">Low</label>
-          </div> -->
+          </div>
         </div>
         <BaseButton
           type="submit"
@@ -94,8 +94,8 @@ export default {
   setup() {
     // Create data
     // const router = useRouter();
-    const details = ref(null);
-    const image = ref(null);
+    const feedbackDetails = ref(null);
+    const feedbackImage = ref(null);
     const feedbackPriority = ref(null);
     const errorMsg = ref(null);
     const id = ref(null);
@@ -112,41 +112,35 @@ export default {
 
       saveImageToDatabase();
 
-      // TODO - check if a launch already exists with that name
-
-      // try {
-      //   const { error } = await supabase.from("launches").insert([
-      //     {
-      //       feedback_id: id.value,
-      //       launch_id: store.state.activeLaunch.launch.launch_id,
-      //       organization_id: store.state.organization,
-      //       completed: false,
-      //       image: image.value,
-      //       source: "LaunchDocs",
-      //       description: details.value,
-      //       priority: feedbackPriority.value,
-      //       created_by: store.state.activeUser.id,
-      //     },
-      //   ]);
-      //   if (error) throw error;
-      //   await store.dispatch("getLaunches");
-      //   await routeToLaunch();
-      //   await store.dispatch("hideCreateLaunchModal");
-      // } catch (error) {
-      //   errorMsg.value = `Error: ${error.message}`;
-      //   setTimeout(() => {
-      //     errorMsg.value = null;
-      //   }, 5000);
-      // }
+      try {
+        const { error } = await supabase.from("feedback").insert([
+          {
+            id: id.value,
+            launch_id: store.state.activeLaunch.launch.id,
+            organization_id: store.state.organization,
+            completed: false,
+            image: id.value + ".png",
+            source: "LaunchDocs",
+            description: feedbackDetails.value,
+            priority: feedbackPriority.value,
+            created_by: store.state.activeUser.id,
+          },
+        ]);
+        if (error) throw error;
+        await store.dispatch("hideAddFeedbackModal");
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
+      }
     };
 
     const saveImageToDatabase = async () => {
-      // const { data } = await supabase.storage.getBucket("feedback");
-      // console.log(data)
       try {
         const { error } = await supabase.storage
           .from("launches")
-          .upload("feedback/" + id.value + ".png", image.value.files[0], {
+          .upload("feedback/" + id.value + ".png", feedbackImage.value.files[0], {
             cacheControl: "3600",
             upsert: false,
           });
@@ -169,8 +163,8 @@ export default {
     // };
     return {
       saveFeedback,
-      details,
-      image,
+      feedbackDetails,
+      feedbackImage,
       feedbackPriority,
       errorMsg,
       closeModal,
@@ -239,7 +233,7 @@ export default {
         }
       }
       .form__button {
-        margin: 20px 0 0;
+        margin: 8px 0 0;
         max-width: 132px;
       }
     }

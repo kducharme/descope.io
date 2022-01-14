@@ -2,8 +2,6 @@
 import Vuex from 'vuex'
 import { supabase } from "../supabase/init";
 
-// Vue.use(Vuex);
-
 export default new Vuex.Store({
     state: {
         appReady: true,
@@ -16,6 +14,7 @@ export default new Vuex.Store({
         // Launch Data
         launches: [],
         activeLaunch: null,
+        feedback: [],
 
         // UI Elements
         createLaunchModal: false,
@@ -25,6 +24,10 @@ export default new Vuex.Store({
         // SET STATE
         SET_LAUNCH_DATA: (state, launches) => {
             state.launches = launches;
+        },
+        SET_FEEDBACK_DATA: (state, feedback) => {
+            state.feedback = feedback;
+            console.log(state.feedback)
         },
         SET_ACTIVE_LAUNCH: (state, launch) => {
             state.activeLaunch = launch;
@@ -73,10 +76,7 @@ export default new Vuex.Store({
                 .select("*")
                 .eq("id", user.id);
 
-                
-                context.commit("SET_ORGANIZATION", await profile);
-                
-                console.log(profile)
+            context.commit("SET_ORGANIZATION", await profile);
 
             // Get data from supabase
             const { data: launch } = await supabase
@@ -88,13 +88,24 @@ export default new Vuex.Store({
                 launch.name_low = launch.name.toLowerCase();
             })
 
-            launch.sort((a,b) => {
+            // Sort launches
+            launch.sort((a, b) => {
                 if (a.name_low < b.name_low) { return -1; }
                 if (a.name_low > b.name_low) { return 1; }
                 return 0;
             })
 
             context.commit("SET_LAUNCH_DATA", await launch);
+        },
+
+        async getFeedback(context, payload) {
+
+            const { data: feedback } = await supabase
+                .from("feedback")
+                .select("*")
+                .eq("launch_id", payload.launch.id);
+
+            context.commit("SET_FEEDBACK_DATA", await feedback);
         },
 
         // SET ACTIONS

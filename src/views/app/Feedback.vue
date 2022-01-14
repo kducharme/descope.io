@@ -32,27 +32,27 @@
             <th class="col col__time">Added</th>
             <th class="col col__assignedby">Added by</th>
           </tr>
-          <tr>
+          <tr
+            v-for="feedback in store.state.feedback"
+            :key="feedback.id">
             <td class="col col__actions">
               <input type="checkbox" id="select" />
             </td>
-            <td class="col col__source">LaunchDocs</td>
+            <td class="col col__source">{{ feedback.source }}</td>
             <td class="col col__image">
               <img
-                src="../../assets/images/feedback.png"
+                :src="`${ feedback.image }`"
                 class="col__image--asset"
               />
             </td>
             <td class="col col__details">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore veritatis et quasi architecto beatae vitae
-              dicta sunt explicabo.
+              {{ feedback.description }}
             </td>
-            <td class="col col__priority"><span class="tag">High</span></td>
-            <td class="col col__time">24 min ago</td>
+            <td class="col col__priority"><span class="tag">{{ feedback.priority }}</span></td>
+            <td class="col col__time">{{ feedback.created_at }}</td>
             <td class="col col__assignedby">
-              <span class="initials">CR</span>Camden Ducharme
+              <!-- <span class="initials">CR</span> -->
+              {{ feedback.created_by }}
             </td>
           </tr>
         </table>
@@ -62,9 +62,10 @@
 </template>
 
 <script>
+// import { ref } from "vue";
+import store from "../../store/index";
 import BaseButton from "../../components/global/BaseButton.vue";
 import TheAddFeedbackModal from "../../components/single/TheAddFeedbackModal.vue";
-import store from "../../store/index";
 
 export default {
   name: "Launch Feedback",
@@ -79,6 +80,18 @@ export default {
     };
   },
   setup() {
+    // Setup variables and data
+    // const feedback = ref(null);
+
+    // // Get data from store
+    // const getFeedback = async () => {
+    //   store.dispatch("getFeedback");
+    //   feedback.value = store.state.feedback;
+    // };
+
+    // Run the get data function
+    // getFeedback();
+
     return { store };
   },
   methods: {

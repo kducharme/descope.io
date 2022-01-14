@@ -92,7 +92,8 @@ h3,
 p,
 a,
 div,
-input {
+input,
+textarea {
   color: #212430;
   font-family: "Avenir";
   font-size: 14px;
