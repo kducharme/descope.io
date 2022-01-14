@@ -64,6 +64,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.launch {
+  margin: 0 0 0 240px;
+}
 // Subnav styling
 .subnav {
   display: flex;

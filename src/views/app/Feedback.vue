@@ -49,10 +49,10 @@
               {{ feedback.description }}
             </td>
             <td class="col col__priority"><span class="tag">{{ feedback.priority }}</span></td>
-            <td class="col col__time">{{ feedback.created_at }}</td>
+            <td class="col col__time">{{ feedback._dateAdded }}</td>
             <td class="col col__assignedby">
-              <!-- <span class="initials">CR</span> -->
-              {{ feedback.created_by }}
+              <span class="initials">{{ feedback._initials }}</span>
+              {{ feedback._addedBy}}
             </td>
           </tr>
         </table>
@@ -175,8 +175,8 @@ export default {
       max-width: 240px;
     }
     .col__priority {
-      width: 64px;
-      max-width: 64px;
+      width: 72px;
+      max-width: 72px;
       .tag {
         background: #cf4d6f;
         color: white;
@@ -191,14 +191,14 @@ export default {
     .col__assignedby {
       width: 140px;
       .initials {
-        background: #3d52d5;
-        color: white;
+        background: #eeeff3;
+        color: #6D769C;
         height: 32px;
         border-radius: 100%;
         padding: 6px;
-        font-size: 12px;
+        font-size: 11.5px;
         font-weight: 600;
-        margin-right: 8px;
+        margin-right: 4px;
       }
     }
   }

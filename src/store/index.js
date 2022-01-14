@@ -9,6 +9,7 @@ export default new Vuex.Store({
         // User Data
         activeUser: null,
         onboarded: null,
+        profile: null,
         organization: null,
 
         // Launch Data
@@ -34,7 +35,8 @@ export default new Vuex.Store({
         SET_ACTIVE_USER: (state, user) => {
             state.activeUser = user;
         },
-        SET_ORGANIZATION: (state, profile) => {
+        SET_PROFILE: (state, profile) => {
+            state.profile = profile[0];
             state.organization = profile[0].organization_id;
         },
         SET_USER_ONBOARDED_STATUS: (state, status) => {
@@ -75,7 +77,7 @@ export default new Vuex.Store({
                 .select("*")
                 .eq("id", user.id);
 
-            context.commit("SET_ORGANIZATION", await profile);
+            context.commit("SET_PROFILE", await profile);
 
             // Get data from supabase
             const { data: launch } = await supabase
@@ -97,23 +99,28 @@ export default new Vuex.Store({
             context.commit("SET_LAUNCH_DATA", await launch);
         },
 
-        async getFeedback(context, payload) {
-            if (payload) {
-                const { data: feedback } = await supabase
-                    .from("feedback")
-                    .select("*")
-                    .eq("launch_id", payload.launch.id);
+        async getFeedback(context) {
+            const { data: feedback } = await supabase
+                .from("feedback")
+                .select("*")
+                .eq("launch_id", context.state.activeLaunch.launch.id);
 
-                context.commit("SET_FEEDBACK_DATA", await feedback);
-            }
-            else {
-                const { data: feedback } = await supabase
-                    .from("feedback")
-                    .select("*")
-                    .eq("launch_id", context.state.activeLaunch.launch.id);
 
-                context.commit("SET_FEEDBACK_DATA", await feedback);
-            }
+            feedback.forEach(fb => {
+                fb._addedBy = context.state.profile.firstname + " " + context.state.profile.lastname;
+                fb._initials = context.state.profile.firstname.charAt(0) + context.state.profile.lastname.charAt(0);
+
+                // Set created at date
+                const date = new Date(fb.created_at)
+                const dateFormat = 
+                    date.toLocaleString('default', { month: 'short' }) + " " +
+                    date.getUTCDate() + ", " +
+                    date.getUTCFullYear();
+
+                fb._dateAdded = dateFormat;
+            })
+
+            context.commit("SET_FEEDBACK_DATA", await feedback);
 
         },
 

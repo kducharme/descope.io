@@ -29,14 +29,14 @@
           />
         </div>
         <div class="form__input">
-          <label for="launchName">Priority</label>
+          <label for="priority">Priority</label>
           <div class="radio">
             <input
               class="radio__select"
               type="radio"
               id="high"
-              name="priority"
               value="High"
+              v-model="feedbackPriority"
             />
             <label class="radio__text" for="high">High</label>
           </div>
@@ -45,8 +45,8 @@
               class="radio__select"
               type="radio"
               id="medium"
-              name="priority"
               value="Medium"
+              v-model="feedbackPriority"
             />
             <label class="radio__text" for="medium">Medium</label>
           </div>
@@ -55,8 +55,8 @@
               class="radio__select"
               type="radio"
               id="low"
-              name="priority"
               value="Low"
+              v-model="feedbackPriority"
             />
             <label class="radio__text" for="low">Low</label>
           </div>
@@ -139,27 +139,26 @@ export default {
     };
 
     const saveImageToDatabase = async () => {
-      try {
-        const { error } = await supabase.storage
-          .from("launches")
-          .upload(
-            "feedback/" + id.value + ".png",
-            feedbackImage.value.files[0],
-            {
-              cacheControl: "3600",
-              upsert: false,
-            }
-          );
-        if (error) throw error;
-      } catch (error) {
-        errorMsg.value = `Error: ${error.message}`;
-        setTimeout(() => {
-          errorMsg.value = null;
-        }, 5000);
+      if (feedbackImage.value.files[0]) {
+        try {
+          const { error } = await supabase.storage
+            .from("launches")
+            .upload(
+              "feedback/" + id.value + ".png",
+              feedbackImage.value.files[0],
+              {
+                cacheControl: "3600",
+                upsert: false,
+              }
+            );
+          if (error) throw error;
+        } catch (error) {
+          errorMsg.value = `Error: ${error.message}`;
+          setTimeout(() => {
+            errorMsg.value = null;
+          }, 5000);
+        }
       }
-
-      // debugger;
-      //Upload to server
     };
 
     // Route user to launch view

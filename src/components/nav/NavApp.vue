@@ -96,6 +96,9 @@ export default {
 
 <style lang="scss" scoped>
 .nav {
+  position: fixed;
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
