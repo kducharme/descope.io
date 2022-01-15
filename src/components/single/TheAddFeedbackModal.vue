@@ -4,7 +4,7 @@
 
     <div class="modal__content">
       <!-- Status Messages -->
-      <div v-if="errorMsg || statusMsg" class="message">
+      <div v-if="errorMsg" class="message">
         <p v-if="errorMsg" class="message__error">{{ errorMsg }}</p>
       </div>
 
@@ -15,7 +15,15 @@
       <form @submit.prevent="saveFeedback" class="form">
         <div class="form__input">
           <label for="imageUpload">Image</label>
-          <input ref="feedbackImage" type="file" id="imageUpload" />
+          <div>
+            <img src="" alt="" id="output" />
+          </div>
+          <input
+            type="file"
+            id="imageUpload"
+            accept="image/*"
+            @change="compressImage"
+          />
         </div>
         <div class="form__input">
           <label for="feedbackDetails">Details</label>
@@ -80,9 +88,9 @@
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 import { v4 as uuidv4 } from "uuid";
-// import { useRouter } from "vue-router";
 import BaseButton from "../global/BaseButton.vue";
 import store from "../../store/index";
+import { decode } from "base64-arraybuffer";
 
 export default {
   name: "TheAddFeedbackModal",
@@ -93,52 +101,83 @@ export default {
     return {
       priority: "Primary",
       text: "Save feedback",
+      selectedImage: null,
     };
   },
   setup() {
     // Create data
-    // const router = useRouter();
     const feedbackDetails = ref(null);
-    const feedbackImage = ref(null);
-    const feedbackImageLink = ref(null);
+    const image = ref(null);
+    const imageName = ref(null);
     const feedbackPriority = ref(null);
     const errorMsg = ref(null);
     const id = ref(null);
-    // const launchId = router.currentRoute.value.fullPath.split("/")[2];
+    const fileInput = ref(null);
 
-    // Closes modal when the background or "x" button  is clicked
-    const closeModal = () => {
-      store.dispatch("hideAddFeedbackModal");
+    // When a user selects an image, this function is called
+    const compressImage = () => {
+      const file = document.querySelector("#imageUpload").files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = function (event) {
+        const imgElement = document.createElement("img");
+        imgElement.src = event.target.result;
+
+        imgElement.onload = function (e) {
+          const canvas = document.createElement("canvas");
+          const width = 800;
+          const scaleSize = width / e.target.width;
+
+          canvas.width = width;
+          canvas.height = e.target.height * scaleSize;
+
+          const ctx = canvas.getContext("2d");
+
+          ctx.drawImage(e.target, 0, 0, canvas.width, canvas.height);
+
+          const srcEncoded = ctx.canvas.toDataURL(e.target, "image/jpeg");
+          // document.querySelector("#output").src = srcEncoded;
+          return (image.value = srcEncoded);
+        };
+      };
     };
 
-    // Creates a new launch in the db when the form is submitted
+    // When a user submits the form, this function is called
+
     const saveFeedback = async () => {
-      // Generate unique id for launch
+      // Generate unique id for feedback
       id.value = uuidv4();
 
-      saveImageToDatabase();
+      // Generate unqiue name for image
+      generateImageName(id);
 
-      if (feedbackImage.value.files[0]) {
-        feedbackImageLink.value = id.value + ".png";
-      }
+      // Upload the image to supabase
+      uploadImageToDatabase();
 
+      // Adds feedback object to supabase
+      addFeedbackToDatabase();
+
+      // Closes the modal once data is added to supabase
+      await closeModal();
+
+      // Refreshes the feedback table
+      await store.dispatch("getFeedback");
+    };
+
+    const generateImageName = (id) => {
+      if (!image.value) return;
+      return (imageName.value = id.value + ".jpeg");
+    };
+
+    const uploadImageToDatabase = async () => {
       try {
-        const { error } = await supabase.from("feedback").insert([
-          {
-            id: id.value,
-            launch_id: store.state.activeLaunch.launch.id,
-            organization_id: store.state.organization,
-            completed: false,
-            image: feedbackImageLink.value,
-            source: "LaunchDocs",
-            description: feedbackDetails.value,
-            priority: feedbackPriority.value,
-            created_by: store.state.activeUser.id,
-          },
-        ]);
+        const { error } = await supabase.storage
+          .from("launches")
+          .upload("feedback/" + id.value + ".jpeg", decode(image.value), {
+            contentType: "image/jpeg",
+          });
         if (error) throw error;
-        await store.dispatch("getFeedback");
-        await store.dispatch("hideAddFeedbackModal");
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
@@ -147,42 +186,45 @@ export default {
       }
     };
 
-    const saveImageToDatabase = async () => {
-      if (feedbackImage.value.files[0]) {
-        try {
-          const { error } = await supabase.storage
-            .from("launches")
-            .upload(
-              "feedback/" + id.value + ".png",
-              feedbackImage.value.files[0],
-              {
-                cacheControl: "3600",
-                upsert: false,
-              }
-            );
-          if (error) throw error;
-        } catch (error) {
-          errorMsg.value = `Error: ${error.message}`;
-          setTimeout(() => {
-            errorMsg.value = null;
-          }, 5000);
-        }
+    const addFeedbackToDatabase = async () => {
+      try {
+        const { error } = await supabase.from("feedback").insert([
+          {
+            id: id.value,
+            launch_id: store.state.activeLaunch.launch.id,
+            organization_id: store.state.organization,
+            completed: false,
+            image: imageName.value,
+            source: "LaunchDocs",
+            description: feedbackDetails.value,
+            priority: feedbackPriority.value,
+            created_by: store.state.activeUser.id,
+          },
+        ]);
+
+        if (error) throw error;
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
       }
     };
 
-    // Route user to launch view
-    // const routeToLaunch = () => {
-    //   router.push({ name: "launch", params: { id: id.value } });
-    //   id.value = null;
-    // };
+    // Closes modal when the background or "x" button  is clicked
+    const closeModal = () => {
+      store.dispatch("hideAddFeedbackModal");
+    };
     return {
       saveFeedback,
       feedbackDetails,
-      feedbackImage,
+      image,
+      compressImage,
       feedbackPriority,
       errorMsg,
       closeModal,
       store,
+      fileInput,
     };
   },
 };

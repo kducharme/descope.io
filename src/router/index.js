@@ -53,7 +53,7 @@ const routes = [
     path: "/launch/:id",
     name: "launch",
     component: Launch,
-    redirect: { name: 'feedback' },
+    redirect: { name: 'overview' },
     children: [
       {
         path: "overview",

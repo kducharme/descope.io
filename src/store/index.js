@@ -116,15 +116,15 @@ export default new Vuex.Store({
                 // Get images and add it to the feedback object
 
                 if (fb.image) {
-                    const { data: data } = await supabase.storage
+                    const { data: img } = await supabase.storage
                         .from("launches")
                         .download(`feedback/${fb.image}`)
 
-                    const url = URL.createObjectURL(data);
+                    const url = URL.createObjectURL(await img);
                     fb._image = url;
                 }
                 else {
-                    fb._image = null;
+                    fb._image = "../assets/images/feedback.png";
                 }
             }
             context.commit("SET_FEEDBACK_DATA", await feedback);
