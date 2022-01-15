@@ -90,7 +90,7 @@ import { supabase } from "../../supabase/init";
 import { v4 as uuidv4 } from "uuid";
 import BaseButton from "../global/BaseButton.vue";
 import store from "../../store/index";
-import { decode } from "base64-arraybuffer";
+// import { decode } from "base64-arraybuffer";
 
 export default {
   name: "TheAddFeedbackModal",
@@ -117,30 +117,37 @@ export default {
     // When a user selects an image, this function is called
     const compressImage = () => {
       const file = document.querySelector("#imageUpload").files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+      // const reader = new FileReader();
+      // reader.readAsDataURL(file);
 
-      reader.onload = function (event) {
-        const imgElement = document.createElement("img");
-        imgElement.src = event.target.result;
+      // reader.onload = function (event) {
+      //   const imgElement = document.createElement("img");
+      //   imgElement.src = event.target.result;
 
-        imgElement.onload = function (e) {
-          const canvas = document.createElement("canvas");
-          const width = 800;
-          const scaleSize = width / e.target.width;
+      //   imgElement.onload = function (e) {
+      //     const canvas = document.createElement("canvas");
+      //     const width = 800;
+      //     const scaleSize = width / e.target.width;
 
-          canvas.width = width;
-          canvas.height = e.target.height * scaleSize;
+      //     canvas.width = width;
+      //     canvas.height = e.target.height * scaleSize;
 
-          const ctx = canvas.getContext("2d");
+      //     const ctx = canvas.getContext("2d");
 
-          ctx.drawImage(e.target, 0, 0, canvas.width, canvas.height);
+      //     ctx.drawImage(e.target, 0, 0, canvas.width, canvas.height);
 
-          const srcEncoded = ctx.canvas.toDataURL(e.target, "image/jpeg");
-          // document.querySelector("#output").src = srcEncoded;
-          return (image.value = srcEncoded);
-        };
-      };
+      //     const srcEncoded = ctx.canvas.toDataURL(e.target, "image/jpeg");
+
+      //     const compressed = new Image();
+      //     compressed.src = srcEncoded;
+      //     // document.querySelector('#output').appendChild(banana);
+      //     // document.querySelector("#output").src = srcEncoded;
+
+      return (image.value = file);
+
+      // convertToBlob(srcEncoded);
+      // };
+      // };
     };
 
     // When a user submits the form, this function is called
@@ -156,13 +163,7 @@ export default {
       uploadImageToDatabase();
 
       // Adds feedback object to supabase
-      addFeedbackToDatabase();
-
-      // Closes the modal once data is added to supabase
-      await closeModal();
-
-      // Refreshes the feedback table
-      await store.dispatch("getFeedback");
+      // addFeedbackToDatabase();
     };
 
     const generateImageName = (id) => {
@@ -171,12 +172,18 @@ export default {
     };
 
     const uploadImageToDatabase = async () => {
+      if (!image.value) {
+        addFeedbackToDatabase();
+      }
+
       try {
         const { error } = await supabase.storage
           .from("launches")
-          .upload("feedback/" + id.value + ".jpeg", decode(image.value), {
-            contentType: "image/jpeg",
+          .upload("feedback/" + id.value + ".jpeg", image.value, {
+            cacheControl: "3600",
+            upsert: false,
           });
+        addFeedbackToDatabase();
         if (error) throw error;
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
@@ -188,7 +195,7 @@ export default {
 
     const addFeedbackToDatabase = async () => {
       try {
-        const { error } = await supabase.from("feedback").insert([
+        const {data, error } = await supabase.from("feedback").insert([
           {
             id: id.value,
             launch_id: store.state.activeLaunch.launch.id,
@@ -202,7 +209,12 @@ export default {
           },
         ]);
 
+        console.log(data)
+        store.dispatch("getFeedback");
+        closeModal();
+
         if (error) throw error;
+
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
