@@ -15,17 +15,24 @@
       <form @submit.prevent="saveFeedback" class="form">
         <div class="form__input">
           <label for="">Image</label>
-          <div id="output" class="upload__output" v-show="image"></div>
-          <div class="upload" id="imageUploader" v-if="!image">
-            <label for="imageUpload" class="upload__button"
-              >Upload image
-              <input
-                type="file"
-                id="imageUpload"
-                accept="image/*"
-                @change="displayImage"
-              />
-            </label>
+          <div
+            class="image"
+            @mouseenter="showImageActions"
+            @mouseleave="hideImageActions"
+          >
+            <div class="actions" v-if="hoverImage">hey there</div>
+            <div id="output" class="upload__output" v-show="image"></div>
+            <div class="upload" id="imageUploader" v-if="!image">
+              <label for="imageUpload" class="upload__button"
+                >Upload image
+                <input
+                  type="file"
+                  id="imageUpload"
+                  accept="image/*"
+                  @change="displayImage"
+                />
+              </label>
+            </div>
           </div>
         </div>
 
@@ -105,7 +112,6 @@ export default {
     return {
       priority: "Primary",
       text: "Save feedback",
-      // imageLoaded: false,
     };
   },
   setup() {
@@ -117,7 +123,8 @@ export default {
     const errorMsg = ref(null);
     const id = ref(null);
     const fileInput = ref(null);
-    const imageLoaded = ref(false);
+    const imageLoaded = ref(null);
+    const hoverImage = ref(null);
 
     // When a user selects an image, this function is called
     const displayImage = () => {
@@ -131,38 +138,21 @@ export default {
       img.style.height = "152px";
       img.style.maxHeight = "152px";
       img.style.objectFit = "cover";
-      img.style.objectPosition = "50%% 25%";
+      img.style.objectPosition = "25%% 25%";
 
       document.querySelector("#output").appendChild(img);
+    };
 
-      // const reader = new FileReader();
-      // reader.readAsDataURL(file);
+    const showImageActions = () => {
+      if (!image.value) return;
+      hoverImage.value = true;
+      console.log("show actions");
+    };
 
-      // reader.onload = function (event) {
-      //   const imgElement = document.createElement("img");
-      //   imgElement.src = event.target.result;
-
-      //   imgElement.onload = function (e) {
-      //     const canvas = document.createElement("canvas");
-      //     const width = 372;
-      //     const scaleSize = width / e.target.width;
-
-      //     canvas.width = width;
-      //     canvas.height = e.target.height * scaleSize;
-
-      //     const ctx = canvas.getContext("2d");
-
-      //     ctx.drawImage(e.target, 0, 0, canvas.width, canvas.height);
-
-      //     const srcEncoded = ctx.canvas.toDataURL(e.target, "image/jpeg");
-
-      //     imageLoaded.value = true;
-      //     const img = new Image();
-      //     img.src = srcEncoded;
-      //     img.classList.add("upload__output--image");
-      //     document.querySelector("#output").appendChild(img);
-      //   };
-      // };
+    const hideImageActions = () => {
+      if (!image.value) return;
+      hoverImage.value = false;
+      console.log("hide actions");
     };
 
     // When a user submits the form, this function is called
@@ -251,6 +241,9 @@ export default {
       displayImage,
       fileInput,
       imageLoaded,
+      showImageActions,
+      hideImageActions,
+      hoverImage,
     };
   },
 };
@@ -322,6 +315,14 @@ export default {
           background: #eeeff3;
           border: 2px solid #dadce2;
           max-height: 320px;
+        }
+        .actions {
+          display: flex;
+          position: fixed;
+          // z-index: 99999!important;
+          height: 152px;
+          width: 100%;
+          background: red;
         }
         label {
           font-size: 12px;

@@ -192,13 +192,13 @@ export default {
         font-weight: 500;
       }
       .tag__low {
-        background: #F3DE8A;
+        background: #F5E5A3;
       }
       .tag__med {
-        background: #FFAD69;
+        background: #FFC799;
       }
       .tag__high {
-        background: #C6808A;
+        background: #E09099;
       }
     }
     .col__time {
