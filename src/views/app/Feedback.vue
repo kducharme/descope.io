@@ -81,25 +81,7 @@ export default {
   setup() {
     // Define variables
 
-    const loadImages = () => {
-      store.state.feedback.forEach((fb) => {
-        if (fb._image) {
-          const url = URL.createObjectURL(fb._image);
-          const img = new Image();
-          img.src = url;
-          img.height = "40";
-          img.width = "40";
-          document.querySelector(`#img_${fb.id}`).appendChild(img);
-        }
-      });
-    };
-
-    // loadImages();
-
-    return { store, loadImages };
-  },
-  mounted() {
-    // this.loadImages();
+    return { store };
   },
   methods: {
     showAddFeedbackModal() {

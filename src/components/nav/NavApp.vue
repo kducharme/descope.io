@@ -152,10 +152,9 @@ export default {
     }
   }
   .nav__bottom {
-    border-top: 0.5px solid #e2e2e25f;
+    border-top: 1px solid #dbdde6;
     width: 100%;
     padding: 16px 0 8px;
-    color: white;
     .nav__link--logout:hover {
       cursor: pointer;
     }

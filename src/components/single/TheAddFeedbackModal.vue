@@ -14,17 +14,21 @@
       </div>
       <form @submit.prevent="saveFeedback" class="form">
         <div class="form__input">
-          <label for="imageUpload">Image</label>
-          <div>
-            <img src="" alt="" id="output" />
+          <label for="">Image</label>
+          <div id="output" class="upload__output" v-if="image"></div>
+          <div class="upload" id="imageUploader" v-if="!image">
+            <label for="imageUpload" class="upload__button"
+              >Upload image
+              <input
+                type="file"
+                id="imageUpload"
+                accept="image/*"
+                @change="displayImage"
+              />
+            </label>
           </div>
-          <input
-            type="file"
-            id="imageUpload"
-            accept="image/*"
-            @change="compressImage"
-          />
         </div>
+
         <div class="form__input">
           <label for="feedbackDetails">Details</label>
           <textarea
@@ -32,7 +36,7 @@
             required
             id="feedbackDetails"
             v-model="feedbackDetails"
-            rows="4"
+            rows="3"
             cols="50"
           />
         </div>
@@ -101,7 +105,7 @@ export default {
     return {
       priority: "Primary",
       text: "Save feedback",
-      selectedImage: null,
+      // imageLoaded: false,
     };
   },
   setup() {
@@ -113,41 +117,41 @@ export default {
     const errorMsg = ref(null);
     const id = ref(null);
     const fileInput = ref(null);
+    const imageLoaded = ref(false);
 
     // When a user selects an image, this function is called
-    const compressImage = () => {
+    const displayImage = () => {
       const file = document.querySelector("#imageUpload").files[0];
-      // const reader = new FileReader();
-      // reader.readAsDataURL(file);
+      image.value = file;
 
-      // reader.onload = function (event) {
-      //   const imgElement = document.createElement("img");
-      //   imgElement.src = event.target.result;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
 
-      //   imgElement.onload = function (e) {
-      //     const canvas = document.createElement("canvas");
-      //     const width = 800;
-      //     const scaleSize = width / e.target.width;
+      reader.onload = function (event) {
+        const imgElement = document.createElement("img");
+        imgElement.src = event.target.result;
 
-      //     canvas.width = width;
-      //     canvas.height = e.target.height * scaleSize;
+        imgElement.onload = function (e) {
+          const canvas = document.createElement("canvas");
+          const width = 376;
+          const scaleSize = width / e.target.width;
 
-      //     const ctx = canvas.getContext("2d");
+          canvas.width = width;
+          canvas.height = e.target.height * scaleSize;
 
-      //     ctx.drawImage(e.target, 0, 0, canvas.width, canvas.height);
+          const ctx = canvas.getContext("2d");
 
-      //     const srcEncoded = ctx.canvas.toDataURL(e.target, "image/jpeg");
+          ctx.drawImage(e.target, 0, 0, canvas.width, canvas.height);
 
-      //     const compressed = new Image();
-      //     compressed.src = srcEncoded;
-      //     // document.querySelector('#output').appendChild(banana);
-      //     // document.querySelector("#output").src = srcEncoded;
+          const srcEncoded = ctx.canvas.toDataURL(e.target, "image/jpeg");
 
-      return (image.value = file);
-
-      // convertToBlob(srcEncoded);
-      // };
-      // };
+          imageLoaded.value = true;
+          const img = new Image();
+          img.src = srcEncoded;
+          console.log(document.querySelector("#output"));
+          document.querySelector("#output").appendChild(img);
+        };
+      };
     };
 
     // When a user submits the form, this function is called
@@ -195,7 +199,7 @@ export default {
 
     const addFeedbackToDatabase = async () => {
       try {
-        const {data, error } = await supabase.from("feedback").insert([
+        const { data, error } = await supabase.from("feedback").insert([
           {
             id: id.value,
             launch_id: store.state.activeLaunch.launch.id,
@@ -209,12 +213,11 @@ export default {
           },
         ]);
 
-        console.log(data)
+        console.log(data);
         store.dispatch("getFeedback");
         closeModal();
 
         if (error) throw error;
-
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
@@ -231,12 +234,12 @@ export default {
       saveFeedback,
       feedbackDetails,
       image,
-      compressImage,
       feedbackPriority,
       errorMsg,
       closeModal,
-      store,
+      displayImage,
       fileInput,
+      imageLoaded,
     };
   },
 };
@@ -274,6 +277,42 @@ export default {
         display: flex;
         flex-direction: column;
         margin: 12px 0;
+        input[type="file"] {
+          width: 0.1px;
+          height: 0.1px;
+          opacity: 0;
+          overflow: hidden;
+          position: absolute;
+          z-index: -1;
+        }
+        .upload {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 56px;
+          background: #eeeff35f;
+          border: 2px solid #dadce2;
+          border-radius: 3px;
+          border-style: dotted;
+          .upload__button {
+            font-weight: 500;
+            background: #eeeff3;
+            border: 2px solid #cfd2de;
+            padding: 8px 12px;
+            display: inline-block;
+          }
+          .upload__button:hover {
+            cursor: pointer;
+            background: #e8e9ee;
+          }
+        }
+        .upload__output {
+          padding: 8px 8px 4px 8px;
+          background: #eeeff3;
+          // border: 2px solid #dadce2;
+          // border-radius: 3px;
+          // border-style: dotted;
+        }
         label {
           font-size: 12px;
           padding: 0 0 6px;
