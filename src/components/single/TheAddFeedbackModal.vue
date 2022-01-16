@@ -15,7 +15,7 @@
       <form @submit.prevent="saveFeedback" class="form">
         <div class="form__input">
           <label for="">Image</label>
-          <div id="output" class="upload__output" v-if="image"></div>
+          <div id="output" class="upload__output" v-show="image"></div>
           <div class="upload" id="imageUploader" v-if="!image">
             <label for="imageUpload" class="upload__button"
               >Upload image
@@ -124,34 +124,45 @@ export default {
       const file = document.querySelector("#imageUpload").files[0];
       image.value = file;
 
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
 
-      reader.onload = function (event) {
-        const imgElement = document.createElement("img");
-        imgElement.src = event.target.result;
+      img.style.width = "100%";
+      img.style.height = "152px";
+      img.style.maxHeight = "152px";
+      img.style.objectFit = "cover";
+      img.style.objectPosition = "50%% 25%";
 
-        imgElement.onload = function (e) {
-          const canvas = document.createElement("canvas");
-          const width = 376;
-          const scaleSize = width / e.target.width;
+      document.querySelector("#output").appendChild(img);
 
-          canvas.width = width;
-          canvas.height = e.target.height * scaleSize;
+      // const reader = new FileReader();
+      // reader.readAsDataURL(file);
 
-          const ctx = canvas.getContext("2d");
+      // reader.onload = function (event) {
+      //   const imgElement = document.createElement("img");
+      //   imgElement.src = event.target.result;
 
-          ctx.drawImage(e.target, 0, 0, canvas.width, canvas.height);
+      //   imgElement.onload = function (e) {
+      //     const canvas = document.createElement("canvas");
+      //     const width = 372;
+      //     const scaleSize = width / e.target.width;
 
-          const srcEncoded = ctx.canvas.toDataURL(e.target, "image/jpeg");
+      //     canvas.width = width;
+      //     canvas.height = e.target.height * scaleSize;
 
-          imageLoaded.value = true;
-          const img = new Image();
-          img.src = srcEncoded;
-          console.log(document.querySelector("#output"));
-          document.querySelector("#output").appendChild(img);
-        };
-      };
+      //     const ctx = canvas.getContext("2d");
+
+      //     ctx.drawImage(e.target, 0, 0, canvas.width, canvas.height);
+
+      //     const srcEncoded = ctx.canvas.toDataURL(e.target, "image/jpeg");
+
+      //     imageLoaded.value = true;
+      //     const img = new Image();
+      //     img.src = srcEncoded;
+      //     img.classList.add("upload__output--image");
+      //     document.querySelector("#output").appendChild(img);
+      //   };
+      // };
     };
 
     // When a user submits the form, this function is called
@@ -309,9 +320,8 @@ export default {
         .upload__output {
           padding: 8px 8px 4px 8px;
           background: #eeeff3;
-          // border: 2px solid #dadce2;
-          // border-radius: 3px;
-          // border-style: dotted;
+          border: 2px solid #dadce2;
+          max-height: 320px;
         }
         label {
           font-size: 12px;
@@ -345,5 +355,11 @@ export default {
       }
     }
   }
+}
+
+.upload__output--image {
+  // width: 100%;
+  height: 200px !important;
+  border: 5px solid red;
 }
 </style>

@@ -25,7 +25,7 @@
             <th class="col col__actions">
               <input type="checkbox" id="select" />
             </th>
-            <th class="col col__image">Source</th>
+            <th class="col col__source">Source</th>
             <th class="col col__image">Image</th>
             <th class="col col__details">Notes</th>
             <th class="col col__priority">Priority</th>
@@ -46,7 +46,9 @@
               {{ feedback.description }}
             </td>
             <td class="col col__priority">
-              <span class="tag">{{ feedback.priority }}</span>
+              <span class="tag tag__high" v-if="feedback.priority === 'High'">{{ feedback.priority }}</span>
+              <span class="tag tag__med" v-if="feedback.priority === 'Medium'">{{ feedback.priority }}</span>
+              <span class="tag tag__low" v-if="feedback.priority === 'Low'">{{ feedback.priority }}</span>
             </td>
             <td class="col col__time">{{ feedback._dateAdded }}</td>
             <td class="col col__assignedby">
@@ -163,6 +165,10 @@ export default {
       width: 24px;
       min-width: 24px;
     }
+    .col__source {
+      width: 120px;
+      max-width: 100px;
+    }
     .col__image {
       width: 48px;
       .col__image--asset{
@@ -179,11 +185,20 @@ export default {
       width: 72px;
       max-width: 72px;
       .tag {
-        background: #cf4d6f;
-        color: white;
+        color: #212430;
         padding: 4px 8px;
         border-radius: 3px;
-        font-size: 13px;
+        font-size: 11.5px;
+        font-weight: 500;
+      }
+      .tag__low {
+        background: #F3DE8A;
+      }
+      .tag__med {
+        background: #FFAD69;
+      }
+      .tag__high {
+        background: #C6808A;
       }
     }
     .col__time {
@@ -191,7 +206,8 @@ export default {
       max-width: 88px;
     }
     .col__assignedby {
-      width: 140px;
+      width: 120px;
+      max-width: 130px;
       .initials {
         background: #ced1de;
         color: white;
