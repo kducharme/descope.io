@@ -1,6 +1,7 @@
 <template>
   <div>
     <button
+      :type="props.type"
       :class="[
         props.priority === 'Primary'
           ? 'btn btn__primary btn__full'
@@ -29,6 +30,9 @@ export default {
       type: Function,
     },
     style: {
+      type: String,
+    },
+    type: {
       type: String,
     },
   },
@@ -64,14 +68,13 @@ export default {
 .btn__primary:hover {
   cursor: pointer;
   background: #3549c5;
-
 }
 
 .btn__secondary {
   // height: 32px;
   font-weight: 500;
   background: #eeeff3;
-  border: 2px solid #CFD2DE;
+  border: 2px solid #cfd2de;
   padding: 8px 12px;
 }
 

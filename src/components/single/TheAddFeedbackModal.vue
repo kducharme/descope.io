@@ -14,25 +14,23 @@
       </div>
       <form @submit.prevent="saveFeedback" class="form">
         <div class="form__input">
-          <label for="">Image</label>
-          <div
-            class="image"
-            @mouseenter="showImageActions"
-            @mouseleave="hideImageActions"
-          >
-            <div class="actions" v-if="hoverImage">hey there</div>
-            <div id="output" class="upload__output" v-show="image"></div>
-            <div class="upload" id="imageUploader" v-if="!image">
-              <label for="imageUpload" class="upload__button"
-                >Upload image
-                <input
-                  type="file"
-                  id="imageUpload"
-                  accept="image/*"
-                  @change="displayImage"
-                />
-              </label>
-            </div>
+          <div class="imgHeader">
+            <label class="imgHeader__label" for="">Image</label>
+            <p class="imgHeader__remove" v-if="image" @click="removeImage">
+              Remove
+            </p>
+          </div>
+          <div id="output" class="upload__output" v-show="image"></div>
+          <div class="upload" id="imageUploader" v-if="!image">
+            <label for="imageUpload" class="upload__button"
+              >Upload image
+              <input
+                type="file"
+                id="imageUpload"
+                accept="image/*"
+                @change="displayImage"
+              />
+            </label>
           </div>
         </div>
 
@@ -85,9 +83,9 @@
           </div>
         </div>
         <BaseButton
-          type="submit"
-          :priority="priority"
-          :text="text"
+          :type="save_type"
+          :priority="save_priority"
+          :text="save_text"
           class="form__button"
         />
       </form>
@@ -110,8 +108,17 @@ export default {
   },
   data() {
     return {
-      priority: "Primary",
-      text: "Save feedback",
+      save_priority: "Primary",
+      save_text: "Save feedback",
+      save_type: "Submit",
+
+      replace_priority: "Secondary",
+      replace_text: "Replace",
+      replace_type: "Button",
+
+      remove_priority: "Secondary",
+      remove_text: "Remove",
+      remove_type: "Button",
     };
   },
   setup() {
@@ -139,6 +146,7 @@ export default {
       img.style.maxHeight = "152px";
       img.style.objectFit = "cover";
       img.style.objectPosition = "25%% 25%";
+      img.setAttribute("id", "imagePreview");
 
       document.querySelector("#output").appendChild(img);
     };
@@ -153,6 +161,12 @@ export default {
       if (!image.value) return;
       hoverImage.value = false;
       console.log("hide actions");
+    };
+
+    const removeImage = () => {
+      image.value = null;
+      hoverImage.value = null;
+      document.querySelector("#imagePreview").remove();
     };
 
     // When a user submits the form, this function is called
@@ -244,8 +258,10 @@ export default {
       showImageActions,
       hideImageActions,
       hoverImage,
+      removeImage,
     };
   },
+  methods: {},
 };
 </script>
 
@@ -289,6 +305,23 @@ export default {
           position: absolute;
           z-index: -1;
         }
+        .imgHeader {
+          display: flex;
+          justify-content: space-between;
+          .imgHeader__remove {
+            display: flex;
+            justify-content: flex-end;
+            color: #3d52d5;
+            font-weight: 600;
+            font-size: 13px;
+            margin: 0 0 2px;
+          }
+          .imgHeader__remove:hover {
+            cursor: pointer;
+            text-decoration: underline;
+            color: #3549c5;
+          }
+        }
         .upload {
           display: flex;
           align-items: center;
@@ -317,12 +350,15 @@ export default {
           max-height: 320px;
         }
         .actions {
+          margin: 10px 10px 6px 10px;
           display: flex;
+          align-items: center;
+          justify-content: center;
           position: fixed;
+          width: 372px;
           // z-index: 99999!important;
           height: 152px;
-          width: 100%;
-          background: red;
+          background: rgba(255, 255, 255, 0.707);
         }
         label {
           font-size: 12px;
