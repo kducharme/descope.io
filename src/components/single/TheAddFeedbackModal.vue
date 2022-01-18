@@ -14,24 +14,7 @@
       </div>
       <form @submit.prevent="saveFeedback" class="form">
         <div class="form__input">
-          <div class="imgHeader">
-            <label class="imgHeader__label" for="">Image</label>
-            <p class="imgHeader__remove" v-if="image" @click="removeImage">
-              Remove
-            </p>
-          </div>
-          <div id="output" class="upload__output" v-show="image"></div>
-          <div class="upload" id="imageUploader" v-if="!image">
-            <label for="imageUpload" class="upload__button"
-              >Upload image
-              <input
-                type="file"
-                id="imageUpload"
-                accept="image/*"
-                @change="displayImage"
-              />
-            </label>
-          </div>
+          <BaseImageUploader :id="id" />
         </div>
 
         <div class="form__input">
@@ -98,6 +81,7 @@ import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 import { v4 as uuidv4 } from "uuid";
 import BaseButton from "../global/BaseButton.vue";
+import BaseImageUploader from "../global/BaseImageUploader.vue";
 import store from "../../store/index";
 // import { decode } from "base64-arraybuffer";
 
@@ -105,6 +89,7 @@ export default {
   name: "TheAddFeedbackModal",
   components: {
     BaseButton,
+    BaseImageUploader,
   },
   data() {
     return {
@@ -124,92 +109,34 @@ export default {
   setup() {
     // Create data
     const feedbackDetails = ref(null);
-    const image = ref(null);
+    const id = ref(null);
     const imageName = ref(null);
     const feedbackPriority = ref(null);
     const errorMsg = ref(null);
-    const id = ref(null);
-    const fileInput = ref(null);
-    const imageLoaded = ref(null);
-    const hoverImage = ref(null);
 
-    // When a user selects an image, this function is called
-    const displayImage = () => {
-      const file = document.querySelector("#imageUpload").files[0];
-      image.value = file;
+    // Generates a unique ID for the feedback
 
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-
-      img.style.width = "100%";
-      img.style.height = "152px";
-      img.style.maxHeight = "152px";
-      img.style.objectFit = "cover";
-      img.style.objectPosition = "25%% 25%";
-      img.setAttribute("id", "imagePreview");
-
-      document.querySelector("#output").appendChild(img);
+    const generateFeedbackId = () => {
+      id.value = uuidv4();
     };
 
-    const showImageActions = () => {
-      if (!image.value) return;
-      hoverImage.value = true;
-      console.log("show actions");
-    };
-
-    const hideImageActions = () => {
-      if (!image.value) return;
-      hoverImage.value = false;
-      console.log("hide actions");
-    };
-
-    const removeImage = () => {
-      image.value = null;
-      hoverImage.value = null;
-      document.querySelector("#imagePreview").remove();
-    };
+    // Call the generate ID function
+    generateFeedbackId();
 
     // When a user submits the form, this function is called
 
     const saveFeedback = async () => {
       // Generate unique id for feedback
-      id.value = uuidv4();
 
       // Generate unqiue name for image
       generateImageName(id);
 
-      // Upload the image to supabase
-      uploadImageToDatabase();
-
       // Adds feedback object to supabase
-      // addFeedbackToDatabase();
+      addFeedbackToDatabase();
     };
 
     const generateImageName = (id) => {
-      if (!image.value) return;
       return (imageName.value = id.value + ".jpeg");
-    };
-
-    const uploadImageToDatabase = async () => {
-      if (!image.value) {
-        addFeedbackToDatabase();
-      }
-
-      try {
-        const { error } = await supabase.storage
-          .from("launches")
-          .upload("feedback/" + id.value + ".jpeg", image.value, {
-            cacheControl: "3600",
-            upsert: false,
-          });
-        addFeedbackToDatabase();
-        if (error) throw error;
-      } catch (error) {
-        errorMsg.value = `Error: ${error.message}`;
-        setTimeout(() => {
-          errorMsg.value = null;
-        }, 5000);
-      }
     };
 
     const addFeedbackToDatabase = async () => {
@@ -246,19 +173,12 @@ export default {
       store.dispatch("hideAddFeedbackModal");
     };
     return {
+      id,
       saveFeedback,
       feedbackDetails,
-      image,
       feedbackPriority,
       errorMsg,
       closeModal,
-      displayImage,
-      fileInput,
-      imageLoaded,
-      showImageActions,
-      hideImageActions,
-      hoverImage,
-      removeImage,
     };
   },
   methods: {},
