@@ -12,7 +12,7 @@
           type="file"
           id="upload_file"
           accept="image/*"
-          @change="displayImage"
+          @change="uploadImageToDatabase"
         />
       </label>
     </div>
@@ -36,10 +36,31 @@ export default {
     const errorMsg = ref(null);
 
     // When a user selects an image, this function is called
-    const displayImage = () => {
+    const uploadImageToDatabase = async () => {
       const file = document.querySelector("#upload_file").files[0];
       image.value = file;
 
+      displayImage(file);
+
+      try {
+        const { error } = await supabase.storage
+          .from("launches")
+          .upload("feedback/" + props.id + ".jpeg", image.value, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+        console.log("success");
+        if (error) throw error;
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
+      }
+    };
+
+    // Displays a preview of the image in the component
+    const displayImage = (file) => {
       const img = new Image();
       img.src = URL.createObjectURL(file);
 
@@ -53,19 +74,19 @@ export default {
       document.querySelector("#output").appendChild(img);
     };
 
-    const removeImage = () => {
+    const removeImage = async () => {
+      // Remove the image from the UI preview
       image.value = null;
       document.querySelector("#imagePreview").remove();
+
+      removeImageFromDatabase();
     };
 
-    const uploadImageToDatabase = async () => {
+    const removeImageFromDatabase = async () => {
       try {
         const { error } = await supabase.storage
           .from("launches")
-          .upload("feedback/" + props.id + ".jpeg", image.value, {
-            cacheControl: "3600",
-            upsert: false,
-          });
+          .remove(["feedback/" + props.id + ".jpeg"]);
         if (error) throw error;
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
@@ -74,6 +95,7 @@ export default {
         }, 5000);
       }
     };
+
     return {
       image,
       errorMsg,
