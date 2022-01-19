@@ -1,6 +1,6 @@
 <template>
   <div class="modal">
-    <div class="modal__bg" @click="closeModal"></div>
+    <div class="modal__bg" @click="closeModal(); $refs.imageUploader.removeImageFromDatabase()" ></div>
 
     <div class="modal__content">
       <!-- Status Messages -->
@@ -14,7 +14,7 @@
       </div>
       <form @submit.prevent="saveFeedback" class="form">
         <div class="form__input">
-          <BaseImageUploader :id="id" />
+          <BaseImageUploader :id="id" ref="imageUploader" />
         </div>
 
         <div class="form__input">
@@ -113,6 +113,7 @@ export default {
     const imageName = ref(null);
     const feedbackPriority = ref(null);
     const errorMsg = ref(null);
+    const removeImageFunction = ref(null);
 
     // Generates a unique ID for the feedback
 
@@ -141,7 +142,7 @@ export default {
 
     const addFeedbackToDatabase = async () => {
       try {
-        const { data, error } = await supabase.from("feedback").insert([
+        const { error } = await supabase.from("feedback").insert([
           {
             id: id.value,
             launch_id: store.state.activeLaunch.launch.id,
@@ -155,7 +156,6 @@ export default {
           },
         ]);
 
-        console.log(data);
         store.dispatch("getFeedback");
         closeModal();
 
@@ -179,6 +179,7 @@ export default {
       feedbackPriority,
       errorMsg,
       closeModal,
+      removeImageFunction,
     };
   },
   methods: {},

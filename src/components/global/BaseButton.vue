@@ -77,6 +77,10 @@ export default {
   border: 2px solid #cfd2de;
   padding: 8px 12px;
 }
+.btn__secondary:hover {
+  cursor: pointer;
+  background: #e8e9ee;
+}
 
 .btn__full {
   background: #3d52d5;

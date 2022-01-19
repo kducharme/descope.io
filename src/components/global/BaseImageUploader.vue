@@ -34,6 +34,7 @@ export default {
     // Create data
     const image = ref(null);
     const errorMsg = ref(null);
+    const loading = ref(null);
 
     // When a user selects an image, this function is called
     const uploadImageToDatabase = async () => {
@@ -49,6 +50,7 @@ export default {
             cacheControl: "3600",
             upsert: false,
           });
+        this.$emit("imageLoading", "loading.value");
         console.log("success");
         if (error) throw error;
       } catch (error) {
@@ -75,6 +77,8 @@ export default {
     };
 
     const removeImage = async () => {
+      if (!image.value) return;
+
       // Remove the image from the UI preview
       image.value = null;
       document.querySelector("#imagePreview").remove();
@@ -83,6 +87,9 @@ export default {
     };
 
     const removeImageFromDatabase = async () => {
+      console.log("no image");
+      if (!image.value) return;
+      console.log("has image");
       try {
         const { error } = await supabase.storage
           .from("launches")
@@ -101,7 +108,9 @@ export default {
       errorMsg,
       displayImage,
       removeImage,
+      removeImageFromDatabase,
       uploadImageToDatabase,
+      loading,
     };
   },
   methods: {},
