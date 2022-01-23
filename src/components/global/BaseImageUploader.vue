@@ -76,17 +76,18 @@ export default {
       document.querySelector("#output").appendChild(img);
     };
 
+    // Removes the image preview from the UI
     const removeImage = async () => {
       if (!image.value) return;
 
-      // Remove the image from the UI preview
       image.value = null;
       document.querySelector("#imagePreview").remove();
 
-      removeImageFromDatabase();
+      deleteImageFromDatabase();
     };
 
-    const removeImageFromDatabase = async () => {
+    // Deletes the image from the database
+    const deleteImageFromDatabase = async () => {
       console.log("no image");
       if (!image.value) return;
       console.log("has image");
@@ -108,7 +109,7 @@ export default {
       errorMsg,
       displayImage,
       removeImage,
-      removeImageFromDatabase,
+      deleteImageFromDatabase,
       uploadImageToDatabase,
       loading,
     };

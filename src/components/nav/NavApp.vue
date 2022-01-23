@@ -18,7 +18,7 @@
             />
           </svg>
 
-          <p class="logo__text">LaunchDocs</p>
+          <p class="logo__text">Feedhack</p>
         </div>
         <div class="actions">
           <BaseButton
@@ -36,7 +36,7 @@
           <router-link class="nav__link" :to="{ name: 'archive' }"
             >Archive</router-link
           >
-          <p class="links__title">Launches</p>
+          <p class="links__title">Projects</p>
           <TheLaunchList />
         </div>
       </div>
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       priority: "Primary",
-      text: "New launch",
+      text: "Create project",
     };
   },
   setup() {

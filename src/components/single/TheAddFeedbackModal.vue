@@ -1,6 +1,6 @@
 <template>
   <div class="modal">
-    <div class="modal__bg" @click="closeModal(); $refs.imageUploader.removeImageFromDatabase()" ></div>
+    <div class="modal__bg" @click="closeModal(); $refs.imageUploader.deleteImageFromDatabase()" ></div>
 
     <div class="modal__content">
       <!-- Status Messages -->
