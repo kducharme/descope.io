@@ -2,18 +2,18 @@
     "name": "TBD — Kyle",
     "description": "An extension to give feedback on the UI",
     "version": "1.0",
-    "background": {
-        "scripts": ["backgrounds.js"]
-    },
-    "permissions": [
-        "storage",
-        "webRequest",
-        "webRequestBlocking",
-        "http://*/",
-        "https://*/"
-    ],
-    "browser_action": {
+    "action": {
+        "default_icon": {
+            "16": "launch__purple.svg",
+            "32": "launch__purple.svg"
+        },
         "default_popup": "popup.html"
     },
-    "manifest_version": 2
+    "background": {
+        "service_worker": "./background.js"
+    },
+    "permissions": [
+        "storage"
+    ],
+    "manifest_version": 3
 }

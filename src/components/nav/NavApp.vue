@@ -18,7 +18,7 @@
             />
           </svg>
 
-          <p class="logo__text">Feedhack</p>
+          <p class="logo__text">critiful</p>
         </div>
         <div class="actions">
           <BaseButton
