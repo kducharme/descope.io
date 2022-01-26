@@ -5,7 +5,6 @@
       <div class="nav__top">
         <div class="logo" @click="navigateHome">
           <svg
-            class="logo__img"
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -13,30 +12,31 @@
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M6 14.9999C5.17 14.9999 4.42 15.3399 3.88 15.8799C2.7 17.0599 2 21.9999 2 21.9999C2 21.9999 6.94 21.2999 8.12 20.1199C8.66 19.5799 9 18.8299 9 17.9999C9 16.3399 7.66 14.9999 6 14.9999ZM6.71 18.7099C6.43 18.9899 4.54 19.4699 4.54 19.4699C4.54 19.4699 5.01 17.5899 5.3 17.2999C5.47 17.1099 5.72 16.9999 6 16.9999C6.55 16.9999 7 17.4499 7 17.9999C7 18.2799 6.89 18.5299 6.71 18.7099ZM17.42 13.6499C23.78 7.28993 21.66 2.33993 21.66 2.33993C21.66 2.33993 16.71 0.219933 10.35 6.57993L7.86 6.07993C7.21 5.94993 6.53 6.15993 6.05 6.62993L2 10.6899L7 12.8299L11.17 16.9999L13.31 21.9999L17.36 17.9499C17.83 17.4799 18.04 16.7999 17.91 16.1399L17.42 13.6499ZM7.41 10.8299L5.5 10.0099L7.47 8.03993L8.91 8.32993C8.34 9.15993 7.83 10.0299 7.41 10.8299ZM13.99 18.4999L13.17 16.5899C13.97 16.1699 14.84 15.6599 15.66 15.0899L15.95 16.5299L13.99 18.4999ZM16 12.2399C14.68 13.5599 12.62 14.6399 11.96 14.9699L9.03 12.0399C9.35 11.3899 10.43 9.32993 11.76 7.99993C16.44 3.31993 19.99 4.00993 19.99 4.00993C19.99 4.00993 20.68 7.55993 16 12.2399ZM15 10.9999C16.1 10.9999 17 10.0999 17 8.99993C17 7.89993 16.1 6.99993 15 6.99993C13.9 6.99993 13 7.89993 13 8.99993C13 10.0999 13.9 10.9999 15 10.9999Z"
+              d="M22 12C22 6.48 17.52 2 12 2C6.48 2 2 6.48 2 12C2 13.33 2.26 14.61 2.74 15.77L7.35 11.15C7.72 10.78 8.3 10.76 8.7 11.09L11.3 13.28L14.58 10H14C13.45 10 13 9.55 13 9C13 8.45 13.45 8 14 8H17C17.55 8 18 8.45 18 9V12C18 12.55 17.55 13 17 13C16.45 13 16 12.55 16 12V11.42L12.06 15.35C11.69 15.72 11.1 15.74 10.71 15.4L8.12 13.21L3.72 17.61C5.52 20.26 8.56 22 12 22H20C21.1 22 22 21.1 22 20V12Z"
               fill="#3D52D5"
             />
           </svg>
 
-          <p class="logo__text">critiful</p>
+          <p class="logo__text">descope</p>
         </div>
         <div class="actions">
-          <BaseButton
+          <!-- <BaseButton
             :priority="priority"
             :text="text"
             :action="showCreateModal"
             class="actions__create"
-          />
+          /> -->
         </div>
 
         <div class="links">
           <router-link class="nav__link" :to="{ name: 'home' }"
-            >Home</router-link
+            >Overview</router-link
           >
-          <router-link class="nav__link" :to="{ name: 'archive' }"
-            >Archive</router-link
+          <router-link class="nav__link" :to="{ name: 'debt' }"
+          
+            >Debt</router-link
           >
-          <p class="links__title">Projects</p>
+          <p class="links__title">Teams</p>
           <TheLaunchList />
         </div>
       </div>
@@ -53,14 +53,14 @@
 import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import TheLaunchList from "./TheLaunchList.vue";
-import BaseButton from "../global/BaseButton.vue";
+// import BaseButton from "../global/BaseButton.vue";
 import TheCreateLaunchModal from "../single/TheCreateLaunchModal.vue";
 import store from "../../store/index";
 
 export default {
   components: {
     TheLaunchList,
-    BaseButton,
+    // BaseButton,
     TheCreateLaunchModal,
   },
   data() {
@@ -112,14 +112,16 @@ export default {
     .logo {
       display: flex;
       align-items: center;
-      padding: 0 8px;
       .logo__img {
-        margin-right: 8px;
-        width: 22px;
+        // margin-right: 6px;
       }
       .logo__text {
+        margin-left: 6px;
         font-weight: 800;
-        font-size: 16px;
+        font-size: 18px;
+        letter-spacing: 0.3px;
+        color: #3549c5;
+        // font-family: 'Merriweather';
       }
     }
     .actions {
@@ -133,7 +135,7 @@ export default {
     .links {
       display: flex;
       flex-direction: column;
-      margin: 20px 0 0;
+      margin: 16px 0 0;
       width: 100%;
       .links__title {
         font-size: 12px;
@@ -148,6 +150,7 @@ export default {
       .router-link-exact-active {
         font-weight: 500;
         background: #dbdde6;
+        border-left: 3px solid #3d52d5;
       }
     }
   }

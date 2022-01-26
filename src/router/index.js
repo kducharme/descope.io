@@ -9,7 +9,7 @@ import ConfirmEmail from "../views/marketing/ConfirmEmail.vue";
 // App pages
 import Home from "../views/app/Home.vue";
 import Launch from "../views/app/Launch.vue";
-import Archive from "../views/app/LaunchHistory.vue";
+import Debt from "../views/app/Debt.vue";
 import Overview from "../views/app/Overview.vue";
 import Requirements from "../views/app/Requirements.vue";
 import Feedback from "../views/app/Feedback.vue";
@@ -45,9 +45,9 @@ const routes = [
     component: Home,
   },
   {
-    path: "/history",
-    name: "archive",
-    component: Archive,
+    path: "/debt",
+    name: "debt",
+    component: Debt,
   },
   {
     path: "/launch/:id",
