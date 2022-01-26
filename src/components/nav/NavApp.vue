@@ -5,8 +5,8 @@
       <div class="nav__top">
         <div class="logo" @click="navigateHome">
           <svg
-            width="24"
-            height="24"
+            width="22"
+            height="22"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +33,7 @@
             >Overview</router-link
           >
           <router-link class="nav__link" :to="{ name: 'debt' }"
-          
+
             >Debt</router-link
           >
           <p class="links__title">Teams</p>
@@ -118,7 +118,7 @@ export default {
       .logo__text {
         margin-left: 6px;
         font-weight: 800;
-        font-size: 18px;
+        font-size: 17px;
         letter-spacing: 0.3px;
         color: #3549c5;
         // font-family: 'Merriweather';
