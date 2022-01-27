@@ -11,6 +11,7 @@ export default new Vuex.Store({
         onboarded: null,
         profile: null,
         organization: null,
+        teams: [],
 
         // Launch Data
         launches: [],
@@ -75,6 +76,38 @@ export default new Vuex.Store({
     actions: {
         // GET ACTIONS
         async getLaunches(context) {
+
+            const user = supabase.auth.user();
+
+            // Get the user's organization id
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id", user.id);
+
+            context.commit("SET_PROFILE", await profile);
+
+            // Get data from supabase
+            const { data: launch } = await supabase
+                .from("launches")
+                .select("*")
+                .eq("organization_id", profile[0].organization_id);
+
+            launch.forEach(launch => {
+                launch.name_low = launch.name.toLowerCase();
+            })
+
+            // Sort launches
+            launch.sort((a, b) => {
+                if (a.name_low < b.name_low) { return -1; }
+                if (a.name_low > b.name_low) { return 1; }
+                return 0;
+            })
+
+            context.commit("SET_LAUNCH_DATA", await launch);
+        },
+
+        async getTeams(context) {
 
             const user = supabase.auth.user();
 

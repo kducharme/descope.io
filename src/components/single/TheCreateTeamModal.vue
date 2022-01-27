@@ -68,7 +68,7 @@ export default {
 
     // Closes modal when the background or "x" button  is clicked
     const closeModal = () => {
-      store.dispatch("hideCreateLaunchModal");
+      store.dispatch("hideCreateTeamModal");
     };
 
     // Creates a new launch in the db when the form is submitted
