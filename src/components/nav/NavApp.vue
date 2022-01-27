@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav class="nav">
-      <TheCreateLaunchModal v-if="store.state.createLaunchModal" />
+      <TheCreateTeamModal v-if="store.state.createTeamModal" />
       <div class="nav__top">
         <div class="logo" @click="navigateHome">
           <svg
@@ -19,24 +19,29 @@
 
           <p class="logo__text">descope</p>
         </div>
-        <div class="actions">
-          <!-- <BaseButton
-            :priority="priority"
-            :text="text"
-            :action="showCreateModal"
-            class="actions__create"
-          /> -->
-        </div>
 
         <div class="links">
           <router-link class="nav__link" :to="{ name: 'home' }"
             >Overview</router-link
           >
           <router-link class="nav__link" :to="{ name: 'debt' }"
-
             >Debt</router-link
           >
-          <p class="links__title">Teams</p>
+          <div class="title">
+            <p class="title__text">Teams</p>
+            <div class="title__action" @click="showCreateTeamModal">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="16px"
+                viewBox="0 0 24 24"
+                width="24px"
+                fill="#516f90"
+              >
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+              </svg>
+            </div>
+          </div>
           <TheLaunchList />
         </div>
       </div>
@@ -54,14 +59,14 @@ import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import TheLaunchList from "./TheLaunchList.vue";
 // import BaseButton from "../global/BaseButton.vue";
-import TheCreateLaunchModal from "../single/TheCreateLaunchModal.vue";
+import TheCreateTeamModal from "../single/TheCreateTeamModal.vue";
 import store from "../../store/index";
 
 export default {
   components: {
     TheLaunchList,
     // BaseButton,
-    TheCreateLaunchModal,
+    TheCreateTeamModal,
   },
   data() {
     return {
@@ -84,12 +89,13 @@ export default {
       router.push({ name: "Home" });
     };
 
-    return { store, logout, navigateHome };
-  },
-  methods: {
-    showCreateModal() {
-      store.dispatch("showCreateLaunchModal");
-    },
+    // Displays create team modal
+
+    const showCreateTeamModal = () => {
+      store.dispatch("showCreateTeamModal");
+    };
+
+    return { store, logout, navigateHome, showCreateTeamModal };
   },
 };
 </script>
@@ -112,16 +118,12 @@ export default {
     .logo {
       display: flex;
       align-items: center;
-      .logo__img {
-        // margin-right: 6px;
-      }
       .logo__text {
         margin-left: 6px;
         font-weight: 800;
         font-size: 17px;
         letter-spacing: 0.3px;
         color: #3549c5;
-        // font-family: 'Merriweather';
       }
     }
     .actions {
@@ -137,10 +139,26 @@ export default {
       flex-direction: column;
       margin: 16px 0 0;
       width: 100%;
-      .links__title {
-        font-size: 12px;
+      .title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         margin: 16px 0 8px -16px;
         padding: 8px 8px 4px 24px;
+        .title__text {
+          font-size: 12px;
+          font-weight: 500;
+          color: #6c849e;
+        }
+        .title__action {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          width: 18px;
+          height: 18px;
+          border: 2px solid #99acc2;
+          border-radius: 100%;
+        }
       }
       .nav__link {
         margin: 0 0 0 -16px;

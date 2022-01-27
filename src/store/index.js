@@ -19,7 +19,8 @@ export default new Vuex.Store({
 
         // UI Elements
         createLaunchModal: false,
-        addFeedbackModal: false
+        addFeedbackModal: false,
+        createTeamModal: false
     },
     mutations: {
         // SET STATE
@@ -63,6 +64,12 @@ export default new Vuex.Store({
         },
         HIDE_ADD_FEEDBACK_MODAL: (state) => {
             state.addFeedbackModal = false;
+        },
+        SHOW_CREATE_TEAM_MODAL: (state) => {
+            state.createTeamModal = true;
+        },
+        HIDE_CREATE_TEAM_MODAL: (state) => {
+            state.createTeamModal = false;
         },
     },
     actions: {
@@ -167,6 +174,13 @@ export default new Vuex.Store({
 
         hideAddFeedbackModal(context) {
             context.commit("HIDE_ADD_FEEDBACK_MODAL")
+        },
+        showCreateTeamModal(context) {
+            context.commit("SHOW_CREATE_TEAM_MODAL")
+        },
+
+        hideCreateTeamModal(context) {
+            context.commit("HIDE_CREATE_TEAM_MODAL")
         },
     }
 });

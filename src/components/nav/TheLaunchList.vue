@@ -6,7 +6,7 @@
       v-for="launch in store.state.launches"
       :key="launch.launch_id"
     >
-      <img src="../../assets/images/launch__dark.svg" class="launch__img" />
+      <img src="../../assets/images/tag.svg" class="launch__img" />
       <p class="launch__text">{{ launch.name }}</p>
     </router-link>
   </div>
@@ -50,8 +50,8 @@ export default {
       margin: 0;
     }
     .launch__img {
-      width: 14px;
-      margin-right: 8px;
+      width: 18px;
+      margin-right: 4px;
       opacity: .35;
     }
   }
@@ -63,5 +63,6 @@ export default {
 .router-link-active {
   font-weight: 500;
   background: #DBDDE6;
+  border-left: 3px solid #3d52d5;
 }
 </style>
