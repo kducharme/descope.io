@@ -54,9 +54,10 @@ export default {
 .btn {
   height: 36px;
   border: none;
-  border-radius: 2px;
+  border-radius: 3px;
   font-weight: 600;
-  font-size: 13.5px;
+  font-size: 14px;
+  font-family: 'Avenir next';
 }
 
 .btn__primary {

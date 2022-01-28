@@ -1,7 +1,7 @@
 <template>
   <div class="body">
     <span>
-      <!-- {{ store.state.activeLaunch.launch.name}} -->
+      I am the overview page
     </span>
   </div>
 </template>

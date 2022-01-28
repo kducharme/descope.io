@@ -100,7 +100,7 @@ div,
 input,
 textarea {
   color: #212430;
-  font-family: "Avenir";
+  font-family: "Avenir Next";
   font-size: 14px;
   margin: 0;
 }

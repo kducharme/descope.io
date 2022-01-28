@@ -2,7 +2,23 @@
   <div class="launch" v-if="store.state.teams_active_data">
     <nav class="subnav">
       <div class="top">
-        <h2 class="title">{{ store.state.teams_active_data.name }}</h2>
+        <div class="top__left">
+          <h2 class="title">{{ store.state.teams_active_data.name }}</h2>
+        </div>
+        <div class="top__right">
+          <BaseButton
+            type="submit"
+            :priority="secondary_priority"
+            :text="secondary_text"
+            class="subnav__button"
+          />
+          <BaseButton
+            type="submit"
+            :priority="primary_priority"
+            :text="primary_text"
+            class="subnav__button"
+          />
+        </div>
       </div>
       <div class="bottom">
         <router-link class="nav__link" :to="{ name: 'overview' }"
@@ -24,10 +40,22 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import store from "../../store/index";
+import BaseButton from "../../components/global/BaseButton.vue";
+
 
 export default {
   name: "Team",
-  components: {},
+  components: {
+    BaseButton
+  },
+    data() {
+    return {
+      primary_priority: "Primary",
+      primary_text: "Create project",
+      secondary_priority: "Secondary",
+      secondary_text: "Add debt",
+    };
+  },
   setup() {
     // Setup ref to router
     const router = useRouter();
@@ -36,7 +64,7 @@ export default {
     const dataLoaded = ref(null);
     const teamData = ref(null);
 
-    store.dispatch("setTeams")
+    store.dispatch("setTeams");
 
     // Get data
     const getActiveTeamData = async () => {
@@ -72,16 +100,24 @@ export default {
   display: flex;
   flex-direction: column;
   width: calc(100vw - 240px);
-  padding: 0 24px;
+  padding: 8px 24px 0;
   border-bottom: 1px solid #eeeff3;
   .top {
     display: flex;
-    margin: 0 0 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 8px;
+    padding: 8px 0;
     .title {
-      // height: 28px;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 600;
-      margin: 16px 0 8px;
+    }
+    .top__right {
+      display: flex;
+      flex-direction: row;
+      .subnav__button {
+        margin-left: 16px;
+      }
     }
   }
   .bottom {
