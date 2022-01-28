@@ -10,22 +10,23 @@
 
       <!-- Create Launch Form -->
       <div class="header">
-        <h1 class="title">Create new launch</h1>
+        <h1 class="title">Create team</h1>
       </div>
-      <form @submit.prevent="createLaunch" class="form">
+      <form @submit.prevent="createTeam" class="form">
         <div class="form__input">
-          <label for="launchName">Launch name</label>
-          <input type="text" required id="launchName" v-model="launchName" />
+          <label for="teamName">Team name</label>
+          <input type="text" required id="teamName" v-model="teamName" />
         </div>
         <div class="form__input">
-          <label for="team">Team</label>
-          <div class="form__select" id="team">Select team</div>
-        </div>
-        <div class="form__input">
-          <label for="owner">Owner</label>
-          <div class="form__select" id="owner">
-            {{ store.state.activeUser.email }}
-          </div>
+          <label for="teamDescription">Description</label>
+          <textarea
+            type="textarea"
+            required
+            id="teamDescription"
+            v-model="teamDescription"
+            rows="3"
+            cols="50"
+          />
         </div>
         <BaseButton
           type="submit"
@@ -41,8 +42,7 @@
 <script>
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
-import { v4 as uuidv4 } from "uuid";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 import BaseButton from "../global/BaseButton.vue";
 import store from "../../store/index";
 
@@ -54,44 +54,39 @@ export default {
   data() {
     return {
       priority: "Primary",
-      text: "Create launch",
+      text: "Create team",
     };
   },
   setup() {
     // Create data
-    const router = useRouter();
-    const team = ref(null);
-    const launchName = ref(null);
+    // const router = useRouter();
+    const teamName = ref(null);
+    const teamDescription = ref(null);
     const errorMsg = ref(null);
-    const id = ref(null);
 
     // Closes modal when the background or "x" button  is clicked
     const closeModal = () => {
-      store.dispatch("hideCreateLaunchModal");
+      store.dispatch("hideCreateTeamModal");
     };
 
     // Creates a new launch in the db when the form is submitted
-    const createLaunch = async () => {
-      // Generate unique id for launch
-      id.value = uuidv4();
+    const createTeam = async () => {
 
-      // TODO - check if a launch already exists with that name
-
+      // TODO - check if a team already exists with that name
       try {
-        const { error } = await supabase.from("launches").insert([
+        const { data, error } = await supabase.from("teams").insert([
           {
-            id: id.value,
-            name: launchName.value,
-            status: "Draft",
-            active: true,
+            name: teamName.value,
+            description: teamDescription.value,
             created_by: store.state.activeUser.id,
             organization_id: store.state.organization,
           },
         ]);
         if (error) throw error;
-        // await store.dispatch("getLaunches");
-        await routeToLaunch();
-        await store.dispatch("hideCreateLaunchModal");
+        console.log(data)
+        // await store.dispatch("getTeams");
+        // await routeToLaunch();
+        // await store.dispatch("hideCreateTeamModal");
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
@@ -101,14 +96,14 @@ export default {
     };
 
     // Route user to launch view
-    const routeToLaunch = () => {
-      router.push({ name: "launch", params: { id: id.value } });
-      id.value = null;
-    };
+    // const routeToLaunch = () => {
+    //   router.push({ name: "team", params: { id: id.value } });
+    //   id.value = null;
+    // };
     return {
-      createLaunch,
-      team,
-      launchName,
+      createTeam,
+      teamName,
+      teamDescription,
       errorMsg,
       closeModal,
       store,
@@ -156,6 +151,13 @@ export default {
           font-weight: 600;
           color: #7c83a2;
           padding: 0 0 6px;
+        }
+        input,
+        textarea {
+          background: white;
+          border: 2px solid #eeeff3;
+          padding: 8px;
+          resize: none;
         }
         .form__select {
           border: 2px solid #eeeff3;

@@ -7,7 +7,10 @@
 
     <!-- Registration Form -->
     <form @submit.prevent="register">
-      <h1>Create new account</h1>
+      <h1 class="form__title">Create new account</h1>
+      <p class="form__description">
+        Sed ut perspiciatis unde omnis iste natus error sit voluptat.
+      </p>
       <div>
         <label for="email">Email</label>
         <input type="text" required id="email" v-model="email" />
@@ -15,15 +18,6 @@
       <div>
         <label for="password">Password</label>
         <input type="password" required id="password" v-model="password" />
-      </div>
-      <div>
-        <label for="confirmPassword">Confirm Password</label>
-        <input
-          type="password"
-          required
-          id="confirmPassword"
-          v-model="confirmPassword"
-        />
       </div>
       <button type="submit">Sign up</button>
       <router-link :to="{ name: 'ConfirmEmail' }"
@@ -47,39 +41,32 @@ export default {
     const lastName = ref(null);
     const email = ref(null);
     const password = ref(null);
-    const confirmPassword = ref(null);
+    // const confirmPassword = ref(null);
     const errorMsg = ref(null);
 
     // Register function
     const register = async () => {
-      if (password.value === confirmPassword.value) {
-        try {
-          let { error } = await supabase.auth.signUp({
-            email: email.value,
-            password: password.value,
-          });
-          if (error) throw error;
+      try {
+        let { error } = await supabase.auth.signUp({
+          email: email.value,
+          password: password.value,
+        });
+        if (error) throw error;
 
-          // Check if the user has an active profile & set initial data
-          createProfile();
+        // Check if the user has an active profile & set initial data
+        createProfile();
 
-          // Route user to the confirmation page
-          router.push({ name: "ConfirmEmail" });
-        } catch (error) {
-          errorMsg.value = error.message;
-          setTimeout(() => {
-            errorMsg.value = null;
-          }, 5000);
-        }
-        return;
+        // Route user to the confirmation page
+        router.push({ name: "ConfirmEmail" });
+      } catch (error) {
+        errorMsg.value = error.message;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
       }
-      errorMsg.value = "Error: Passwords do not match. Please try again.";
-      setTimeout(() => {
-        errorMsg.value = null;
-      }, 5000);
+      return;
     };
     const createProfile = async () => {
-      console.log('hi')
       try {
         const user = supabase.auth.user();
         const updates = {
@@ -103,7 +90,6 @@ export default {
       lastName,
       email,
       password,
-      confirmPassword,
       errorMsg,
       register,
     };
@@ -117,6 +103,14 @@ form {
   flex-direction: column;
   width: 50%;
   margin: 16px;
+  .form__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .form__description {
+    margin: 0 0 16px;
+  }
 }
 
 form > div {

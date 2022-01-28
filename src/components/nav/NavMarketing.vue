@@ -6,10 +6,10 @@
       <div class="nav__left">
         <router-link class="nav__logo" :to="{ name: 'Welcome' }">
           <img
-            src="../../assets/images/launch_logo.png"
-            class="nav__logo--img"
+            src="../../assets/images/launch__purple.svg"
+            class="logo__img"
           />
-          <p class="nav__logo--text">LaunchList</p>
+          <p class="logo__text">LaunchDocs</p>
         </router-link>
         <router-link class="nav__link" :to="{ name: 'Welcome' }"
           >Home</router-link
@@ -52,12 +52,7 @@ export default {
       router.push({ name: "Welcome" });
     };
 
-    // Create new draft launch
-    const createLaunch = () => {
-      console.log('hi');
-    }
-
-    return { logout, user, createLaunch };
+    return { logout, user };
   },
 };
 </script>
@@ -93,15 +88,14 @@ export default {
     display: flex;
     align-items: center;
     margin-right: 32px;
-    .nav__logo--img {
-      margin-right: 12px;
-      height: 32px;
-      width: 32px;
-    }
-    .nav__logo--text {
-      font-weight: 800;
-      font-size: 16px;
-    }
+      .logo__img {
+        margin-right: 8px;
+        width: 22px;
+      }
+      .logo__text {
+        font-weight: 800;
+        font-size: 16px;
+      }
   }
 }
 

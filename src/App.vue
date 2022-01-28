@@ -1,19 +1,8 @@
 <template>
-  <div v-if="store.state.appReady">
-    <div class="marketing" v-if="!store.state.activeUser">
-      <NavMarketing />
-      <router-view />
-    </div>
-    <div class="app" v-if="store.state.activeUser">
-      <TheOnboardingModal v-if="!store.state.onboarded" />
-      <div class="app__left">
-        <NavApp />
-      </div>
-      <div class="app__right">
-        <Subnav />
-        <router-view :key="$route.fullPath" />
-      </div>
-    </div>
+  <div v-if="store.state.appReady" id="appContent">
+    <component :is="modal"></component>
+    <component :is="nav"></component>
+    <router-view :key="$route" />
   </div>
 </template>
 
@@ -24,6 +13,7 @@ import NavMarketing from "./components/nav/NavMarketing.vue";
 import Subnav from "./components/nav/Subnav.vue";
 import { supabase } from "./supabase/init";
 import store from "./store/index";
+import { shallowRef } from "vue";
 
 export default {
   components: {
@@ -33,12 +23,35 @@ export default {
     TheOnboardingModal,
   },
   setup() {
+    // Create data
+    const modal = shallowRef(null);
+    const nav = shallowRef(null);
+
+    // Set active user
+    const user = supabase.auth.user();
+
+    // Configures the nav component
+    if (user) {
+      nav.value = NavApp;
+    }
+    if (!user) {
+      nav.value = NavMarketing;
+    }
+
     // Runs when there is a auth state change
     supabase.auth.onAuthStateChange((_, session) => {
       if (session) {
-        // Set the active user in Vuex store
-        // Set the active user in Vuex store
+        nav.value = NavApp;
+        document.querySelector("#appContent").classList.add("app");
+        document.querySelector("#appContent").classList.remove("marketing");
+
+        // Get active user
         store.dispatch("setActiveUser", {
+          session,
+        });
+
+        // Set active user profile
+        store.dispatch("setActiveUserProfile", {
           session,
         });
 
@@ -46,12 +59,14 @@ export default {
         checkOnboardedStatus(session);
       }
       if (!session) {
+        nav.value = NavMarketing;
+        document.querySelector("#appContent").classList.remove("app");
+        document.querySelector("#appContent").classList.add("marketing");
         store.dispatch("resetActiveUser");
       }
     });
 
     const checkOnboardedStatus = async (session) => {
-
       // TODO - check if profile exists - then, if it does, check if onboarded
       const { data: profile } = await supabase
         .from("profiles")
@@ -59,12 +74,15 @@ export default {
         .eq("id", session.user.id)
         .single();
 
-      store.dispatch("setUserOnboardedStatus", {
-        profile,
-      });
+      if (!profile) {
+        modal.value = TheOnboardingModal;
+      }
+      if (profile) {
+        modal.value = null;
+      }
     };
 
-    return { store };
+    return { store, modal, nav };
   },
 };
 </script>
@@ -78,22 +96,47 @@ h2,
 h3,
 p,
 a,
-button {
-  color: white;
+div,
+input,
+textarea {
+  color: #212430;
   font-family: "Avenir";
   font-size: 14px;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
 }
 
 input {
-  color: #1e1f21;
+  border: 2px solid #eeeff3;
+  background: white;
+  padding: 8px;
+}
+
+div,
+span,
+section,
+article,
+nav {
+  box-sizing: border-box;
 }
 
 body {
-  background: #1e1f21;
+  background: white;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .app {
   display: flex;
   flex-direction: row;
+}
+
+.marketing {
+  display: flex;
+  flex-direction: column;
 }
 </style>

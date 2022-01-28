@@ -8,13 +8,11 @@ import ConfirmEmail from "../views/marketing/ConfirmEmail.vue";
 
 // App pages
 import Home from "../views/app/Home.vue";
-import Launch from "../views/app/Launch.vue";
-import LaunchHistory from "../views/app/LaunchHistory.vue";
-
-// Getting subdomain info
-// const host = window.location.host;
-// const parts = host.split('.');
-// const domainLength = 3; // route1.example.com => domain length = 3
+import Debt from "../views/app/Debt.vue";
+import Team from "../views/app/Team.vue";
+import Overview from "../views/app/Overview.vue";
+import Projects from "../views/app/Projects.vue";
+import Feedback from "../views/app/Feedback.vue";
 
 const routes = [
 
@@ -43,19 +41,38 @@ const routes = [
   // App pages
   {
     path: "/",
-    name: "Home",
+    name: "home",
     component: Home,
   },
   {
-    path: "/history/",
-    name: "LaunchHistory",
-    component: LaunchHistory,
+    path: "/debt",
+    name: "debt",
+    component: Debt,
   },
   {
-    path: "/launch/:launchId",
-    name: "Launch",
-    component: Launch,
+    path: "/team/:id",
+    name: "team",
+    component: Team,
+    redirect: { name: 'overview' },
+    children: [
+      {
+        path: "overview",
+        name: "overview",
+        component: Overview,
+      },
+      {
+        path: "projects",
+        name: "projects",
+        component: Projects,
+      },
+      {
+        path: "feedback",
+        name: "feedback",
+        component: Feedback,
+      },
+    ]
   },
+
 ];
 
 const router = createRouter({

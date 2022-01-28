@@ -46,7 +46,7 @@ export default {
           password: password.value,
         });
         if (error) throw error;
-        router.push({ name: 'Home' })
+        router.push({ path: '/' })
 
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;

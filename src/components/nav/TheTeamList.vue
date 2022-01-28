@@ -1,13 +1,13 @@
 <template>
-  <div v-if="store.state.launches.length > 0" class="launches">
+  <div v-if="store.state.teams_all.length > 0" class="launches">
     <router-link
       class="launches__link"
-      :to="{ name: 'launch', params: { id: launch.id },}"
-      v-for="launch in store.state.launches"
-      :key="launch.launch_id"
+      :to="{ name: 'team', params: { id: team.id } }"
+      v-for="team in store.state.teams_all"
+      :key="team.id"
     >
       <img src="../../assets/images/tag.svg" class="launch__img" />
-      <p class="launch__text">{{ launch.name }}</p>
+      <p class="launch__text">{{ team.name }}</p>
     </router-link>
   </div>
 </template>
@@ -16,15 +16,14 @@ import { ref } from "vue";
 import store from "../../store/index";
 
 export default {
-  name: "TheLaunchList",
+  name: "TheTeamList",
   setup() {
     // Setup variables and data
-    const launches = ref(null);
+    const teams = ref(null);
 
     // Get data from store
     const getData = async () => {
-      // store.dispatch("getLaunches");
-      launches.value = store.state.launches;
+      teams.value = store.state.teams_all;
     };
 
     // Run get data function
@@ -52,7 +51,7 @@ export default {
     .launch__img {
       width: 18px;
       margin-right: 4px;
-      opacity: .35;
+      opacity: 0.35;
     }
   }
   .launchList__link:hover {
@@ -62,7 +61,7 @@ export default {
 }
 .router-link-active {
   font-weight: 500;
-  background: #DBDDE6;
+  background: #dbdde6;
   border-left: 3px solid #3d52d5;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>I am the home page.</div>
+  <div class="overview">I am the home page.</div>
 </template>
 
 <script>
@@ -17,3 +17,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.overview {
+    margin: 0 0 0 240px;
+}
+</style>

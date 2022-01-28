@@ -1,0 +1,19 @@
+{
+    "name": "TBD — Kyle",
+    "description": "An extension to give feedback on the UI",
+    "version": "1.0",
+    "action": {
+        "default_icon": {
+            "16": "launch__purple.svg",
+            "32": "launch__purple.svg"
+        },
+        "default_popup": "popup.html"
+    },
+    "background": {
+        "service_worker": "./background.js"
+    },
+    "permissions": [
+        "storage"
+    ],
+    "manifest_version": 3
+}
