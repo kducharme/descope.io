@@ -1,13 +1,13 @@
 <template>
-  <div v-if="store.state.launches.length > 0" class="launches">
+  <div v-if="store.state.teams.length > 0" class="launches">
     <router-link
       class="launches__link"
-      :to="{ name: 'launch', params: { id: launch.id },}"
-      v-for="launch in store.state.launches"
-      :key="launch.launch_id"
+      :to="{ name: 'team', params: { id: team.id },}"
+      v-for="team in store.state.teams"
+      :key="team.id"
     >
       <img src="../../assets/images/tag.svg" class="launch__img" />
-      <p class="launch__text">{{ launch.name }}</p>
+      <p class="launch__text">{{ team.name }}</p>
     </router-link>
   </div>
 </template>
@@ -19,12 +19,12 @@ export default {
   name: "TheTeamList",
   setup() {
     // Setup variables and data
-    const launches = ref(null);
+    const teams = ref(null);
 
     // Get data from store
     const getData = async () => {
-      store.dispatch("getLaunches");
-      launches.value = store.state.launches;
+      store.dispatch("getTeams");
+      teams.value = store.state.teams;
     };
 
     // Run get data function

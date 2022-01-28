@@ -8,18 +8,24 @@
 
       <!-- Onboarding Form -->
       <form @submit.prevent="createProfile" class="form">
-        <h1 class="form__title">Welcome to LaunchDocs!</h1>
+        <h1 class="form__title">Complete your profile</h1>
         <p class="form__description">
           Sed ut perspiciatis unde omnis iste natus error sit voluptat
           accusantium doloremque laudantium.
         </p>
-        <div class="form__input">
-          <label for="firstName">Full name</label>
-          <input type="text" required id="firstName" v-model="firstName" />
+        <div class="name">
+          <div class="form__input name__first">
+            <label for="firstName">First name *</label>
+            <input type="text" required id="firstName" v-model="firstName" />
+          </div>
+          <div class="form__input name__last">
+            <label for="lastName">Last name *</label>
+            <input type="text" required id="lastName" v-model="lastName" />
+          </div>
         </div>
         <div class="form__input">
-          <label for="lastName">Last name</label>
-          <input type="text" required id="lastName" v-model="lastName" />
+          <label for="companyName">Company name *</label>
+          <input type="text" required id="companyName" v-model="companyName" />
         </div>
         <BaseButton
           type="submit"
@@ -38,7 +44,6 @@ import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 import BaseButton from "../global/BaseButton.vue";
 import store from "../../store/index";
-import { v4 as uuidv4 } from "uuid";
 
 export default {
   name: "TheOnboardingModal",
@@ -48,23 +53,23 @@ export default {
   data() {
     return {
       priority: "Primary",
-      text: "Save",
+      text: "Save profile",
     };
   },
   setup() {
     // Create data / vars
     const firstName = ref(null);
     const lastName = ref(null);
+    const companyName = ref(null);
     const errorMsg = ref(null);
-    const organization = ref(null);
 
     // Register function
     const createProfile = async () => {
-      // Generate unique id for organization
-      organization.value = uuidv4();
+      const org = await createOrganization();
 
       try {
         const user = supabase.auth.user();
+        console.log(user.id)
         const updates = {
           id: user.id,
           firstname: firstName.value,
@@ -72,7 +77,7 @@ export default {
           email: user.email,
           updated_at: new Date(),
           onboarded: true,
-          organization_id: organization.value
+          organization_id: org[0].id,
         };
         let { error } = await supabase.from("profiles").upsert(updates);
         store.state.onboarded = true;
@@ -85,9 +90,27 @@ export default {
       }
     };
 
+    const createOrganization = async () => {
+      try {
+        const { data, error } = await supabase.from("organizations").insert([
+          {
+            name: companyName.value,
+          },
+        ]);
+        if (error) throw error;
+        return data;
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
+      }
+    };
+
     return {
       firstName,
       lastName,
+      companyName,
       errorMsg,
       createProfile,
     };
@@ -102,6 +125,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 999999;
   width: 100vw;
   height: 100vh;
   background: #333536bb;
@@ -110,7 +134,7 @@ export default {
     position: fixed;
     margin: 24px 0 0;
     width: 440px;
-    background: #1e1f21;
+    background: white;
     padding: 24px;
     // border-left: 0.5px solid #e2e2e25f;
     .form {
@@ -124,6 +148,14 @@ export default {
       .form__description {
         margin: 0 0 16px;
       }
+      .name {
+        display: flex;
+        justify-content: space-between;
+        .name__first,
+        .name__last {
+          width: 188px;
+        }
+      }
       .form__input {
         display: flex;
         flex-direction: column;
@@ -132,10 +164,12 @@ export default {
           font-size: 12px;
           padding: 0 0 6px;
         }
-        input {
-          background: #252628;
-          border: 1px solid #e2e2e25f;
+        input,
+        textarea {
+          background: white;
+          border: 2px solid #eeeff3;
           padding: 8px;
+          resize: none;
         }
         .form__select {
           background: #252628;
@@ -144,8 +178,7 @@ export default {
         }
       }
       .form__button {
-        margin: 20px 0 0;
-        // max-width: 132px;
+        margin: 16px 0 0;
       }
     }
   }

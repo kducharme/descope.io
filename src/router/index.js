@@ -8,8 +8,8 @@ import ConfirmEmail from "../views/marketing/ConfirmEmail.vue";
 
 // App pages
 import Home from "../views/app/Home.vue";
-import Launch from "../views/app/Launch.vue";
 import Debt from "../views/app/Debt.vue";
+import Team from "../views/app/Team.vue";
 import Overview from "../views/app/Overview.vue";
 import Requirements from "../views/app/Requirements.vue";
 import Feedback from "../views/app/Feedback.vue";
@@ -50,9 +50,9 @@ const routes = [
     component: Debt,
   },
   {
-    path: "/launch/:id",
-    name: "launch",
-    component: Launch,
+    path: "/team/:id",
+    name: "team",
+    component: Team,
     redirect: { name: 'overview' },
     children: [
       {

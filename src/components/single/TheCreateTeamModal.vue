@@ -42,8 +42,7 @@
 <script>
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
-import { v4 as uuidv4 } from "uuid";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 import BaseButton from "../global/BaseButton.vue";
 import store from "../../store/index";
 
@@ -55,16 +54,15 @@ export default {
   data() {
     return {
       priority: "Primary",
-      text: "Create launch",
+      text: "Create team",
     };
   },
   setup() {
     // Create data
-    const router = useRouter();
+    // const router = useRouter();
     const teamName = ref(null);
     const teamDescription = ref(null);
     const errorMsg = ref(null);
-    const id = ref(null);
 
     // Closes modal when the background or "x" button  is clicked
     const closeModal = () => {
@@ -73,15 +71,11 @@ export default {
 
     // Creates a new launch in the db when the form is submitted
     const createTeam = async () => {
-      // Generate unique id for launch
-      id.value = uuidv4();
 
-      // TODO - check if a launch already exists with that name
-
+      // TODO - check if a team already exists with that name
       try {
-        const { error } = await supabase.from("teams").insert([
+        const { data, error } = await supabase.from("teams").insert([
           {
-            id: id.value,
             name: teamName.value,
             description: teamDescription.value,
             created_by: store.state.activeUser.id,
@@ -89,9 +83,10 @@ export default {
           },
         ]);
         if (error) throw error;
-        await store.dispatch("getLaunches");
-        await routeToLaunch();
-        await store.dispatch("hideCreateLaunchModal");
+        console.log(data)
+        // await store.dispatch("getTeams");
+        // await routeToLaunch();
+        // await store.dispatch("hideCreateTeamModal");
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
@@ -101,10 +96,10 @@ export default {
     };
 
     // Route user to launch view
-    const routeToLaunch = () => {
-      router.push({ name: "launch", params: { id: id.value } });
-      id.value = null;
-    };
+    // const routeToLaunch = () => {
+    //   router.push({ name: "team", params: { id: id.value } });
+    //   id.value = null;
+    // };
     return {
       createTeam,
       teamName,

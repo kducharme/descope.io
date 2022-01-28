@@ -27,7 +27,6 @@ export default {
     const modal = shallowRef(null);
     const nav = shallowRef(null);
 
-
     // Set active user
     const user = supabase.auth.user();
 
@@ -46,7 +45,14 @@ export default {
         nav.value = NavApp;
         document.querySelector("#appContent").classList.add("app");
         document.querySelector("#appContent").classList.remove("marketing");
+
+        // Get active user
         store.dispatch("setActiveUser", {
+          session,
+        });
+
+        // Set active user profile
+        store.dispatch("setActiveUserProfile", {
           session,
         });
 
@@ -105,14 +111,17 @@ a {
 }
 
 input {
-  border: 2px solid #EEEFF3;
+  border: 2px solid #eeeff3;
   background: white;
   padding: 8px;
 }
 
-
-div, span, section, article, nav{
-  box-sizing:border-box
+div,
+span,
+section,
+article,
+nav {
+  box-sizing: border-box;
 }
 
 body {

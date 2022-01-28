@@ -23,7 +23,7 @@ export default {
 
     // Get data from store
     const getData = async () => {
-      store.dispatch("getLaunches");
+      // store.dispatch("getLaunches");
       launches.value = store.state.launches;
     };
 

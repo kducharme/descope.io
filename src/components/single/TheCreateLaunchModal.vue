@@ -89,7 +89,7 @@ export default {
           },
         ]);
         if (error) throw error;
-        await store.dispatch("getLaunches");
+        // await store.dispatch("getLaunches");
         await routeToLaunch();
         await store.dispatch("hideCreateLaunchModal");
       } catch (error) {
