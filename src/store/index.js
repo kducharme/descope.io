@@ -141,11 +141,10 @@ export default new Vuex.Store({
             payload.teams.forEach((team) => {
                 if (team.id == context.state.teams_active_id) {
                     context.commit("SET_ACTIVE_TEAM_DATA", team);
-                    console.log(team)
                 }
             })
         },
-    
+
         // RESET ACTIONS
         resetActiveUser(context) {
             context.commit("SET_ACTIVE_USER");

@@ -42,7 +42,7 @@
 <script>
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import BaseButton from "../global/BaseButton.vue";
 import store from "../../store/index";
 
@@ -59,7 +59,7 @@ export default {
   },
   setup() {
     // Create data
-    // const router = useRouter();
+    const router = useRouter();
     const teamName = ref(null);
     const teamDescription = ref(null);
     const errorMsg = ref(null);
@@ -84,9 +84,9 @@ export default {
         ]);
         if (error) throw error;
         console.log(data)
-        // await store.dispatch("getTeams");
-        // await routeToLaunch();
-        // await store.dispatch("hideCreateTeamModal");
+        await store.dispatch("setTeams");
+        routeToTeam(data);
+        store.dispatch("hideCreateTeamModal");
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
@@ -95,11 +95,10 @@ export default {
       }
     };
 
-    // Route user to launch view
-    // const routeToLaunch = () => {
-    //   router.push({ name: "team", params: { id: id.value } });
-    //   id.value = null;
-    // };
+    // Route user to team view
+    const routeToTeam = (data) => {
+      router.push({ name: "team", params: { id: data[0].id } });
+    };
     return {
       createTeam,
       teamName,
