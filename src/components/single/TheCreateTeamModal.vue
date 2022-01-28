@@ -83,7 +83,6 @@ export default {
           },
         ]);
         if (error) throw error;
-        console.log(data)
         await store.dispatch("setTeams");
         routeToTeam(data);
         store.dispatch("hideCreateTeamModal");

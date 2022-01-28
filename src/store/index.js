@@ -26,6 +26,19 @@ export default new Vuex.Store({
         createTeamModal: false
     },
     mutations: {
+        // RESET STATE — APP
+        RESET_STATE: (state) => {
+            state.activeUser = null;
+            state.profile = null;
+            state.organization = null;
+            state.teams_all = [];
+            state.teams_active_id = null;
+            state.teams_active_data = null;
+            state.projects = [];
+            state.activeProject = null;
+            state.feedback = [];
+        },
+
         // SET STATE — APP
         SET_APP_STATUS: (state, status) => {
             state.appReady = status;
@@ -84,11 +97,6 @@ export default new Vuex.Store({
         HIDE_CREATE_TEAM_MODAL: (state) => {
             state.createTeamModal = false;
         },
-
-        // RESET STATE
-        RESET_ACTIVE_USER: (state) => {
-            state.activeUser = null;
-        },
     },
     actions: {
         // SET ACTIONS
@@ -146,8 +154,8 @@ export default new Vuex.Store({
         },
 
         // RESET ACTIONS
-        resetActiveUser(context) {
-            context.commit("SET_ACTIVE_USER");
+        resetState(context) {
+            context.commit("RESET_STATE");
         },
         setUserOnboardedStatus(context, payload) {
             if (payload.profile.onboarded) {

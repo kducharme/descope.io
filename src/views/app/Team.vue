@@ -32,8 +32,6 @@ export default {
     // Setup ref to router
     const router = useRouter();
 
-    console.log('hi')
-
     // Create data
     const dataLoaded = ref(null);
     const teamData = ref(null);

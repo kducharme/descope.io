@@ -62,7 +62,7 @@ export default {
         nav.value = NavMarketing;
         document.querySelector("#appContent").classList.remove("app");
         document.querySelector("#appContent").classList.add("marketing");
-        store.dispatch("resetActiveUser");
+        store.dispatch("resetState");
       }
     });
 
