@@ -1,9 +1,9 @@
 <template>
-  <div v-if="store.state.teams.length > 0" class="launches">
+  <div v-if="store.state.teams_all.length > 0" class="launches">
     <router-link
       class="launches__link"
-      :to="{ name: 'team', params: { id: team.id },}"
-      v-for="team in store.state.teams"
+      :to="{ name: 'team', params: { id: team.id } }"
+      v-for="team in store.state.teams_all"
       :key="team.id"
     >
       <img src="../../assets/images/tag.svg" class="launch__img" />
@@ -23,8 +23,7 @@ export default {
 
     // Get data from store
     const getData = async () => {
-      store.dispatch("getTeams");
-      teams.value = store.state.teams;
+      teams.value = store.state.teams_all;
     };
 
     // Run get data function
@@ -52,7 +51,7 @@ export default {
     .launch__img {
       width: 18px;
       margin-right: 4px;
-      opacity: .35;
+      opacity: 0.35;
     }
   }
   .launchList__link:hover {
@@ -62,7 +61,7 @@ export default {
 }
 .router-link-active {
   font-weight: 500;
-  background: #DBDDE6;
+  background: #dbdde6;
   border-left: 3px solid #3d52d5;
 }
 </style>

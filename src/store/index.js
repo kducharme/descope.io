@@ -11,7 +11,8 @@ export default new Vuex.Store({
         onboarded: null,
         profile: null,
         organization: null,
-        teams: [],
+        teams_all: [],
+        teams_active: null,
 
         // Launch Data
         launches: [],
@@ -28,7 +29,6 @@ export default new Vuex.Store({
         SET_APP_STATUS: (state, status) => {
             state.appReady = status;
         },
-
         SET_USER_ONBOARDED_STATUS: (state, status) => {
             state.onboarded = status;
         },
@@ -44,7 +44,11 @@ export default new Vuex.Store({
             state.organization = organization;
         },
         SET_TEAMS: (state, teams) => {
-            state.teams = teams;
+            state.teams_all = teams;
+        },
+        SET_ACTIVE_TEAM: (state, team) => {
+            state.team_active = team;
+            console.log(state.team_active.team.name)
         },
 
         // SET STATE — PROJECT DATA
@@ -107,11 +111,10 @@ export default new Vuex.Store({
                 .from("teams")
                 .select("*")
                 .eq("organization_id", context.state.organization);
-                console.log(teams)
 
             if (teams) {
 
-
+                // Add 
                 teams.forEach(t => {
                     t.name_low = t.name.toLowerCase();
                 })
@@ -126,14 +129,8 @@ export default new Vuex.Store({
                 context.commit("SET_TEAMS", await teams);
             }
         },
-
-
-
-
-        setActiveLaunch(context, payload) {
-            if (payload.launch.id.length === 36) {
-                context.commit("SET_ACTIVE_LAUNCH", payload);
-            }
+        setActiveTeam(context, payload) {
+            context.commit("SET_ACTIVE_TEAM", payload);
         },
 
         // RESET ACTIONS

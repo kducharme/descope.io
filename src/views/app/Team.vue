@@ -1,8 +1,8 @@
 <template>
-  <div class="launch" v-if="store.state.activeLaunch">
+  <div class="launch" v-if="dataLoaded">
     <nav class="subnav">
       <div class="top">
-        <h2 class="title">{{ store.state.activeLaunch.launch.name }}</h2>
+        <h2 class="title">{{ teamData.name}}</h2>
       </div>
       <div class="bottom">
         <router-link class="nav__link" :to="{ name: 'overview' }"
@@ -26,39 +26,35 @@ import { useRouter } from "vue-router";
 import store from "../../store/index";
 
 export default {
-  name: "Launch",
+  name: "Team",
   components: {},
   setup() {
     // Setup ref to router
     const router = useRouter();
 
     // Create data
-    const launchId = router.currentRoute.value.fullPath.split("/")[2];
-    const launch = ref([]);
+    const team_id = router.currentRoute.value.fullPath.split("/")[2];
     const dataLoaded = ref(null);
+    const teamData = ref(null);
 
     // Get data
     const getData = async () => {
       // TODO - need to refactor this
-      await store.dispatch("getLaunches");
 
-      await store.state.launches.forEach((launch) => {
-        if (launch.id === launchId) {
+      await store.state.teams_all.forEach((team) => {
+        if (team.id == team_id) {
           dataLoaded.value = true;
-          launch.value = launch;
-          store.dispatch("setActiveLaunch", {
-            launch,
+          store.dispatch("setActiveTeam", {
+            team,
           });
-          store.dispatch("getFeedback", {
-            launch
-          });
+          teamData.value = team;
         }
       });
     };
 
     getData();
 
-    return { launch, dataLoaded, store, launchId };
+    return { dataLoaded, store, team_id, teamData };
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="body">
     <span>
-      {{ store.state.activeLaunch.launch.name}}
+      <!-- {{ store.state.activeLaunch.launch.name}} -->
     </span>
   </div>
 </template>
