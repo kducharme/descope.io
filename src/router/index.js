@@ -11,7 +11,7 @@ import Home from "../views/app/Home.vue";
 import Debt from "../views/app/Debt.vue";
 import Team from "../views/app/Team.vue";
 import Overview from "../views/app/Overview.vue";
-import Requirements from "../views/app/Requirements.vue";
+import Projects from "../views/app/Projects.vue";
 import Feedback from "../views/app/Feedback.vue";
 
 const routes = [
@@ -61,9 +61,9 @@ const routes = [
         component: Overview,
       },
       {
-        path: "requirements",
-        name: "requirements",
-        component: Requirements,
+        path: "projects",
+        name: "projects",
+        component: Projects,
       },
       {
         path: "feedback",

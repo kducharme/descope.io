@@ -1,18 +1,18 @@
 <template>
-  <div class="launch" v-if="dataLoaded">
+  <div class="launch" v-if="store.state.teams_active_data">
     <nav class="subnav">
       <div class="top">
-        <h2 class="title">{{ teamData.name}}</h2>
+        <h2 class="title">{{ store.state.teams_active_data.name }}</h2>
       </div>
       <div class="bottom">
         <router-link class="nav__link" :to="{ name: 'overview' }"
           >Overview</router-link
         >
-        <router-link class="nav__link" :to="{ name: 'requirements' }"
-          >Requirements</router-link
+        <router-link class="nav__link" :to="{ name: 'projects' }"
+          >Projects</router-link
         >
         <router-link class="nav__link" :to="{ name: 'feedback' }"
-          >Feedback</router-link
+          >Debt</router-link
         >
       </div>
     </nav>
@@ -32,29 +32,35 @@ export default {
     // Setup ref to router
     const router = useRouter();
 
+    console.log('hi')
+
     // Create data
-    const team_id = router.currentRoute.value.fullPath.split("/")[2];
     const dataLoaded = ref(null);
     const teamData = ref(null);
 
+    store.dispatch("setTeams")
+
     // Get data
-    const getData = async () => {
+    const getActiveTeamData = async () => {
       // TODO - need to refactor this
 
-      await store.state.teams_all.forEach((team) => {
-        if (team.id == team_id) {
-          dataLoaded.value = true;
-          store.dispatch("setActiveTeam", {
-            team,
-          });
-          teamData.value = team;
-        }
-      });
+      if (store.state.teams_active_data) {
+        dataLoaded.value = true;
+        teamData.value = store.state.teams_active;
+      }
     };
 
-    getData();
+    const setActiveTeamId = async () => {
+      const team_id = router.currentRoute.value.fullPath.split("/")[2];
+      store.dispatch("setActiveTeamId", {
+        team_id,
+      });
+      await getActiveTeamData();
+    };
 
-    return { dataLoaded, store, team_id, teamData };
+    setActiveTeamId();
+
+    return { dataLoaded, store, teamData };
   },
 };
 </script>

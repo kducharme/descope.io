@@ -2,7 +2,7 @@
   <div v-if="store.state.appReady" id="appContent">
     <component :is="modal"></component>
     <component :is="nav"></component>
-    <router-view :key="$route.fullPath" />
+    <router-view :key="$route" />
   </div>
 </template>
 
@@ -31,7 +31,6 @@ export default {
     const user = supabase.auth.user();
 
     // Configures the nav component
-
     if (user) {
       nav.value = NavApp;
     }
