@@ -34,6 +34,7 @@ export default new Vuex.Store({
             state.teams_all = [];
             state.teams_active_id = null;
             state.teams_active_data = null;
+            state.teams_active_members = [];
             state.projects = [];
             state.activeProject = null;
             state.feedback = [];
@@ -151,6 +152,20 @@ export default new Vuex.Store({
                     context.commit("SET_ACTIVE_TEAM_DATA", team);
                 }
             })
+            context.dispatch("setActiveTeamMembers")
+        },
+        async setActiveTeamMembers(context) {
+            const teamMemberIds = context.state.teams_active_data.members;
+
+            const { data: profiles } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("organization_id", context.state.organization);
+
+            const members = profiles.filter(p => teamMemberIds.includes(p.id));
+
+            console.log(members)
+
         },
 
         // RESET ACTIONS

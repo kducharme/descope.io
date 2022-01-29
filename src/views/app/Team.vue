@@ -6,6 +6,11 @@
           <h2 class="title">{{ store.state.teams_active_data.name }}</h2>
         </div>
         <div class="top__right">
+          <div class="members">
+            <div class="members__names" v-for="member in store.state.teams_active_data.members" :key="member">
+              {{ member }}
+            </div>
+          </div>
           <BaseButton
             type="submit"
             :priority="secondary_priority"
@@ -53,7 +58,7 @@ export default {
       primary_priority: "Primary",
       primary_text: "Create project",
       secondary_priority: "Secondary",
-      secondary_text: "Add debt",
+      secondary_text: "Actions",
     };
   },
   setup() {

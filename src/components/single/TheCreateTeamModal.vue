@@ -10,18 +10,19 @@
 
       <!-- Create Launch Form -->
       <div class="header">
-        <h1 class="title">Create team</h1>
+        <h1 class="title">Create a team</h1>
       </div>
       <form @submit.prevent="createTeam" class="form">
         <div class="form__input">
-          <label for="teamName">Team name</label>
+          <label for="teamName">Team name *</label>
           <input type="text" required id="teamName" v-model="teamName" />
         </div>
         <div class="form__input">
-          <label for="teamDescription">Description</label>
+          <label for="teamDescription"
+            >Description<span class="optional">(optional)</span></label
+          >
           <textarea
             type="textarea"
-            required
             id="teamDescription"
             v-model="teamDescription"
             rows="3"
@@ -71,13 +72,13 @@ export default {
 
     // Creates a new launch in the db when the form is submitted
     const createTeam = async () => {
-
       // TODO - check if a team already exists with that name
       try {
         const { data, error } = await supabase.from("teams").insert([
           {
             name: teamName.value,
             description: teamDescription.value,
+            members: [`${store.state.activeUser.id}`],
             created_by: store.state.activeUser.id,
             organization_id: store.state.organization,
           },
@@ -129,8 +130,6 @@ export default {
     padding: 24px;
     .header {
       display: flex;
-      // background: #eeeff3;
-      // border-bottom: 1px solid #CFD2DE;
       .title {
         font-size: 20px;
         font-weight: 600;
@@ -149,6 +148,11 @@ export default {
           font-weight: 600;
           color: #7c83a2;
           padding: 0 0 6px;
+        }
+        .optional {
+          color: #9ba1bb;
+          font-weight: 400;
+          margin-left: 4px;
         }
         input,
         textarea {
