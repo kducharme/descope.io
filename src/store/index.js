@@ -11,21 +11,24 @@ export default new Vuex.Store({
         onboarded: null,
         profile: null,
         organization: null,
+
+        // Team Data
         teams_all: [],
         teams_active_id: null,
         teams_active_data: null,
         teams_active_members: [],
 
-
-        // Launch Data
-        launches: [],
-        activeLaunch: null,
+        // Project Data
+        projects: [],
         feedback: [],
 
+
+        // activeLaunch: null,
+
         // UI Elements
-        createLaunchModal: false,
-        addFeedbackModal: false,
-        createTeamModal: false
+        createTeamModal: false,
+        createProjectModal: false,
+        createFeedbackModal: false,
     },
     mutations: {
         // RESET STATE — APP
@@ -85,17 +88,17 @@ export default new Vuex.Store({
         },
 
         // SET STATE — UI CONFIGRATUIONS
-        SHOW_CREATE_LAUNCH_MODAL: (state) => {
-            state.createLaunchModal = true;
+        SHOW_CREATE_PROJECT_MODAL: (state) => {
+            state.createProjectModal = true;
         },
-        HIDE_CREATE_LAUNCH_MODAL: (state) => {
-            state.createLaunchModal = false;
+        HIDE_CREATE_PROJECT_MODAL: (state) => {
+            state.createProjectModal = false;
         },
         SHOW_ADD_FEEDBACK_MODAL: (state) => {
-            state.addFeedbackModal = true;
+            state.createFeedbackModal = true;
         },
         HIDE_ADD_FEEDBACK_MODAL: (state) => {
-            state.addFeedbackModal = false;
+            state.createFeedbackModal = false;
         },
         SHOW_CREATE_TEAM_MODAL: (state) => {
             state.createTeamModal = true;
@@ -190,18 +193,18 @@ export default new Vuex.Store({
         },
 
         // UI CONFIG ACTIONS
-        showCreateLaunchModal(context) {
-            context.commit("SHOW_CREATE_LAUNCH_MODAL")
+        showCreateProjectModal(context) {
+            context.commit("SHOW_CREATE_PROJECT_MODAL")
         },
 
-        hideCreateLaunchModal(context) {
-            context.commit("HIDE_CREATE_LAUNCH_MODAL")
+        hideCreateProjectModal(context) {
+            context.commit("HIDE_CREATE_PROJECT_MODAL")
         },
-        showAddFeedbackModal(context) {
+        showCreateFeedbackModal(context) {
             context.commit("SHOW_ADD_FEEDBACK_MODAL")
         },
 
-        hideAddFeedbackModal(context) {
+        hideCreateFeedbackModal(context) {
             context.commit("HIDE_ADD_FEEDBACK_MODAL")
         },
         showCreateTeamModal(context) {

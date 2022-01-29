@@ -10,7 +10,7 @@
 
       <!-- Create Launch Form -->
       <div class="header">
-        <h1 class="title">Create a team</h1>
+        <h1 class="title">Create new team</h1>
       </div>
       <form @submit.prevent="createTeam" class="form">
         <div class="form__input">
@@ -19,7 +19,7 @@
         </div>
         <div class="form__input">
           <label for="teamDescription"
-            >Description<span class="optional">(optional)</span></label
+            >Team mission<span class="optional">(optional)</span></label
           >
           <textarea
             type="textarea"
@@ -48,7 +48,7 @@ import BaseButton from "../global/BaseButton.vue";
 import store from "../../store/index";
 
 export default {
-  name: "TheCreateLaunchModal",
+  name: "TheCreateTeamModal",
   components: {
     BaseButton,
   },

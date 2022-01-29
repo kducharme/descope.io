@@ -1,7 +1,7 @@
 <template>
   <div class="body">
-    <span>
-      I am the projects page
+    <span v-for="proj in store.state.projects" :key="proj.id">
+      {{ project.name }}
     </span>
   </div>
 </template>

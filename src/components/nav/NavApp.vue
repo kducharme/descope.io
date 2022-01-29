@@ -147,9 +147,9 @@ export default {
         margin: 16px 0 8px -16px;
         padding: 8px 8px 0px 24px;
         .title__text {
-          font-size: 12px;
+          font-size: 14px;
           font-weight: 500;
-          color: #6c849e;
+          color: #778ea7;
         }
         .title__action {
           display: flex;

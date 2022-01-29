@@ -1,5 +1,7 @@
 <template>
   <div class="launch" v-if="store.state.teams_active_data">
+          <TheCreateProjectModal v-if="store.state.createProjectModal" />
+
     <nav class="subnav">
       <div class="top">
         <div class="top__left">
@@ -19,13 +21,14 @@
             type="submit"
             :priority="secondary_priority"
             :text="secondary_text"
-            class="subnav__button"
+            class="subnav__button--secondary"
           />
           <BaseButton
             type="submit"
             :priority="primary_priority"
             :text="primary_text"
-            class="subnav__button"
+            :action="showCreateProjectModal"
+            class="subnav__button--primary"
           />
         </div>
       </div>
@@ -37,7 +40,7 @@
           >Projects</router-link
         >
         <router-link class="nav__link" :to="{ name: 'feedback' }"
-          >Debt</router-link
+          >Feedback</router-link
         >
       </div>
     </nav>
@@ -50,11 +53,13 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import store from "../../store/index";
 import BaseButton from "../../components/global/BaseButton.vue";
+import TheCreateProjectModal from "../../components/single/TheCreateProjectModal.vue";
 
 export default {
   name: "Team",
   components: {
     BaseButton,
+    TheCreateProjectModal,
   },
   data() {
     return {
@@ -96,6 +101,11 @@ export default {
 
     return { dataLoaded, store, teamData };
   },
+  methods: {
+    showCreateProjectModal() {
+      store.dispatch("showCreateProjectModal");
+    },
+  },
 };
 </script>
 
@@ -123,8 +133,11 @@ export default {
     .top__right {
       display: flex;
       flex-direction: row;
-      .subnav__button {
+      .subnav__button--primary {
         margin-left: 16px;
+      }
+      .subnav__button--secondary {
+        margin-left: 24px;
       }
     }
     .members {
@@ -136,9 +149,9 @@ export default {
         align-items: center;
         justify-content: center;
         background: #ced1de;
-        color: #636C92;
-        height: 32px;
-        width: 32px;
+        color: #636c92;
+        height: 36px;
+        width: 36px;
         border-radius: 100%;
         font-size: 11px;
         font-weight: 600;
