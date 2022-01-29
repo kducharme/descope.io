@@ -7,8 +7,12 @@
         </div>
         <div class="top__right">
           <div class="members">
-            <div class="members__names" v-for="member in store.state.teams_active_data.members" :key="member">
-              {{ member }}
+            <div
+              class="members__avatar"
+              v-for="member in store.state.teams_active_members"
+              :key="member.id"
+            >
+              {{ member._initials }}
             </div>
           </div>
           <BaseButton
@@ -47,13 +51,12 @@ import { useRouter } from "vue-router";
 import store from "../../store/index";
 import BaseButton from "../../components/global/BaseButton.vue";
 
-
 export default {
   name: "Team",
   components: {
-    BaseButton
+    BaseButton,
   },
-    data() {
+  data() {
     return {
       primary_priority: "Primary",
       primary_text: "Create project",
@@ -122,6 +125,24 @@ export default {
       flex-direction: row;
       .subnav__button {
         margin-left: 16px;
+      }
+    }
+    .members {
+      display: flex;
+      align-items: center;
+      .members__avatar {
+        margin: -4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ced1de;
+        color: #636C92;
+        height: 32px;
+        width: 32px;
+        border-radius: 100%;
+        font-size: 11px;
+        font-weight: 600;
+        border: 2px solid white;
       }
     }
   }

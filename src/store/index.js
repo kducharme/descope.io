@@ -14,6 +14,8 @@ export default new Vuex.Store({
         teams_all: [],
         teams_active_id: null,
         teams_active_data: null,
+        teams_active_members: [],
+
 
         // Launch Data
         launches: [],
@@ -66,6 +68,9 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_TEAM_DATA: (state, team) => {
             state.teams_active_data = team;
+        },
+        SET_ACTIVE_TEAM_MEMBERS: (state, members) => {
+            state.teams_active_members = members;
         },
 
         // SET STATE — PROJECT DATA
@@ -162,10 +167,13 @@ export default new Vuex.Store({
                 .select("*")
                 .eq("organization_id", context.state.organization);
 
+            profiles.forEach(p => {
+                p._initials = p.firstname.charAt(0) + p.lastname.charAt(0);
+            })
+
             const members = profiles.filter(p => teamMemberIds.includes(p.id));
 
-            console.log(members)
-
+            context.commit("SET_ACTIVE_TEAM_MEMBERS", members);
         },
 
         // RESET ACTIONS
