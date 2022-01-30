@@ -10,7 +10,6 @@
         <BaseButton
           :priority="priority"
           :text="text"
-          :action="showAddFeedbackModal"
           class="actions__create"
         />
       </div>
@@ -19,9 +18,10 @@
       <div
         v-for="project in store.state.projects"
         :key="project.id"
+        @click="routeToProject(project.id)"
         class="proj"
       >
-        <div class="col__1">
+        <div class="col col__1">
           <div class="icon">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +45,7 @@
             </svg>
           </div>
         </div>
-        <div class="col__2">
+        <div class="col col__2">
           <p class="name">
             {{ project.name }}
           </p>
@@ -53,9 +53,13 @@
             {{ project.description }}
           </p>
         </div>
-        <div class="col__3">
-              <span class="status status__active" v-if="project.status === 'active'">Active</span>
-              <span class="status status__draft" v-if="project.status === 'draft'">Draft</span>
+        <div class="col col__3">
+          <span class="status status__active" v-if="project.status === 'active'"
+            >Active</span
+          >
+          <span class="status status__draft" v-if="project.status === 'draft'"
+            >Draft</span
+          >
         </div>
       </div>
     </div>
@@ -65,6 +69,7 @@
 <script>
 import store from "../../store/index";
 import BaseButton from "../../components/global/BaseButton.vue";
+import { useRouter } from "vue-router";
 
 export default {
   name: "Projects",
@@ -78,7 +83,14 @@ export default {
     };
   },
   setup() {
-    return { store };
+    // Crate data
+    const router = useRouter();
+
+    // When a project is clicked, route user to project page
+    const routeToProject = (projectId) => {
+      router.push({ name: "project", params: { team: store.state.teams_active_data.id, projectId: projectId }, });
+    };
+    return { store, routeToProject };
   },
 };
 </script>
@@ -124,16 +136,18 @@ export default {
       border-radius: 3px;
       margin: 0 0 -1px;
       padding: 16px;
+      .col {
+        margin-right: 16px;
+      }
       .col__1 {
         display: flex;
-        margin: 0 16px 0 0;
         .icon {
           align-items: center;
           justify-content: center;
           display: flex;
           width: 36px;
           height: 36px;
-          background: #eeeff3;
+          background: #e6e8ef;
           font-size: 12px;
           font-weight: 600;
           border-radius: 100%;
@@ -160,6 +174,9 @@ export default {
       .col__3 {
         .status {
           padding: 4px 6px;
+          border-radius: 3px;
+          font-size: 11.5px;
+          font-weight: 500;
         }
         .status__active {
           background: #d2f1e4;
@@ -168,6 +185,10 @@ export default {
           background: #eeeff3;
         }
       }
+    }
+    .proj:hover {
+      background: #f3f4f7;
+      cursor: pointer;
     }
   }
 }

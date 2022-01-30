@@ -13,6 +13,7 @@ import Team from "../views/app/Team.vue";
 import Overview from "../views/app/Overview.vue";
 import Projects from "../views/app/Projects.vue";
 import Feedback from "../views/app/Feedback.vue";
+import IndividualProject from "../views/app/IndividualProject.vue";
 
 const routes = [
 
@@ -72,7 +73,11 @@ const routes = [
       },
     ]
   },
-
+  {
+    path: "/team/:team/project/:projectId",
+    name: "project",
+    component: IndividualProject,
+  },
 ];
 
 const router = createRouter({
