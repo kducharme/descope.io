@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <span v-for="proj in store.state.projects" :key="proj.id">
+    <span v-for="project in store.state.projects" :key="project.id">
       {{ project.name }}
     </span>
   </div>
@@ -11,7 +11,8 @@ import store from "../../store/index";
 export default {
   name: "Projects",
   setup() {
-    return {store};
+
+    return { store };
   },
 };
 </script>

@@ -14,8 +14,8 @@
       </div>
       <form @submit.prevent="createProject" class="form">
         <div class="form__input">
-          <label for="launchName">Name</label>
-          <input type="text" required id="launchName" v-model="launchName" />
+          <label for="projectName">Name</label>
+          <input type="text" required id="projectName" v-model="projectName" />
         </div>
         <div class="form__input">
           <label for="team">Team</label>
@@ -87,7 +87,7 @@ export default {
     // Creates a new launch in the db when the form is submitted
     const createProject = async () => {
       try {
-        const { data, error } = await supabase.from("projects").insert([
+        const { error } = await supabase.from("projects").insert([
           {
             name: projectName.value,
             description: projectDescription.value,
@@ -99,7 +99,7 @@ export default {
           },
         ]);
         if (error) throw error;
-        await routeToProject(data);
+        await routeToProject();
         await store.dispatch("hideCreateProjectModal");
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
@@ -110,8 +110,9 @@ export default {
     };
 
     // Route user to launch view
-    const routeToProject = (data) => {
-      router.push({ name: "projects", params: { id: data[0].id } });
+    const routeToProject = () => {
+      // router.push({ name: "projects", params: { id: data[0].id } });
+      router.push({ name: "projects" });
     };
     return {
       createProject,

@@ -22,9 +22,6 @@ export default new Vuex.Store({
         projects: [],
         feedback: [],
 
-
-        // activeLaunch: null,
-
         // UI Elements
         createTeamModal: false,
         createProjectModal: false,
@@ -77,14 +74,12 @@ export default new Vuex.Store({
         },
 
         // SET STATE — PROJECT DATA
-        SET_LAUNCH_DATA: (state, launches) => {
-            state.launches = launches;
+        SET_PROJECTS: (state, projects) => {
+            state.projects = projects;
+            console.log(state.projects)
         },
         SET_FEEDBACK_DATA: (state, feedback) => {
             state.feedback = feedback;
-        },
-        SET_ACTIVE_LAUNCH: (state, launch) => {
-            state.activeLaunch = launch;
         },
 
         // SET STATE — UI CONFIGRATUIONS
@@ -161,6 +156,7 @@ export default new Vuex.Store({
                 }
             })
             context.dispatch("setActiveTeamMembers")
+            context.dispatch("setActiveTeamProjects")
         },
         async setActiveTeamMembers(context) {
             const teamMemberIds = context.state.teams_active_data.members;
@@ -177,6 +173,15 @@ export default new Vuex.Store({
             const members = profiles.filter(p => teamMemberIds.includes(p.id));
 
             context.commit("SET_ACTIVE_TEAM_MEMBERS", members);
+        },
+        async setActiveTeamProjects(context) {
+
+            const { data: projects } = await supabase
+                .from("projects")
+                .select("*")
+                .eq("team_id", context.state.teams_active_data.id);
+
+            context.commit("SET_PROJECTS", projects);
         },
 
         // RESET ACTIONS
