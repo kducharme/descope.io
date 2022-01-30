@@ -62,13 +62,13 @@ export default {
 
 .btn__primary {
   padding: 6px 12px;
-  background: #3d52d5;
+  background: #212430;
   color: white;
 }
 
 .btn__primary:hover {
   cursor: pointer;
-  background: #3549c5;
+  background: #f0624c;
 }
 
 .btn__secondary {
@@ -84,7 +84,7 @@ export default {
 }
 
 .btn__full {
-  background: #3d52d5;
+  background: #FF6047;
   width: 100%;
 }
 </style>

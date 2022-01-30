@@ -21,5 +21,6 @@ export default {
 .projects {
   background: #eeeff3;
   height: calc(100vh - 100px);
+  padding: 24px;
 }
 </style>

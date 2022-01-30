@@ -97,13 +97,12 @@ export default {
 .feedback {
   display: flex;
   flex-direction: column;
-  margin: 24px;
   background: #eeeff3;
   height: calc(100vh - 100px);
+  padding: 24px;
   .actions {
     display: flex;
     justify-content: space-between;
-    margin: 0 0 24px;
     .actions__filters {
       display: flex;
       width: 50%;
@@ -156,7 +155,7 @@ export default {
       padding: 0 8px;
     }
     .table {
-      width: calc(100vw - 240px - 48px);
+      // width: calc(100vw - 220px - 48px);
     }
     .col {
       // display: flex;
@@ -181,7 +180,7 @@ export default {
       }
     }
     .col__details {
-      max-width: 240px;
+      max-width: 220px;
     }
     .col__priority {
       width: 72px;

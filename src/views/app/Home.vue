@@ -20,6 +20,6 @@ export default {
 
 <style lang="scss" scoped>
 .overview {
-    margin: 0 0 0 240px;
+    margin: 0 0 0 220px;
 }
 </style>

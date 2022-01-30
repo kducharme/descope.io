@@ -111,20 +111,20 @@ export default {
 
 <style lang="scss" scoped>
 .launch {
-  margin: 0 0 0 240px;
+  margin: 0 0 0 220px;
 }
 // Subnav styling
 .subnav {
   display: flex;
   flex-direction: column;
-  width: calc(100vw - 240px);
+  width: calc(100vw - 220px);
   padding: 8px 24px 0;
-  border-bottom: 1px solid #eeeff3;
+  border-bottom: 2px solid #DBDDE6;
   .top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 0 8px;
+    margin: 0 0 12px;
     padding: 8px 0;
     .title {
       font-size: 20px;
@@ -137,7 +137,7 @@ export default {
         margin-left: 16px;
       }
       .subnav__button--secondary {
-        margin-left: 24px;
+        margin-left: 20px;
       }
     }
     .members {
@@ -148,14 +148,14 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #ced1de;
-        color: #636c92;
+        background: #7680A7;
+        color: white;
         height: 36px;
         width: 36px;
         border-radius: 100%;
         font-size: 11px;
         font-weight: 600;
-        border: 2px solid #DBDDE6;
+        border: 2px solid white;
       }
     }
   }
@@ -171,7 +171,7 @@ export default {
     }
     .router-link-active {
       font-weight: 600;
-      border-bottom: 2px solid #3d52d5;
+      border-bottom: 2px solid #212430;
       border-radius: 2px;
     }
   }
