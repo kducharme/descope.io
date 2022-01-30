@@ -152,7 +152,7 @@ export default {
   .output {
     padding: 8px 8px 4px 8px;
     background: #eeeff3;
-    border: 2px solid #dadce2;
+    border: 2px solid #DBDDE6;
     max-height: 320px;
   }
   .upload {
@@ -161,19 +161,19 @@ export default {
     justify-content: center;
     padding: 56px;
     background: #eeeff35f;
-    border: 2px solid #dadce2;
+    border: 2px solid #DBDDE6;
     border-radius: 3px;
     border-style: dotted;
     .upload__button {
       font-weight: 500;
       background: #eeeff3;
-      border: 2px solid #cfd2de;
+      border: 2px solid #DBDDE6;
       padding: 8px 12px;
       display: inline-block;
     }
     .upload__button:hover {
       cursor: pointer;
-      background: #e8e9ee;
+      background: #DBDDE6;
     }
   }
 }

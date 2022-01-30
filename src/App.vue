@@ -110,7 +110,7 @@ a {
 }
 
 input {
-  border: 2px solid #eeeff3;
+  border: 2px solid #DBDDE6;
   background: white;
   padding: 8px;
 }

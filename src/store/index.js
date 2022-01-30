@@ -76,7 +76,6 @@ export default new Vuex.Store({
         // SET STATE — PROJECT DATA
         SET_PROJECTS: (state, projects) => {
             state.projects = projects;
-            console.log(state.projects)
         },
         SET_FEEDBACK_DATA: (state, feedback) => {
             state.feedback = feedback;

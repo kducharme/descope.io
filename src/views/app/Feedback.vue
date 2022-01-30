@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="feedback">
     <TheAddFeedbackModal v-if="store.state.addFeedbackModal" />
     <div class="actions">
       <div class="actions__filters">
@@ -94,10 +94,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page {
+.feedback {
   display: flex;
   flex-direction: column;
   margin: 24px;
+  background: #eeeff3;
+  height: calc(100vh - 100px);
   .actions {
     display: flex;
     justify-content: space-between;
@@ -107,7 +109,7 @@ export default {
       width: 50%;
       .form__select {
         background: white;
-        border: 2px solid #cfd2de;
+        border: 2px solid #DBDDE6;
         padding: 8px;
         width: 220px;
         border-radius: 3px;

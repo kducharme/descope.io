@@ -122,14 +122,16 @@ export default {
   .modal__bg {
     width: calc(100vw - 540px);
     background: #212430;
-    opacity: 0.5;
+    opacity: 0.72;
   }
   .modal__content {
     width: 540px;
-    background: white;
-    padding: 24px;
+    background: #eeeff3;
+    // padding: 24px;
     .header {
       display: flex;
+      background: white;
+      padding: 24px;
       .title {
         font-size: 20px;
         font-weight: 600;
@@ -139,6 +141,7 @@ export default {
     .form {
       display: flex;
       flex-direction: column;
+      padding: 24px;
       .form__input {
         display: flex;
         flex-direction: column;
@@ -157,12 +160,12 @@ export default {
         input,
         textarea {
           background: white;
-          border: 2px solid #eeeff3;
+          border: 2px solid #DBDDE6;
           padding: 8px;
           resize: none;
         }
         .form__select {
-          border: 2px solid #eeeff3;
+          border: 2px solid #DBDDE6;
           background: white;
           padding: 8px;
         }

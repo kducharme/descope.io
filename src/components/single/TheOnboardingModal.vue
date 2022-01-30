@@ -167,7 +167,7 @@ export default {
         input,
         textarea {
           background: white;
-          border: 2px solid #eeeff3;
+          border: 2px solid #DBDDE6;
           padding: 8px;
           resize: none;
         }

@@ -36,7 +36,7 @@
                 height="22px"
                 viewBox="0 0 24 24"
                 width="22px"
-                fill="#636C92"
+                fill="#778ea7"
               >
                 <path d="M0 0h24v24H0z" fill="none" />
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
@@ -113,7 +113,7 @@ export default {
   height: 100vh;
   padding: 16px;
   width: 240px;
-  background: #eeeff3;
+  background: #212430;
   .nav__top {
     width: 100%;
     .logo {
@@ -157,24 +157,22 @@ export default {
           align-items: center;
           width: 26px;
           height: 26px;
-          // border: 2px solid #3d52d5;
           border-radius: 5px;
         }
         .title__action:hover {
           cursor: pointer;
-          // border: 2px solid #3549c5;
-          background: #dbdde6;
+          background: #313649;
         }
       }
       .nav__link {
+        color: white;
         margin: 0 0 0 -16px;
         padding: 10px 8px 10px 24px;
       }
       .router-link-active,
       .router-link-exact-active {
         font-weight: 500;
-        background: #dbdde6;
-        border-left: 3px solid #3d52d5;
+        background: #313649;
       }
     }
   }
@@ -182,6 +180,7 @@ export default {
     border-top: 1px solid #dbdde6;
     width: 100%;
     padding: 16px 0 8px;
+    color: white;
     .nav__link--logout:hover {
       cursor: pointer;
     }

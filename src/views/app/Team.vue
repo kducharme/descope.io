@@ -155,7 +155,7 @@ export default {
         border-radius: 100%;
         font-size: 11px;
         font-weight: 600;
-        border: 2px solid white;
+        border: 2px solid #DBDDE6;
       }
     }
   }

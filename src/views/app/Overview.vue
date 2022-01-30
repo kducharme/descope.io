@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div class="overview">
     <span>
       I am the overview page
     </span>
@@ -17,4 +17,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.overview {
+  background: #eeeff3;
+  height: calc(100vh - 100px);
+}
 </style>
