@@ -119,7 +119,7 @@ export default {
   flex-direction: column;
   width: calc(100vw - 220px);
   padding: 8px 24px 0;
-  border-bottom: 2px solid #DBDDE6;
+  border-bottom: 1px solid #DBDDE6;
   .top {
     display: flex;
     align-items: center;
@@ -171,7 +171,7 @@ export default {
     }
     .router-link-active {
       font-weight: 600;
-      border-bottom: 2px solid #212430;
+      border-bottom: 2px solid #FF6047;
       border-radius: 2px;
     }
   }

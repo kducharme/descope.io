@@ -176,7 +176,7 @@ export default {
     }
   }
   .nav__bottom {
-    border-top: 1px solid #dbdde6;
+    border-top: 1px solid #778ea7;
     width: 100%;
     padding: 16px 0 8px;
     color: white;

@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       priority: "Primary",
-      text: "Create launch",
+      text: "Create project",
     };
   },
   setup() {
