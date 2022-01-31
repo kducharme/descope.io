@@ -98,8 +98,9 @@ export default {
   display: flex;
   flex-direction: column;
   background: #eeeff3;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 102px);
   padding: 24px;
+  width: 100%;
   .actions {
     display: flex;
     justify-content: space-between;

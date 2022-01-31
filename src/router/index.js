@@ -10,10 +10,14 @@ import ConfirmEmail from "../views/marketing/ConfirmEmail.vue";
 import Home from "../views/app/Home.vue";
 import Debt from "../views/app/Debt.vue";
 import Team from "../views/app/Team.vue";
-import Overview from "../views/app/Overview.vue";
+import Insights from "../views/app/Insights.vue";
 import Projects from "../views/app/Projects.vue";
 import Feedback from "../views/app/Feedback.vue";
+import TeamSettings from "../views/app/TeamSettings.vue";
 import IndividualProject from "../views/app/IndividualProject.vue";
+import IndividualProjectFeedback from "../views/app/IndividualProjectFeedback.vue";
+import IndividualProjectOverview from "../views/app/IndividualProjectOverview.vue";
+import IndividualProjectSettings from "../views/app/IndividualProjectSettings.vue";
 
 const routes = [
 
@@ -54,30 +58,52 @@ const routes = [
     path: "/team/:id",
     name: "team",
     component: Team,
-    redirect: { name: 'overview' },
+    redirect: { name: 'projects' },
     children: [
       {
-        path: "overview",
-        name: "overview",
-        component: Overview,
+        path: "insights",
+        name: "insights",
+        component: Insights,
       },
       {
         path: "projects",
         name: "projects",
         component: Projects,
         children: [
-          
         ]
       },
       {
-      path: "projects/:projectId",
-      name: "project",
-      component: IndividualProject,
+        path: "projects/:projectId",
+        name: "project",
+        component: IndividualProject,
+        redirect: { name: 'projectOverview' },
+        children: [
+          {
+            path: "overview",
+            name: "projectOverview",
+            component: IndividualProjectOverview,
+          },
+          {
+            path: "feedback",
+            name: "projectFeedback",
+            component: IndividualProjectFeedback,
+          },
+          {
+            path: "settings",
+            name: "projectSettings",
+            component: IndividualProjectSettings,
+          },
+        ]
       },
       {
         path: "feedback",
         name: "feedback",
         component: Feedback,
+      },
+      {
+        path: "settings",
+        name: "teamSettings",
+        component: TeamSettings,
       },
     ]
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="overview">
     <span>
-      I am the overview page
+      I am the insights page
     </span>
   </div>
 </template>
@@ -9,7 +9,7 @@
 <script>
 import store from "../../store/index";
 export default {
-  name: "Overview",
+  name: "Insights",
   setup() {
     return {store};
   },
@@ -19,7 +19,7 @@ export default {
 <style lang="scss" scoped>
 .overview {
   background: #eeeff3;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 102px);
   padding: 24px;
 }
 </style>

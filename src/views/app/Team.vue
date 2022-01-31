@@ -32,14 +32,17 @@
         </div>
       </div>
       <div class="bottom">
-        <router-link class="nav__link" :to="{ name: 'overview' }"
-          >Overview</router-link
-        >
         <router-link class="nav__link" :to="{ name: 'projects' }"
           >Projects</router-link
         >
         <router-link class="nav__link" :to="{ name: 'feedback' }"
           >Feedback</router-link
+        >
+        <router-link class="nav__link" :to="{ name: 'insights' }"
+          >Insights</router-link
+        >
+        <router-link class="nav__link" :to="{ name: 'teamSettings' }"
+          >Settings</router-link
         >
       </div>
     </nav>
@@ -162,7 +165,7 @@ export default {
     display: flex;
     flex-direction: row;
     .nav__link {
-      margin: 0 12px;
+      margin: 0 14px;
       padding: 0 0 8px;
     }
     .nav__link:first-child {

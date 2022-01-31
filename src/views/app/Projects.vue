@@ -103,7 +103,7 @@ export default {
   display: flex;
   flex-direction: column;
   background: #eeeff3;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 102px);
   padding: 24px;
   .actions {
     display: flex;
@@ -136,7 +136,6 @@ export default {
       align-items: center;
       background: white;
       border: 1px solid #dbdde6;
-      border-radius: 3px;
       margin: 0 0 -1px;
       padding: 16px;
       .col {

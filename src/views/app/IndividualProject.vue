@@ -25,17 +25,18 @@
         <div class="top__right"></div>
       </div>
       <div class="bottom">
-        <router-link class="nav__link" :to="{ name: 'overview' }"
+        <router-link class="nav__link" :to="{ name: 'projectOverview' }"
           >Overview</router-link
         >
-        <router-link class="nav__link" :to="{ name: 'projects' }"
-          >Projects</router-link
-        >
-        <router-link class="nav__link" :to="{ name: 'feedback' }"
+        <router-link class="nav__link" :to="{ name: 'projectFeedback' }"
           >Feedback</router-link
+        >
+        <router-link class="nav__link" :to="{ name: 'projectSettings' }"
+          >Settings</router-link
         >
       </div>
     </nav>
+    <router-view />
   </div>
 </template>
 
@@ -48,7 +49,7 @@ export default {
   components: {},
   setup() {
     // Create data / vars
-        const router = useRouter();
+    const router = useRouter();
 
     // What "Back" is clicked, user is navigated back to team page
     const navigateBack = () => {
@@ -70,13 +71,14 @@ export default {
   height: 100vh;
   width: 100%;
   z-index: 99999;
-  background: white;
+  background: #eeeff3;
   .subnav {
     display: flex;
     flex-direction: column;
     width: calc(100vw - 220px);
     padding: 8px 24px 0;
     border-bottom: 1px solid #dbdde6;
+    background: white;
     .top {
       display: flex;
       align-items: center;
@@ -99,8 +101,8 @@ export default {
         }
       }
       .back:hover {
-          cursor: pointer;
-          text-decoration: underline;
+        cursor: pointer;
+        text-decoration: underline;
       }
       .title {
         font-size: 20px;
