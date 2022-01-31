@@ -16,48 +16,53 @@
         />
       </div>
     </div>
-    <div class="feedback">
-      <!-- Outstanding feedback -->
-      <div class="feedback__outstanding">
-        <!-- Table header -->
-        <table class="table">
-          <tr>
-            <th class="col col__actions">
-              <input type="checkbox" id="select" />
-            </th>
-            <th class="col col__source">Source</th>
-            <th class="col col__image">Image</th>
-            <th class="col col__details">Notes</th>
-            <th class="col col__priority">Priority</th>
-            <th class="col col__time">Added</th>
-            <th class="col col__assignedby">Added by</th>
-          </tr>
+    <div class="data">
+      <!-- Table header -->
+      <table class="table">
+        <tr>
+          <th class="col col__actions">
+            <input type="checkbox" id="select" />
+          </th>
+          <th class="col col__priority">Priority</th>
+          <th class="col col__details">Feedback</th>
+          <th class="col col__time">Added</th>
+          <th class="col col__assignedby">Added by</th>
+        </tr>
 
-          <!-- Table rows -->
-          <tr v-for="feedback in store.state.feedback" :key="feedback.id">
-            <td class="col col__actions">
-              <input type="checkbox" id="select" />
-            </td>
-            <td class="col col__source">{{ feedback.source }}</td>
-            <td class="col col__image">
-              <img :id="`img_${feedback.id}`" :src="`${feedback._image}`" class="col__image--asset" />
-            </td>
-            <td class="col col__details">
-              {{ feedback.description }}
-            </td>
-            <td class="col col__priority">
-              <span class="tag tag__high" v-if="feedback.priority === 'High'">{{ feedback.priority }}</span>
-              <span class="tag tag__med" v-if="feedback.priority === 'Medium'">{{ feedback.priority }}</span>
-              <span class="tag tag__low" v-if="feedback.priority === 'Low'">{{ feedback.priority }}</span>
-            </td>
-            <td class="col col__time">{{ feedback._dateAdded }}</td>
-            <td class="col col__assignedby">
-              <span class="initials">{{ feedback._initials }}</span>
-              {{ feedback._addedBy }}
-            </td>
-          </tr>
-        </table>
-      </div>
+        <!-- Table rows -->
+        <tr v-for="feedback in store.state.feedback" :key="feedback.id">
+          <td class="col col__actions">
+            <input type="checkbox" id="select" />
+          </td>
+
+          <td class="col col__priority">
+            <span class="tag tag__high" v-if="feedback.priority === 'High'">{{
+              feedback.priority
+            }}</span>
+            <span class="tag tag__med" v-if="feedback.priority === 'Medium'">{{
+              feedback.priority
+            }}</span>
+            <span class="tag tag__low" v-if="feedback.priority === 'Low'">{{
+              feedback.priority
+            }}</span>
+          </td>
+
+          <td class="col col__details">
+            <div class="details">
+              <span class="details__feedback">
+                {{ feedback.description }}
+              </span>
+              <span class="details__project">Project name</span>
+            </div>
+          </td>
+
+          <td class="col col__time">{{ feedback._dateAdded }}</td>
+          <td class="col col__assignedby">
+            <span class="initials">{{ feedback._initials }}</span>
+            {{ feedback._addedBy }}
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 </template>
@@ -104,12 +109,13 @@ export default {
   .actions {
     display: flex;
     justify-content: space-between;
+    margin: 0 0 24px;
     .actions__filters {
       display: flex;
       width: 50%;
       .form__select {
         background: white;
-        border: 2px solid #DBDDE6;
+        border: 2px solid #dbdde6;
         padding: 8px;
         width: 220px;
         border-radius: 3px;
@@ -121,17 +127,10 @@ export default {
       width: 50%;
     }
   }
-  .feedback {
+  .data {
     display: flex;
     flex-direction: column;
-    .feedback__completed {
-      margin: 32px 0 0;
-    }
-    .title {
-      font-size: 16px;
-      font-weight: 600;
-      margin: 0 0 16px;
-    }
+    width: 100%;
     table {
       border-collapse: collapse;
       //   border: 0.5px solid #e2e2e25f;
@@ -149,18 +148,16 @@ export default {
     td {
       border-top: 1px solid #eeeff3;
       border-bottom: 1px solid #eeeff3;
-      height: 44px;
+      height: 48px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       padding: 0 8px;
     }
-    .table {
-      // width: calc(100vw - 220px - 48px);
+    tr {
+      background: white;
     }
     .col {
-      // display: flex;
-      // align-items: center;
       padding-left: 8px;
     }
     .col__actions {
@@ -173,7 +170,7 @@ export default {
     }
     .col__image {
       width: 48px;
-      .col__image--asset{
+      .col__image--asset {
         height: 32px !important;
         width: 32px;
         object-fit: cover;
@@ -182,6 +179,14 @@ export default {
     }
     .col__details {
       max-width: 220px;
+      .details {
+        display: flex;
+        flex-direction: column;
+        .details__project {
+          font-size: 13px;
+          color: #778ea7;
+        }
+      }
     }
     .col__priority {
       width: 72px;
@@ -194,13 +199,13 @@ export default {
         font-weight: 500;
       }
       .tag__low {
-        background: #F5E5A3;
+        background: #f5e5a3;
       }
       .tag__med {
-        background: #FFC799;
+        background: #ffc799;
       }
       .tag__high {
-        background: #E09099;
+        background: #e09099;
       }
     }
     .col__time {

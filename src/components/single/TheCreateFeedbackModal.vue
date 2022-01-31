@@ -175,25 +175,27 @@ export default {
     };
 
     const addFeedbackToDatabase = async () => {
-
-      console.log(project.value)
       try {
         const { error } = await supabase.from("feedback").insert([
           {
+            // Core feedback data
             id: id.value,
-            team_id: store.state.projects_active.id,
-            organization_id: store.state.organization,
-            project_id: project.value.id,
-            completed: false,
-            image: imageName.value,
-            source: "LaunchDocs",
             description: feedbackDetails.value,
             priority: feedbackPriority.value,
+            image: imageName.value,
+
+            // Supporting data
+            organization_id: store.state.organization,
+            team_id: store.state.teams_active_data.id,
+            project_id: project.value.id,
             created_by: store.state.activeUser.id,
+            completed: false,
+            completed_at: null,
+            source: "LaunchDocs",
           },
         ]);
 
-        store.dispatch("getFeedback");
+        store.dispatch("setAllTeamFeedback");
         closeModal();
 
         if (error) throw error;
