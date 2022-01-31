@@ -62,9 +62,17 @@ const routes = [
         component: Overview,
       },
       {
-        path: "projects/",
+        path: "projects",
         name: "projects",
         component: Projects,
+        children: [
+          
+        ]
+      },
+      {
+      path: "projects/:projectId",
+      name: "project",
+      component: IndividualProject,
       },
       {
         path: "feedback",
@@ -73,11 +81,11 @@ const routes = [
       },
     ]
   },
-  {
-    path: "/team/:team/project/:projectId",
-    name: "project",
-    component: IndividualProject,
-  },
+  // {
+  //   path: "/team/:id/projects/:projectId",
+  //   name: "project",
+  //   component: IndividualProject,
+  // },
 ];
 
 const router = createRouter({

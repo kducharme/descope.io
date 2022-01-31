@@ -1,7 +1,6 @@
 <template>
-  <div class="launch" v-if="store.state.teams_active_data">
-          <TheCreateProjectModal v-if="store.state.createProjectModal" />
-
+  <div class="team" v-if="store.state.teams_active_data">
+    <TheCreateProjectModal v-if="store.state.createProjectModal" />
     <nav class="subnav">
       <div class="top">
         <div class="top__left">
@@ -110,7 +109,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.launch {
+.team {
   margin: 0 0 0 220px;
 }
 // Subnav styling
@@ -119,7 +118,7 @@ export default {
   flex-direction: column;
   width: calc(100vw - 220px);
   padding: 8px 24px 0;
-  border-bottom: 1px solid #DBDDE6;
+  border-bottom: 1px solid #dbdde6;
   .top {
     display: flex;
     align-items: center;
@@ -148,7 +147,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #7680A7;
+        background: #7680a7;
         color: white;
         height: 36px;
         width: 36px;
@@ -171,7 +170,7 @@ export default {
     }
     .router-link-active {
       font-weight: 600;
-      border-bottom: 2px solid #FF6047;
+      border-bottom: 2px solid #ff6047;
       border-radius: 2px;
     }
   }

@@ -148,6 +148,7 @@ export default {
       justify-content: space-between;
       background: white;
       padding: 24px;
+      border-bottom: 1px solid #dbdde6;
       .header__title {
         font-size: 20px;
         font-weight: 600;

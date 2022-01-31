@@ -1,4 +1,4 @@
-<template>
+ro<template>
   <div class="content">
     <div class="actions">
       <div class="actions__filters">
@@ -7,18 +7,14 @@
         </div>
       </div>
       <div class="actions__buttons">
-        <BaseButton
-          :priority="priority"
-          :text="text"
-          class="actions__create"
-        />
+        <BaseButton :priority="priority" :text="text" class="actions__create" />
       </div>
     </div>
     <div class="projects">
       <div
         v-for="project in store.state.projects"
         :key="project.id"
-        @click="routeToProject(project.id)"
+        @click="setActiveProject(project.id)"
         class="proj"
       >
         <div class="col col__1">
@@ -86,11 +82,18 @@ export default {
     // Crate data
     const router = useRouter();
 
-    // When a project is clicked, route user to project page
-    const routeToProject = (projectId) => {
-      router.push({ name: "project", params: { team: store.state.teams_active_data.id, projectId: projectId }, });
+    const routeToActiveProject = (id) => {
+      router.push({ name: "project", params: { projectId: id } });
     };
-    return { store, routeToProject };
+
+    // When a project is clicked, store the active project in Vuex
+    const setActiveProject = (id) => {
+      store.dispatch("setActiveProject", {
+        id,
+      });
+      routeToActiveProject(id);
+    };
+    return { store, setActiveProject };
   },
 };
 </script>
