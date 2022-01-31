@@ -80,9 +80,8 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_PROJECT: (state, project) => {
             state.projects_active = project;
-            console.log(state.projects_active)
         },
-        SET_FEEDBACK_DATA: (state, feedback) => {
+        SET_ACTIVE_PROJECT_FEEDBACK: (state, feedback) => {
             state.feedback = feedback;
         },
 
@@ -125,28 +124,29 @@ export default new Vuex.Store({
             context.dispatch("setTeams")
         },
         async setTeams(context) {
+            if (context.state.organization) {
+                const { data: teams } = await supabase
+                    .from("teams")
+                    .select("*")
+                    .eq("organization_id", context.state.organization);
 
-            const { data: teams } = await supabase
-                .from("teams")
-                .select("*")
-                .eq("organization_id", context.state.organization);
+                if (teams) {
 
-            if (teams) {
+                    // Add lowercase property for sorting
+                    teams.forEach(t => {
+                        t.name_low = t.name.toLowerCase();
+                    })
 
-                // Add 
-                teams.forEach(t => {
-                    t.name_low = t.name.toLowerCase();
-                })
+                    // Sort teams alphabetically
+                    teams.sort((a, b) => {
+                        if (a.name_low < b.name_low) { return -1; }
+                        if (a.name_low > b.name_low) { return 1; }
+                        return 0;
+                    })
 
-                // Sort launches
-                teams.sort((a, b) => {
-                    if (a.name_low < b.name_low) { return -1; }
-                    if (a.name_low > b.name_low) { return 1; }
-                    return 0;
-                })
-
-                context.commit("SET_TEAMS", await teams);
-                await context.dispatch("setActiveTeamData", { teams })
+                    context.commit("SET_TEAMS", await teams);
+                    await context.dispatch("setActiveTeamData", { teams })
+                }
             }
 
         },
@@ -161,33 +161,50 @@ export default new Vuex.Store({
             })
             context.dispatch("setActiveTeamMembers")
             context.dispatch("setAllTeamProjects")
+            context.dispatch("setAllTeamFeedback")
         },
         async setActiveTeamMembers(context) {
-            const teamMemberIds = context.state.teams_active_data.members;
+            if (context.state.teams_active_data) {
 
-            const { data: profiles } = await supabase
-                .from("profiles")
-                .select("*")
-                .eq("organization_id", context.state.organization);
+                const teamMemberIds = context.state.teams_active_data.members;
 
-            profiles.forEach(p => {
-                p._initials = p.firstname.charAt(0) + p.lastname.charAt(0);
-            })
+                const { data: profiles } = await supabase
+                    .from("profiles")
+                    .select("*")
+                    .eq("organization_id", context.state.organization);
 
-            const members = profiles.filter(p => teamMemberIds.includes(p.id));
+                profiles.forEach(p => {
+                    p._initials = p.firstname.charAt(0) + p.lastname.charAt(0);
+                })
 
-            context.commit("SET_ACTIVE_TEAM_MEMBERS", members);
+                const members = profiles.filter(p => teamMemberIds.includes(p.id));
+
+                context.commit("SET_ACTIVE_TEAM_MEMBERS", members);
+            }
         },
         async setAllTeamProjects(context) {
+            if (context.state.teams_active_data) {
 
-            const { data: projects } = await supabase
-                .from("projects")
+                const { data: projects } = await supabase
+                    .from("projects")
+                    .select("*")
+                    .eq("team_id", context.state.teams_active_data.id);
+
+                context.commit("SET_PROJECTS", projects);
+            }
+        },
+        async setAllTeamFeedback(context) {
+            const { data: feedback } = await supabase
+                .from("feedback")
                 .select("*")
-                .eq("team_id", context.state.teams_active_data.id);
+                .eq("project_id", context.state.teams_active_data.id);
 
-            context.commit("SET_PROJECTS", projects);
+            console.log(feedback)
+
+            context.commit("SET_ACTIVE_PROJECT_FEEDBACK", feedback);
         },
         async setActiveProject(context, payload) {
+
             const { data: project } = await supabase
                 .from("projects")
                 .select("*")
@@ -213,14 +230,12 @@ export default new Vuex.Store({
         showCreateProjectModal(context) {
             context.commit("SHOW_CREATE_PROJECT_MODAL")
         },
-
         hideCreateProjectModal(context) {
             context.commit("HIDE_CREATE_PROJECT_MODAL")
         },
         showCreateFeedbackModal(context) {
             context.commit("SHOW_ADD_FEEDBACK_MODAL")
         },
-
         hideCreateFeedbackModal(context) {
             context.commit("HIDE_ADD_FEEDBACK_MODAL")
         },

@@ -1,7 +1,9 @@
 <template>
   <div class="imgUploader">
     <div class="header">
-      <label class="header__label">Image</label>
+      <label class="header__label"
+        >Image<span class="optional">(optional)</span></label
+      >
       <p class="header__remove" v-if="image" @click="removeImage">Remove</p>
     </div>
     <div class="output" id="output" v-show="image"></div>
@@ -67,8 +69,8 @@ export default {
       img.src = URL.createObjectURL(file);
 
       img.style.width = "100%";
-      img.style.height = "152px";
-      img.style.maxHeight = "152px";
+      img.style.height = "120px";
+      img.style.maxHeight = "120px";
       img.style.objectFit = "cover";
       img.style.objectPosition = "25%% 25%";
       img.setAttribute("id", "imagePreview");
@@ -135,6 +137,11 @@ export default {
       font-size: 12px;
       padding: 0 0 6px;
     }
+    .optional {
+      color: #9ba1bb;
+      font-weight: 400;
+      margin-left: 4px;
+    }
     .header__remove {
       display: flex;
       justify-content: flex-end;
@@ -152,28 +159,28 @@ export default {
   .output {
     padding: 8px 8px 4px 8px;
     background: #eeeff3;
-    border: 2px solid #DBDDE6;
+    border: 2px solid #dbdde6;
     max-height: 320px;
   }
   .upload {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 56px;
-    background: #eeeff35f;
-    border: 2px solid #DBDDE6;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.473);
+    border: 2px solid #dbdde6;
     border-radius: 3px;
-    border-style: dotted;
+    border-style: dashed;
     .upload__button {
       font-weight: 500;
       background: #eeeff3;
-      border: 2px solid #DBDDE6;
+      border: 2px solid #dbdde6;
       padding: 8px 12px;
       display: inline-block;
     }
     .upload__button:hover {
       cursor: pointer;
-      background: #DBDDE6;
+      background: #dbdde6;
     }
   }
 }

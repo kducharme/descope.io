@@ -83,7 +83,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 0 0 12px;
+      margin: 0 0 24px;
       padding: 8px 0;
       .back {
         display: flex;

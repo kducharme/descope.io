@@ -7,7 +7,6 @@ ro<template>
         </div>
       </div>
       <div class="actions__buttons">
-        <BaseButton :priority="priority" :text="text" class="actions__create" />
       </div>
     </div>
     <div class="projects">
@@ -64,20 +63,10 @@ ro<template>
 
 <script>
 import store from "../../store/index";
-import BaseButton from "../../components/global/BaseButton.vue";
 import { useRouter } from "vue-router";
 
 export default {
   name: "Projects",
-  components: {
-    BaseButton,
-  },
-  data() {
-    return {
-      priority: "Secondary",
-      text: "Add feedback",
-    };
-  },
   setup() {
     // Crate data
     const router = useRouter();

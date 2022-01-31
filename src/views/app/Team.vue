@@ -15,6 +15,18 @@
             >
               {{ member._initials }}
             </div>
+            <div class="members__add" @click="addMember">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="22px"
+                viewBox="0 0 24 24"
+                width="22px"
+                fill="#ffffff"
+              >
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+              </svg>
+            </div>
           </div>
           <BaseButton
             type="submit"
@@ -99,9 +111,14 @@ export default {
       await getActiveTeamData();
     };
 
+    // TODO - ADD THIS FUNCTIONALITY
+    const addMember = () => {
+      console.log('add member')
+    }
+
     setActiveTeamId();
 
-    return { dataLoaded, store, teamData };
+    return { dataLoaded, store, teamData, addMember };
   },
   methods: {
     showCreateProjectModal() {
@@ -145,19 +162,24 @@ export default {
     .members {
       display: flex;
       align-items: center;
-      .members__avatar {
+      .members__avatar,
+      .members__add {
         margin: -4px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #7680a7;
         color: white;
-        height: 36px;
-        width: 36px;
+        height: 32px;
+        width: 32px;
         border-radius: 100%;
         font-size: 11px;
         font-weight: 600;
         border: 2px solid white;
+        background: #9da5c4;
+      }
+      .members__add:hover {
+        cursor: pointer;
+        background: #9097b6;
       }
     }
   }

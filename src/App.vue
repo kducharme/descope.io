@@ -98,7 +98,9 @@ p,
 a,
 div,
 input,
-textarea {
+textarea,
+select,
+select option {
   color: #212430;
   font-family: "Avenir Next";
   font-size: 14px;

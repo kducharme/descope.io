@@ -1,6 +1,6 @@
 <template>
   <div class="feedback">
-    <TheAddFeedbackModal v-if="store.state.addFeedbackModal" />
+    <TheAddFeedbackModal v-if="store.state.createFeedbackModal" />
     <div class="actions">
       <div class="actions__filters">
         <div class="form__input">
@@ -66,7 +66,7 @@
 // import { ref } from "vue";
 import store from "../../store/index";
 import BaseButton from "../../components/global/BaseButton.vue";
-import TheAddFeedbackModal from "../../components/single/TheAddFeedbackModal.vue";
+import TheAddFeedbackModal from "../../components/single/TheCreateFeedbackModal.vue";
 
 export default {
   name: "Launch Feedback",
@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     showAddFeedbackModal() {
-      store.dispatch("showAddFeedbackModal");
+      store.dispatch("showCreateFeedbackModal");
     },
   },
 };
