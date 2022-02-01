@@ -131,6 +131,7 @@ export default {
 <style lang="scss" scoped>
 .team {
   margin: 0 0 0 220px;
+  width: 100%; 
 }
 // Subnav styling
 .subnav {
