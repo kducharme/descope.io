@@ -175,6 +175,7 @@ export default {
     };
 
     const addFeedbackToDatabase = async () => {
+      console.log(project.value)
       try {
         const { error } = await supabase.from("feedback").insert([
           {
@@ -236,12 +237,12 @@ export default {
   width: 100vw;
   height: 100vh;
   .modal__bg {
-    width: calc(100vw - 400px);
+    width: calc(100vw - 480px);
     background: #3d3e41;
     opacity: 0.6;
   }
   .modal__content {
-    width: 400px;
+    width: 480px;
     background: #eeeff3;
     .header {
       display: flex;

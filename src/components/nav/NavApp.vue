@@ -148,7 +148,7 @@ export default {
         .title__text {
           font-size: 14px;
           font-weight: 500;
-          color: #778ea7;
+          color: #9aa3ac;
         }
         .title__action {
           display: flex;

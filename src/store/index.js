@@ -83,7 +83,6 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_PROJECT_FEEDBACK: (state, feedback) => {
             state.feedback = feedback;
-            console.log(state.feedback)
         },
 
         // SET STATE — UI CONFIGRATUIONS
@@ -232,8 +231,6 @@ export default new Vuex.Store({
                 .select("*")
                 .eq("team_id", context.state.teams_active_data.id);
 
-                console.log(context.state.teams_active_data.id)
-
             for (const fb of feedback) {
                 const { data: profile } = await supabase
                     .from("profiles")
@@ -243,6 +240,13 @@ export default new Vuex.Store({
                 fb._addedBy = profile[0].firstname + " " + profile[0].lastname;
                 fb._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
                 fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
+
+                const { data: project } = await supabase
+                    .from("projects")
+                    .select("*")
+                    .eq("id", fb.project_id);
+
+                fb._project = project[0];
 
                 // Get images and add it to the feedback object
 

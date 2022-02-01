@@ -134,12 +134,12 @@ export default {
   width: 100vw;
   height: 100vh;
   .modal__bg {
-    width: calc(100vw - 400px);
+    width: calc(100vw - 480px);
     background: #212430;
     opacity: 0.72;
   }
   .modal__content {
-    width: 400px;
+    width: 480px;
     background: #eeeff3;
     // padding: 24px;
     .header {
