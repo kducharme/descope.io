@@ -65,6 +65,7 @@ c<template>
                 d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"
               />
             </svg>
+            <div class="comments__count">2</div>
           </div>
           <div class="right">
             <svg
@@ -182,7 +183,8 @@ export default {
               display: flex;
               align-items: center;
               justify-content: center;
-              background: #dbdde6;
+              background: #212430;
+              color: white;
               height: 36px;
               width: 36px;
               border-radius: 100%;
@@ -195,13 +197,12 @@ export default {
             display: flex;
             flex-direction: column;
             .project {
-              font-weight: 500;
+              font-weight: 600;
               font-size: 12px;
               margin: 0 0 2px;
             }
             .details {
               font-size: 12px;
-              color: #6d769c;
             }
           }
         }
@@ -219,7 +220,7 @@ export default {
             background: #ffc799;
           }
           .priority__high {
-            background: #e998a2;
+            background: #f0b5bc;
           }
         }
       }
@@ -233,7 +234,6 @@ export default {
           margin: 0 0 6px 0;
         }
         .description {
-          color: #6d769c;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
@@ -248,6 +248,28 @@ export default {
         justify-content: space-between;
         // border-top: 1px solid #dbdde6;
         margin: 24px 0 0 0;
+        .left {
+          display: flex;
+          position: relative;
+          .comments__icon {
+          }
+          .comments__count {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: absolute;
+            top: -10px;
+            left: -4px;
+            background: #d6e3f8;
+            margin: 0 0 0 12px;
+            border-radius: 100%;
+            height: 18px;
+            width: 18px;
+            font-size: 11.5px;
+            font-weight: 600;
+          }
+        }
         .right {
           display: flex;
           flex-direction: row;

@@ -240,6 +240,9 @@ export default new Vuex.Store({
                 fb._addedBy = profile[0].firstname + " " + profile[0].lastname;
                 fb._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
                 fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
+                if (fb.priority === "High") { fb._priority = 3; }
+                if (fb.priority === "Med") { fb._priority = 2; }
+                if (fb.priority === "Low") { fb._priority = 1; }
 
                 const { data: project } = await supabase
                     .from("projects")
@@ -265,10 +268,12 @@ export default new Vuex.Store({
                 // }
             }
 
-            // Sort teams alphabetically
+            // TODO — sort based on votes then priority
             feedback.sort((a, b) => {
                 if (a.votes > b.votes) { return -1; }
                 if (a.votes < b.votes) { return 1; }
+                if (a._priority < b._priority) { return 1; }
+                if (a._priority > b._priority) { return -1; }
                 return 0;
             })
 
