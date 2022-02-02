@@ -248,6 +248,8 @@ export default new Vuex.Store({
 
                 fb._project = project[0];
 
+
+
                 // Get images and add it to the feedback object
 
                 // if (fb.image) {
@@ -262,6 +264,14 @@ export default new Vuex.Store({
                 //     fb._image = "../assets/images/feedback.png";
                 // }
             }
+
+            // Sort teams alphabetically
+            feedback.sort((a, b) => {
+                if (a.votes > b.votes) { return -1; }
+                if (a.votes < b.votes) { return 1; }
+                return 0;
+            })
+
             context.commit("SET_ACTIVE_PROJECT_FEEDBACK", await feedback);
         },
         async setActiveProject(context, payload) {
