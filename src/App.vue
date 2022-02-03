@@ -134,11 +134,16 @@ body {
 
 .app {
   display: flex;
-  flex-direction: row;
+  // flex-direction: row;
 }
 
 .marketing {
   display: flex;
   flex-direction: column;
+}
+
+.noScroll {
+  height: 100%;
+  overflow: hidden!important;
 }
 </style>

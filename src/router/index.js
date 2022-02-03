@@ -12,7 +12,7 @@ import Debt from "../views/app/Debt.vue";
 import Team from "../views/app/Team.vue";
 import Insights from "../views/app/Insights.vue";
 import Projects from "../views/app/Projects.vue";
-import Feedback from "../views/app/Feedback.vue";
+import AllTeamFeedback from "../views/app/AllTeamFeedback.vue";
 import TeamSettings from "../views/app/TeamSettings.vue";
 import IndividualProject from "../views/app/IndividualProject.vue";
 import IndividualProjectFeedback from "../views/app/IndividualProjectFeedback.vue";
@@ -98,7 +98,7 @@ const routes = [
       {
         path: "feedback",
         name: "feedback",
-        component: Feedback,
+        component: AllTeamFeedback,
       },
       {
         path: "settings",

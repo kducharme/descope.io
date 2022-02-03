@@ -1,4 +1,4 @@
-ro<template>
+<template>
   <div class="content">
     <div class="actions">
       <div class="actions__filters">
@@ -92,7 +92,7 @@ export default {
   display: flex;
   flex-direction: column;
   background: #eeeff3;
-  height: calc(100vh - 102px);
+  min-height: calc(100vh - 102px);
   padding: 24px;
   .actions {
     display: flex;

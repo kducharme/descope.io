@@ -34,6 +34,25 @@
       </div>
       <form @submit.prevent="saveFeedback" class="form">
         <div class="form__input">
+          <label for="feedbackTitle">Title *</label>
+          <input
+            type="textarea"
+            required
+            id="feedbackTitle"
+            v-model="feedbackTitle"
+          />
+        </div>
+        <div class="form__input">
+          <label for="feedbackDetails">Details</label>
+          <textarea
+            type="textarea"
+            id="feedbackDetails"
+            v-model="feedbackDetails"
+            rows="2"
+            cols="50"
+          />
+        </div>
+        <div class="form__input">
           <label for="feedbackProject"
             >Project <span class="optional">(optional)</span></label
           >
@@ -49,40 +68,30 @@
           </select>
         </div>
         <div class="form__input">
-          <label for="feedbackDetails">Feedback *</label>
-          <textarea
-            type="textarea"
-            required
-            id="feedbackDetails"
-            v-model="feedbackDetails"
-            rows="2"
-            cols="50"
-          />
-        </div>
-        <div class="form__input">
-          <label for="priority">Priority *</label>
+          <label for="priority">Category *</label>
           <div class="radio">
             <input
               name="priority"
               class="radio__select"
               type="radio"
-              id="high"
-              value="High"
+              id="design"
+              value="design"
               v-model="feedbackPriority"
-              required
             />
-            <label class="radio__text" for="high">High</label>
+            <label class="radio__text" for="design">Design bug</label>
           </div>
           <div class="radio">
             <input
               name="priority"
               class="radio__select"
               type="radio"
-              id="medium"
-              value="Medium"
+              id="functionality"
+              value="functionality"
               v-model="feedbackPriority"
             />
-            <label class="radio__text" for="medium">Medium</label>
+            <label class="radio__text" for="functionality"
+              >Functionality bug</label
+            >
           </div>
           <div class="radio">
             <input
@@ -143,6 +152,7 @@ export default {
   },
   setup() {
     // Create data
+    const feedbackTitle = ref(null);
     const feedbackDetails = ref(null);
     const id = ref(null);
     const imageName = ref(null);
@@ -156,6 +166,13 @@ export default {
     const generateFeedbackId = () => {
       id.value = uuidv4();
     };
+
+    // Prevent background scrolling
+    const preventBackgroundScroll = () => {
+      document.body.classList.add("noScroll");
+    }
+
+    preventBackgroundScroll();
 
     // When a user submits the form, this function is called
 
@@ -175,7 +192,7 @@ export default {
     };
 
     const addFeedbackToDatabase = async () => {
-      console.log(project.value)
+      console.log(project.value);
       try {
         const { error } = await supabase.from("feedback").insert([
           {
@@ -211,11 +228,13 @@ export default {
     // Closes modal when the background or "x" button  is clicked
     const closeModal = () => {
       store.dispatch("hideCreateFeedbackModal");
+      document.body.classList.remove("noScroll");
     };
     return {
       store,
       id,
       saveFeedback,
+      feedbackTitle,
       feedbackDetails,
       feedbackPriority,
       project,
@@ -236,6 +255,7 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
+  z-index: 99999;
   .modal__bg {
     width: calc(100vw - 480px);
     background: #3d3e41;
@@ -244,6 +264,7 @@ export default {
   .modal__content {
     width: 480px;
     background: #eeeff3;
+    overflow-y: scroll;
     .header {
       display: flex;
       align-items: center;

@@ -193,35 +193,6 @@ export default new Vuex.Store({
                 context.commit("SET_PROJECTS", projects);
             }
         },
-        // async setAllTeamFeedback(context) {
-        //     const { data: feedback } = await supabase
-        //         .from("feedback")
-        //         .select("*")
-        //         .eq("project_id", context.state.teams_active_data.id);
-
-        //     const { data: profiles } = await supabase
-        //         .from("profiles")
-        //         .select("*")
-        //         .eq("organization_id", context.state.organization);
-
-        //     feedback.forEach(f => {
-        //         console.log(f.created_by)
-        //     })
-
-        //     // const members = profiles.filter(p => teamMemberIds.includes(p.id));
-
-        //     const user = profiles.filter(p => {
-        //         feedback.created_by.includes(p.id)
-        //     });
-
-        //     console.log(user)
-
-        //     // feedback.forEach(f => {
-        //     //     f._initials = f.firstname.charAt(0) + f.lastname.charAt(0);
-        //     // })
-
-        //     context.commit("SET_ACTIVE_PROJECT_FEEDBACK", feedback);
-        // },
         async setAllTeamFeedback(context) {
             // Create variables
             const moment = require('moment')
@@ -236,6 +207,8 @@ export default new Vuex.Store({
                     .from("profiles")
                     .select("*")
                     .eq("id", fb.created_by);
+
+                    console.log(fb.comments)
 
                 fb._addedBy = profile[0].firstname + " " + profile[0].lastname;
                 fb._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);

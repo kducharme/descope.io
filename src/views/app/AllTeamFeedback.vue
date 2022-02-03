@@ -1,19 +1,20 @@
-c<template>
+<template>
   <div class="content">
-    <TheAddFeedbackModal v-if="store.state.createFeedbackModal" />
+    <TheCreateFeedbackModal v-if="store.state.createFeedbackModal" />
 
     <!-- TODO — Add search and filters -->
     <div class="content__left">
       <div class="card summary">
-        <p class="title">Feedback</p>
-        <div class="actions">
+        <div class="header">
+          <p class="header__title">Feedback</p>
           <BaseButton
             :priority="priority"
             :text="text"
-            :action="showAddFeedbackModal"
+            :action="showCreateFeedbackModal"
             class="actions__create"
           />
         </div>
+        <div class="actions"></div>
       </div>
     </div>
 
@@ -65,7 +66,7 @@ c<template>
                 d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"
               />
             </svg>
-            <div class="comments__count">2</div>
+            <div class="comments__count" v-if="feedback.comments">{{ feedback.comments.length }}</div>
           </div>
           <div class="right">
             <svg
@@ -104,30 +105,34 @@ c<template>
 // import { ref } from "vue";
 import store from "../../store/index";
 import BaseButton from "../../components/global/BaseButton.vue";
-import TheAddFeedbackModal from "../../components/single/TheCreateFeedbackModal.vue";
+import TheCreateFeedbackModal from "../../components/single/TheCreateFeedbackModal.vue";
 
 export default {
   name: "Launch Feedback",
   components: {
     BaseButton,
-    TheAddFeedbackModal,
+    TheCreateFeedbackModal,
   },
   data() {
     return {
-      priority: "Primary",
-      text: "Add feedback",
+      priority: "Secondary",
+      text: "+ Add",
     };
   },
   setup() {
     // Define variables
 
+    // const showCreateFeedbackModal = () => {
+    //   store.dispatch("showCreateFeedbackModal");
+    // };
+
     return { store };
   },
   methods: {
-    showAddFeedbackModal() {
+    showCreateFeedbackModal() {
       store.dispatch("showCreateFeedbackModal");
     },
-  },
+  }
 };
 </script>
 
@@ -145,16 +150,36 @@ export default {
     border: 1px solid #dbdde6;
     background: white;
     border-radius: 3px;
-  }
-  .title {
-    font-weight: 600;
-    font-size: 14px;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .header__title {
+        font-weight: 600;
+        font-size: 16px;
+      }
+      .header__action {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 5px;
+      }
+      .header__action:hover {
+        cursor: pointer;
+        background: #313649;
+      }
+    }
   }
   .content__left {
-    // width: 25%;
+    width: 25%;
     margin: 0 12px 0 0;
     .summary {
-      min-width: 280px;
+      // min-width: 280px;
+      position: -webkit-sticky; /* Safari */
+      position: sticky;
+      top: 24px;
       .title {
         margin: 0 0 16px;
       }
@@ -162,8 +187,8 @@ export default {
   }
   .content__right {
     width: 75%;
-    max-width: 640px;
-    margin: 0 0 0 12px;
+    // max-width: 640px;
+    // margin: 0 0 0 12px;
     .fb {
       display: flex;
       flex-direction: column;
@@ -203,6 +228,7 @@ export default {
             }
             .details {
               font-size: 12px;
+              color: #636c92;
             }
           }
         }
@@ -235,11 +261,11 @@ export default {
         }
         .description {
           display: -webkit-box;
-          -webkit-line-clamp: 2;
+          -webkit-line-clamp: 1;
           -webkit-box-orient: vertical;
           overflow: hidden;
           text-overflow: ellipsis;
-          width: 100%;
+          color: #636c92;
         }
       }
       .fb__bottom {
@@ -251,21 +277,19 @@ export default {
         .left {
           display: flex;
           position: relative;
-          .comments__icon {
-          }
           .comments__count {
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             position: absolute;
-            top: -10px;
+            top: -8px;
             left: -4px;
-            background: #d6e3f8;
+            background: #dfe1e9;
             margin: 0 0 0 12px;
             border-radius: 100%;
-            height: 18px;
-            width: 18px;
+            height: 16px;
+            width: 16px;
             font-size: 11.5px;
             font-weight: 600;
           }

@@ -132,6 +132,8 @@ export default {
 .team {
   margin: 0 0 0 220px;
   width: 100%; 
+  overflow-x: hidden;
+  
 }
 // Subnav styling
 .subnav {
@@ -201,4 +203,5 @@ export default {
     }
   }
 }
+
 </style>
