@@ -215,33 +215,34 @@ export default new Vuex.Store({
                 if (fb.priority === "Med") { fb._priority = 2; }
                 if (fb.priority === "Low") { fb._priority = 1; }
 
-                const { data: project } = await supabase
-                    .from("projects")
-                    .select("*")
-                    .eq("id", fb.project_id);
+                if (fb.project_id) {
+                    const { data: project } = await supabase
+                        .from("projects")
+                        .select("*")
+                        .eq("id", fb.project_id);
 
-                fb._project = project[0];
+                    fb._project = project[0];
+
+                }
+
 
 
                 // Get images and add it to the feedback object
 
-                console.log(fb.image)
-
                 if (fb.image) {
                     const { data: img } = await supabase.storage
-                        .from("launches")
-                        .download(`feedback/${fb.image}`)
-                        console.log(img)
+                        .from("feedback")
+                        .download(`post/${fb.image}`)
 
                     const url = URL.createObjectURL(await img);
                     fb._image = url;
+
                 }
-                else {
-                    fb._image = "../assets/images/feedback.png";
-                }
+
+
             }
 
-            
+
             // TODO — sort based on votes then priority
             feedback.sort((a, b) => {
                 if (a.votes > b.votes) { return -1; }

@@ -4,17 +4,29 @@
       <label class="header__label"
         >Image<span class="optional">(optional)</span></label
       >
-      <p class="header__remove" v-if="image" @click="removeImage">Remove</p>
+      <p
+        class="header__remove"
+        v-if="image"
+        @click="
+          removeImageFromDatabase();
+          updatedParentFeedbackImage(false);
+        "
+      >
+        Remove
+      </p>
     </div>
     <div class="output" id="output" v-show="image"></div>
-    <div class="upload" id="upload" v-if="!image">
+    <div class="upload" id="upload" v-show="!image">
       <label for="upload_file" class="upload__button"
         >Upload image
         <input
           type="file"
           id="upload_file"
           accept="image/*"
-          @change="uploadImageToDatabase"
+          @change="
+            uploadImageToDatabase();
+            updatedParentFeedbackImage(true);
+          "
         />
       </label>
     </div>
@@ -44,12 +56,10 @@ export default {
       image.value = file;
 
       displayImage(file);
-
       try {
         const { error } = await supabase.storage
           .from("feedback")
           .upload("post/" + props.id + ".jpeg", file);
-        // this.$emit("imageLoading", "loading.value");
         if (error) throw error;
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
@@ -68,14 +78,14 @@ export default {
       img.style.height = "120px";
       img.style.maxHeight = "120px";
       img.style.objectFit = "cover";
-      img.style.objectPosition = "25%% 25%";
+      img.style.objectPosition = "25% 25%";
       img.setAttribute("id", "imagePreview");
 
       document.querySelector("#output").appendChild(img);
     };
 
     // Removes the image preview from the UI
-    const removeImage = async () => {
+    const removeImageFromDatabase = async () => {
       if (!image.value) return;
       document.querySelector("#imagePreview").remove();
 
@@ -84,14 +94,14 @@ export default {
 
     // Deletes the image from the database
     const deleteImageFromDatabase = async () => {
-
       if (!image.value) return;
+      image.value = null;
       try {
         const { error } = await supabase.storage
           .from("feedback")
           .remove(["post/" + props.id + ".jpeg"]);
         if (error) throw error;
-        image.value = null;
+        this.updateParentFeedbackImage();
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
@@ -104,13 +114,19 @@ export default {
       image,
       errorMsg,
       displayImage,
-      removeImage,
+      removeImageFromDatabase,
       deleteImageFromDatabase,
       uploadImageToDatabase,
       loading,
     };
   },
-  methods: {},
+  methods: {
+    updatedParentFeedbackImage(payload) {
+      payload
+        ? this.$emit("updateImage", true)
+        : this.$emit("updateImage", false);
+    },
+  },
 };
 </script>
 

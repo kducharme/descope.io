@@ -30,27 +30,38 @@
               <p class="initials">{{ feedback._initials }}</p>
             </div>
             <div class="right">
-              <p class="project">{{ feedback._project.name }}</p>
+              <p class="project" v-if="feedback._project">
+                {{ feedback._project.name }}
+              </p>
+              <p class="project" v-if="!feedback._project">
+                {{ store.state.teams_active_data.name }} Team <span class="team">(no project)</span>
+              </p>
               <p class="details">
                 Added by {{ feedback._addedBy }} {{ feedback._dateAdded }}
               </p>
             </div>
           </div>
           <div class="fb__top--right">
-            <p class="tag priority__high" v-if="feedback.priority === 'High'">
-              {{ feedback.priority }}
+            <p class="tag category__issue" v-if="feedback.category === 'issue_design'">
+              Design Issue
             </p>
-            <p class="tag priority__med" v-if="feedback.priority === 'Medium'">
-              {{ feedback.priority }}
+            <p class="tag category__issue" v-if="feedback.category === 'issue_product'">
+              Product Issue
             </p>
-            <p class="tag priority__low" v-if="feedback.priority === 'Low'">
-              {{ feedback.priority }}
+            <p class="tag category__issue" v-if="feedback.category === 'issue_technical'">
+              Engineering Issue
+            </p>
+            <p class="tag category__request" v-if="feedback.category === 'request_feature'">
+              Feature Request
             </p>
           </div>
         </div>
         <div class="fb__mid">
           <p class="title">{{ feedback.title }}</p>
           <p class="description">{{ feedback.description }}</p>
+        </div>
+        <div class="fb__image" v-if="feedback._image">
+          <img :src="feedback._image" />
         </div>
         <div class="fb__bottom">
           <div class="left">
@@ -66,7 +77,9 @@
                 d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"
               />
             </svg>
-            <div class="comments__count" v-if="feedback.comments">{{ feedback.comments.length }}</div>
+            <div class="comments__count" v-if="feedback.comments">
+              {{ feedback.comments.length }}
+            </div>
           </div>
           <div class="right">
             <svg
@@ -131,12 +144,8 @@ export default {
   methods: {
     showCreateFeedbackModal() {
       store.dispatch("showCreateFeedbackModal");
-
-      if (store.state.projects.length > 4) {
-        document.querySelector('.content').style.padding = "24px 92px 24px 76px";
-      }
     },
-  }
+  },
 };
 </script>
 
@@ -149,7 +158,7 @@ export default {
   min-height: calc(100vh - 102px);
   width: 100%;
   padding: 24px 80px;
-  
+
   .card {
     padding: 16px;
     border: 1px solid #dbdde6;
@@ -231,6 +240,11 @@ export default {
               font-size: 12px;
               margin: 0 0 2px;
             }
+            .team {
+              color: #9ba1bb;
+              font-weight: 400;
+              margin-left: 4px;
+            }
             .details {
               font-size: 12px;
               color: #636c92;
@@ -239,19 +253,16 @@ export default {
         }
         .fb__top--right {
           .tag {
-            padding: 4px 8px;
+            padding: 4px 6px;
             border-radius: 3px;
             font-size: 12px;
             font-weight: 500;
           }
-          .priority__low {
-            background: #f5e5a3;
-          }
-          .priority__med {
-            background: #ffc799;
-          }
-          .priority__high {
+          .category__issue {
             background: #f0b5bc;
+          }
+          .category__request {
+            background: #dbdde6;
           }
         }
       }
@@ -273,12 +284,20 @@ export default {
           color: #636c92;
         }
       }
+      .fb__image {
+        margin: 16px 0 0 0;
+        img {
+          width: 100%;
+          height: 160px;
+          object-fit: cover;
+          object-position: 10% 0%;
+        }
+      }
       .fb__bottom {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        // border-top: 1px solid #dbdde6;
-        margin: 24px 0 0 0;
+        margin: 16px 0 0 0;
         .left {
           display: flex;
           position: relative;

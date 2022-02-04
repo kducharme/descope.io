@@ -33,6 +33,7 @@
         </div>
       </div>
       <form @submit.prevent="saveFeedback" class="form">
+        <!-- Title input -->
         <div class="form__input">
           <label for="feedbackTitle">Title *</label>
           <input
@@ -42,11 +43,25 @@
             v-model="feedbackTitle"
           />
         </div>
+
+        <!-- Category input -->
+        <div class="form__input">
+          <label for="feedbackCategory">Category *</label>
+          <select name="projects" id="project" v-model="feedbackCategory">
+            <option value="" selected id="placeholder">Select category</option>
+            <option value="issue_design">Design issue</option>
+            <option value="issue_product">Product issue</option>
+            <option value="issue_technical">Engineering issue</option>
+            <option value="request_feature">Feature request</option>
+          </select>
+        </div>
+
+        <!-- Project input -->
         <div class="form__input">
           <label for="feedbackProject"
             >Project<span class="optional">(optional)</span></label
           >
-          <select name="projects" id="project" v-model="project">
+          <select name="projects" id="project" v-model="feedbackProject">
             <option value="" selected id="placeholder">Select a team</option>
             <option
               v-for="project in store.state.projects"
@@ -57,6 +72,8 @@
             </option>
           </select>
         </div>
+
+        <!-- Details input -->
         <div class="form__input">
           <label for="feedbackDetails"
             >Details<span class="optional">(optional)</span></label
@@ -71,45 +88,11 @@
         </div>
 
         <div class="form__input">
-          <label for="priority">Category *</label>
-          <div class="radio">
-            <input
-              name="priority"
-              class="radio__select"
-              type="radio"
-              id="design"
-              value="design"
-              v-model="feedbackPriority"
-            />
-            <label class="radio__text" for="design">Design bug</label>
-          </div>
-          <div class="radio">
-            <input
-              name="priority"
-              class="radio__select"
-              type="radio"
-              id="functionality"
-              value="functionality"
-              v-model="feedbackPriority"
-            />
-            <label class="radio__text" for="functionality"
-              >Functionality bug</label
-            >
-          </div>
-          <div class="radio">
-            <input
-              name="priority"
-              class="radio__select"
-              type="radio"
-              id="low"
-              value="Low"
-              v-model="feedbackPriority"
-            />
-            <label class="radio__text" for="low">Low</label>
-          </div>
-        </div>
-        <div class="form__input">
-          <BaseImageUploader :id="id" ref="imageUploader" />
+          <BaseImageUploader
+            :id="id"
+            ref="imageUploader"
+            v-on:updateImage="updateFeedbackImage"
+          />
         </div>
 
         <BaseButton
@@ -155,12 +138,13 @@ export default {
   },
   setup() {
     // Create data
+    const id = ref(null);
     const feedbackTitle = ref(null);
     const feedbackDetails = ref(null);
-    const id = ref(null);
+    const feedbackImage = ref(null);
     const imageName = ref(null);
-    const feedbackPriority = ref(null);
-    const project = ref(null);
+    const feedbackCategory = ref(null);
+    const feedbackProject = ref(null);
     const errorMsg = ref(null);
     const removeImageFunction = ref(null);
 
@@ -195,24 +179,34 @@ export default {
     };
 
     const addFeedbackToDatabase = async () => {
-      console.log(project.value);
+      // if (!feedbackImage.value) {
+      //   imageName.value = null;
+      // } else {
+      //   console.log(imageName.value);
+      // }
+
+      feedbackImage.value ? imageName.value : imageName.value = null;
+      feedbackProject.value ? feedbackProject.value = feedbackProject.value.id : feedbackProject.value = null;
+
+      console.log(feedbackProject.value)
+
       try {
         const { error } = await supabase.from("feedback").insert([
           {
             // Core feedback data
             id: id.value,
+            title: feedbackTitle.value,
             description: feedbackDetails.value,
-            priority: feedbackPriority.value,
+            category: feedbackCategory.value,
             image: imageName.value,
+            votes: 1,
+            source: "app",
 
             // Supporting data
             organization_id: store.state.organization,
             team_id: store.state.teams_active_data.id,
-            project_id: project.value.id,
+            project_id: feedbackProject.value,
             created_by: store.state.activeUser.id,
-            completed: false,
-            completed_at: null,
-            source: "LaunchDocs",
           },
         ]);
 
@@ -232,9 +226,6 @@ export default {
     const closeModal = () => {
       store.dispatch("hideCreateFeedbackModal");
       document.body.classList.remove("noScroll");
-      if (store.state.projects.length > 4) {
-        document.querySelector(".content").style.padding = "24px 80px";
-      }
     };
     return {
       store,
@@ -242,14 +233,19 @@ export default {
       saveFeedback,
       feedbackTitle,
       feedbackDetails,
-      feedbackPriority,
-      project,
+      feedbackCategory,
+      feedbackProject,
+      feedbackImage,
       errorMsg,
       closeModal,
       removeImageFunction,
     };
   },
-  methods: {},
+  methods: {
+    updateFeedbackImage(payload) {
+      this.feedbackImage = payload;
+    },
+  },
 };
 </script>
 
