@@ -55,36 +55,39 @@ export default {
   height: 36px;
   border: none;
   border-radius: 3px;
-  font-weight: 500;
-  font-size: 14px;
-  font-family: 'Avenir next';
+  font-weight: 600;
+  font-size: 13px;
+  font-family: "Avenir next";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
 }
 
 .btn__primary {
-  padding: 6px 12px;
-  background: #212430;
+  background: #3253e4;
   color: white;
+  border: 2px solid #3253e4;
 }
 
 .btn__primary:hover {
   cursor: pointer;
-  background: #f0624c;
+  background: #2a4ad4;
 }
 
 .btn__secondary {
-  font-weight: 500;
   background: white;
-  border: 2px solid #f0624c;
-  color: #f0624c;
-  padding: 8px 12px;
+  border: 2px solid #3253e4;
+  color: #3253e4;
+  
 }
 .btn__secondary:hover {
   cursor: pointer;
-  background: #e8e9ee;
+  background: #f1f3fc;
 }
 
 .btn__full {
-  background: #FF6047;
+  background: #3253e4;
   width: 100%;
 }
 </style>

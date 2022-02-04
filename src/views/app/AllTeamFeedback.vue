@@ -1,14 +1,27 @@
 <template>
   <div class="content">
-    <TheCreateFeedbackModal v-if="store.state.createFeedbackModal" />
     <div class="content__top"></div>
     <div class="content__bottom">
       <!-- TODO — Add search and filters -->
       <div class="content__bottom--left">
         <div class="card summary">
-          <p class="header">Summary</p>
+          <div class="header">
+            <div class="header__bg"></div>
+            <p class="header__avatar">KD</p>
+            <p class="header__title">Summary</p>
+          </div>
           <div class="filters">
             <div class="filter">
+              <p class="filter__title">Debt</p>
+              <p class="filter__count">
+                {{
+                  store.state.feedback.filter((f) =>
+                    f.category.includes("issue")
+                  ).length
+                }}
+              </p>
+            </div>
+            <div class="filter debt">
               <p class="filter__title">Design</p>
               <p class="filter__count">
                 {{
@@ -18,7 +31,7 @@
                 }}
               </p>
             </div>
-            <div class="filter">
+            <div class="filter debt">
               <p class="filter__title">Product</p>
               <p class="filter__count">
                 {{
@@ -28,8 +41,8 @@
                 }}
               </p>
             </div>
-            <div class="filter">
-              <p class="filter__title">Engineering</p>
+            <div class="filter debt">
+              <p class="filter__title">Technical</p>
               <p class="filter__count">
                 {{
                   store.state.feedback.filter(
@@ -39,7 +52,7 @@
               </p>
             </div>
             <div class="filter">
-              <p class="filter__title">Feature request</p>
+              <p class="filter__title">Feature Request</p>
               <p class="filter__count">
                 {{
                   store.state.feedback.filter(
@@ -83,19 +96,19 @@
                 class="tag category__issue"
                 v-if="feedback.category === 'issue_design'"
               >
-                Design Issue
+                Design Debt
               </p>
               <p
                 class="tag category__issue"
                 v-if="feedback.category === 'issue_product'"
               >
-                Product Issue
+                Product Debt
               </p>
               <p
                 class="tag category__issue"
                 v-if="feedback.category === 'issue_technical'"
               >
-                Engineering Issue
+                Tech Debt
               </p>
               <p
                 class="tag category__request"
@@ -171,20 +184,12 @@
 <script>
 // import { ref } from "vue";
 import store from "../../store/index";
-import TheCreateFeedbackModal from "../../components/single/TheCreateFeedbackModal.vue";
 import { supabase } from "../../supabase/init";
 
 export default {
-  name: "Launch Feedback",
-  components: {
-    TheCreateFeedbackModal,
-  },
-  data() {
-    return {
-      priority: "Secondary",
-      text: "Add feedback",
-    };
-  },
+  name: "All Team Feedback",
+  components: {},
+  data() {},
   setup() {
     // Define variables
 
@@ -220,38 +225,13 @@ export default {
   align-items: center;
   min-height: calc(100vh - 102px);
   width: 100%;
-  padding: 0px 80px;
+  padding: 32px 80px;
   background: #eeeff3;
 
   .card {
-    padding: 16px;
     border: 1px solid #dbdde6;
     background: white;
     border-radius: 8px;
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .header__title {
-        font-weight: 600;
-        font-size: 16px;
-      }
-      .header__action {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 26px;
-        height: 26px;
-        border-radius: 5px;
-      }
-      .header__action:hover {
-        cursor: pointer;
-        background: #313649;
-      }
-    }
-  }
-  .content__top {
-    margin: 24px 0;
   }
   .content__bottom {
     display: flex;
@@ -265,23 +245,65 @@ export default {
       top: 24px;
       .summary {
         .header {
-          font-size: 16px;
-          font-weight: 600;
-          margin: 0 0 12px 0;
-        }
-        .filter {
           display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          margin: 16px 0;
+          flex-direction: column;
+          margin: 0 0 12px 0;
+          .header__bg {
+            height: 48px;
+            width: 100%;
+            background: #3253e4;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            position: relative;
+          }
+          .header__avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: absolute;
+            height: 72px;
+            width: 72px;
+            top: 20px;
+            left: 16px;
+            border-radius: 100%;
+            background: #eeeff3;
+            border: 4px solid white;
+            font-weight: 600;
+            font-size: 13px;
+          }
+          .header__title {
+            font-size: 16px;
+            font-weight: 600;
+            padding: 56px 16px 0;
+          }
         }
-        .filter__title,
-        .filter__count {
-          color: #636c92;
-        }
-        .filter:last-child {
-          margin: 16px 0 0 0;
-          color: red;
+        .filters {
+          padding: 0 16px 16px;
+          .filter {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin: 16px 0;
+          }
+          .debt {
+            .filter__title,
+            .filter__count {
+              font-size: 13px;
+              color: #7981a4;
+              font-weight: 400;
+            }
+            .filter__title {
+              padding: 0 0 0 8px;
+            }
+          }
+          .filter__title,
+          .filter__count {
+            font-weight: 500;
+          }
+          .filter:last-child {
+            margin: 16px 0 0 0;
+          }
         }
       }
     }
@@ -293,6 +315,7 @@ export default {
         display: flex;
         flex-direction: column;
         margin: 0 0 12px;
+        padding: 16px;
         .fb__top {
           display: flex;
           flex-direction: row;
@@ -345,7 +368,7 @@ export default {
               font-weight: 500;
             }
             .category__issue {
-              background: #f0b5bc;
+              background: #f1c7cc;
             }
             .category__request {
               background: #eeeff3;
@@ -374,24 +397,26 @@ export default {
           margin: 16px 0 0 0;
           img {
             width: 100%;
-            height: 160px;
+            height: 170px;
             object-fit: cover;
-            object-position: 10% 0%;
+            object-position: 10% 20%;
+            border: 1px solid #dbdde6;
+            border-radius: 5px;
           }
         }
         .fb__bottom {
           display: flex;
           flex-direction: row;
           justify-content: space-between;
-          margin: 16px 0 0 0;
+          margin: 12px 0 0 0;
           .left {
             display: flex;
             position: relative;
             align-items: center;
             justify-content: center;
             .comment {
-              padding: 4px;
-              margin: -4px;
+              padding: 5px;
+              margin: -5px;
             }
             .comment:hover {
               background: #eeeff3;

@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <div class="actions">
+    <!-- <div class="actions">
       <div class="actions__filters">
         <div class="form__input">
           <div class="form__select" id="team">Search</div>
@@ -8,7 +8,7 @@
       </div>
       <div class="actions__buttons">
       </div>
-    </div>
+    </div> -->
     <div class="projects">
       <div
         v-for="project in store.state.projects"
@@ -125,7 +125,8 @@ export default {
       align-items: center;
       background: white;
       border: 1px solid #dbdde6;
-      margin: 0 0 -1px;
+      border-radius: 5px;
+      margin: 0 0 8px 0;
       padding: 16px;
       .col {
         margin-right: 16px;

@@ -1,5 +1,6 @@
 <template>
   <div class="team" v-if="store.state.teams_active_data">
+    <TheCreateFeedbackModal v-if="store.state.createFeedbackModal" />
     <TheCreateProjectModal v-if="store.state.createProjectModal" />
     <nav class="subnav">
       <div class="top">
@@ -69,12 +70,14 @@ import { useRouter } from "vue-router";
 import store from "../../store/index";
 import BaseButton from "../../components/global/BaseButton.vue";
 import TheCreateProjectModal from "../../components/single/TheCreateProjectModal.vue";
+import TheCreateFeedbackModal from "../../components/single/TheCreateFeedbackModal.vue";
 
 export default {
   name: "Team",
   components: {
     BaseButton,
     TheCreateProjectModal,
+    TheCreateFeedbackModal,
   },
   data() {
     return {
@@ -202,7 +205,7 @@ export default {
     }
     .router-link-active {
       font-weight: 600;
-      border-bottom: 2px solid #ff6047;
+      border-bottom: 2px solid #3253E4;
       border-radius: 2px;
     }
   }
