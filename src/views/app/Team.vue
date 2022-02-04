@@ -140,7 +140,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: calc(100vw - 220px);
-  padding: 8px 24px 0;
+  padding: 8px 32px 0 24px;
   border-bottom: 1px solid #dbdde6;
   .top {
     display: flex;

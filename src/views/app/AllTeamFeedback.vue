@@ -131,6 +131,10 @@ export default {
   methods: {
     showCreateFeedbackModal() {
       store.dispatch("showCreateFeedbackModal");
+
+      if (store.state.projects.length > 4) {
+        document.querySelector('.content').style.padding = "24px 92px 24px 76px";
+      }
     },
   }
 };
@@ -145,6 +149,7 @@ export default {
   min-height: calc(100vh - 102px);
   width: 100%;
   padding: 24px 80px;
+  
   .card {
     padding: 16px;
     border: 1px solid #dbdde6;
@@ -173,8 +178,8 @@ export default {
     }
   }
   .content__left {
-    width: 25%;
-    margin: 0 12px 0 0;
+    width: 220px;
+    margin: 0 12px;
     .summary {
       // min-width: 280px;
       position: -webkit-sticky; /* Safari */
@@ -186,9 +191,9 @@ export default {
     }
   }
   .content__right {
-    width: 75%;
-    // max-width: 640px;
-    // margin: 0 0 0 12px;
+    width: 540px;
+    max-width: 540px;
+    margin: 0 0 0 12px;
     .fb {
       display: flex;
       flex-direction: column;

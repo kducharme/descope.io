@@ -47,13 +47,9 @@ export default {
 
       try {
         const { error } = await supabase.storage
-          .from("launches")
-          .upload("feedback/" + props.id + ".jpeg", image.value, {
-            cacheControl: "3600",
-            upsert: false,
-          });
-        this.$emit("imageLoading", "loading.value");
-        console.log("success");
+          .from("feedback")
+          .upload("post/" + props.id + ".jpeg", file);
+        // this.$emit("imageLoading", "loading.value");
         if (error) throw error;
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
@@ -66,8 +62,8 @@ export default {
     // Displays a preview of the image in the component
     const displayImage = (file) => {
       const img = new Image();
-      img.src = URL.createObjectURL(file);
 
+      img.src = URL.createObjectURL(file);
       img.style.width = "100%";
       img.style.height = "120px";
       img.style.maxHeight = "120px";
@@ -81,8 +77,6 @@ export default {
     // Removes the image preview from the UI
     const removeImage = async () => {
       if (!image.value) return;
-
-      image.value = null;
       document.querySelector("#imagePreview").remove();
 
       deleteImageFromDatabase();
@@ -90,14 +84,14 @@ export default {
 
     // Deletes the image from the database
     const deleteImageFromDatabase = async () => {
-      console.log("no image");
+
       if (!image.value) return;
-      console.log("has image");
       try {
         const { error } = await supabase.storage
-          .from("launches")
-          .remove(["feedback/" + props.id + ".jpeg"]);
+          .from("feedback")
+          .remove(["post/" + props.id + ".jpeg"]);
         if (error) throw error;
+        image.value = null;
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {

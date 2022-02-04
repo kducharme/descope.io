@@ -90,6 +90,9 @@ export default {
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap");
 
+body { 
+    overflow-y: auto;
+}
 body,
 h1,
 h2,
@@ -143,7 +146,7 @@ body {
 }
 
 .noScroll {
-  height: 100%;
+  // height: 100%;
   overflow: hidden!important;
 }
 </style>

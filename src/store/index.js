@@ -208,8 +208,6 @@ export default new Vuex.Store({
                     .select("*")
                     .eq("id", fb.created_by);
 
-                    console.log(fb.comments)
-
                 fb._addedBy = profile[0].firstname + " " + profile[0].lastname;
                 fb._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
                 fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
@@ -225,22 +223,25 @@ export default new Vuex.Store({
                 fb._project = project[0];
 
 
-
                 // Get images and add it to the feedback object
 
-                // if (fb.image) {
-                //     const { data: img } = await supabase.storage
-                //         .from("launches")
-                //         .download(`feedback/${fb.image}`)
+                console.log(fb.image)
 
-                //     const url = URL.createObjectURL(await img);
-                //     fb._image = url;
-                // }
-                // else {
-                //     fb._image = "../assets/images/feedback.png";
-                // }
+                if (fb.image) {
+                    const { data: img } = await supabase.storage
+                        .from("launches")
+                        .download(`feedback/${fb.image}`)
+                        console.log(img)
+
+                    const url = URL.createObjectURL(await img);
+                    fb._image = url;
+                }
+                else {
+                    fb._image = "../assets/images/feedback.png";
+                }
             }
 
+            
             // TODO — sort based on votes then priority
             feedback.sort((a, b) => {
                 if (a.votes > b.votes) { return -1; }

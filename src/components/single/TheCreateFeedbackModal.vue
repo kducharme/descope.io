@@ -43,18 +43,8 @@
           />
         </div>
         <div class="form__input">
-          <label for="feedbackDetails">Details</label>
-          <textarea
-            type="textarea"
-            id="feedbackDetails"
-            v-model="feedbackDetails"
-            rows="2"
-            cols="50"
-          />
-        </div>
-        <div class="form__input">
           <label for="feedbackProject"
-            >Project <span class="optional">(optional)</span></label
+            >Project<span class="optional">(optional)</span></label
           >
           <select name="projects" id="project" v-model="project">
             <option value="" selected id="placeholder">Select a team</option>
@@ -67,6 +57,19 @@
             </option>
           </select>
         </div>
+        <div class="form__input">
+          <label for="feedbackDetails"
+            >Details<span class="optional">(optional)</span></label
+          >
+          <textarea
+            type="textarea"
+            id="feedbackDetails"
+            v-model="feedbackDetails"
+            rows="3"
+            cols="50"
+          />
+        </div>
+
         <div class="form__input">
           <label for="priority">Category *</label>
           <div class="radio">
@@ -167,19 +170,19 @@ export default {
       id.value = uuidv4();
     };
 
+    // Generate unique id for feedback
+    generateFeedbackId();
+
     // Prevent background scrolling
     const preventBackgroundScroll = () => {
       document.body.classList.add("noScroll");
-    }
+    };
 
     preventBackgroundScroll();
 
     // When a user submits the form, this function is called
 
     const saveFeedback = async () => {
-      // Generate unique id for feedback
-      generateFeedbackId();
-
       // Generate unqiue name for image
       generateImageName(id);
 
@@ -229,6 +232,9 @@ export default {
     const closeModal = () => {
       store.dispatch("hideCreateFeedbackModal");
       document.body.classList.remove("noScroll");
+      if (store.state.projects.length > 4) {
+        document.querySelector(".content").style.padding = "24px 80px";
+      }
     };
     return {
       store,
@@ -264,7 +270,7 @@ export default {
   .modal__content {
     width: 480px;
     background: #eeeff3;
-    overflow-y: scroll;
+    overflow-y: auto;
     .header {
       display: flex;
       align-items: center;
