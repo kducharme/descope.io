@@ -34,7 +34,8 @@
                 {{ feedback._project.name }}
               </p>
               <p class="project" v-if="!feedback._project">
-                {{ store.state.teams_active_data.name }} Team <span class="team">(no project)</span>
+                {{ store.state.teams_active_data.name }} Team
+                <span class="team">(no project)</span>
               </p>
               <p class="details">
                 Added by {{ feedback._addedBy }} {{ feedback._dateAdded }}
@@ -42,16 +43,28 @@
             </div>
           </div>
           <div class="fb__top--right">
-            <p class="tag category__issue" v-if="feedback.category === 'issue_design'">
+            <p
+              class="tag category__issue"
+              v-if="feedback.category === 'issue_design'"
+            >
               Design Issue
             </p>
-            <p class="tag category__issue" v-if="feedback.category === 'issue_product'">
+            <p
+              class="tag category__issue"
+              v-if="feedback.category === 'issue_product'"
+            >
               Product Issue
             </p>
-            <p class="tag category__issue" v-if="feedback.category === 'issue_technical'">
+            <p
+              class="tag category__issue"
+              v-if="feedback.category === 'issue_technical'"
+            >
               Engineering Issue
             </p>
-            <p class="tag category__request" v-if="feedback.category === 'request_feature'">
+            <p
+              class="tag category__request"
+              v-if="feedback.category === 'request_feature'"
+            >
               Feature Request
             </p>
           </div>
@@ -71,36 +84,40 @@
               viewBox="0 0 24 24"
               width="16px"
               fill="#7B82A3"
+              class="comment"
             >
               <path d="M0 0h24v24H0V0z" fill="none" />
               <path
                 d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"
               />
             </svg>
-            <div class="comments__count" v-if="feedback.comments">
+            <div class="comment__count" v-if="feedback.comments">
               {{ feedback.comments.length }}
             </div>
           </div>
           <div class="right">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              height="20px"
+              height="18px"
               viewBox="0 0 24 24"
-              width="20px"
+              width="18px"
               fill="#7B82A3"
+              class="vote vote__up"
+              @click="upVote(feedback)"
             >
               <path d="M0 0h24v24H0V0z" fill="none" />
               <path
                 d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
               />
             </svg>
-            <p class="count">{{ feedback.votes }}</p>
+            <p class="count">{{ feedback.votes.length }}</p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              height="20px"
+              height="18px"
               viewBox="0 0 24 24"
-              width="20px"
+              width="18px"
               fill="#7B82A3"
+              class="vote vote__down"
             >
               <path d="M0 0h24v24H0V0z" fill="none" />
               <path
@@ -119,6 +136,7 @@
 import store from "../../store/index";
 import BaseButton from "../../components/global/BaseButton.vue";
 import TheCreateFeedbackModal from "../../components/single/TheCreateFeedbackModal.vue";
+import { supabase } from "../../supabase/init";
 
 export default {
   name: "Launch Feedback",
@@ -135,11 +153,21 @@ export default {
   setup() {
     // Define variables
 
-    // const showCreateFeedbackModal = () => {
-    //   store.dispatch("showCreateFeedbackModal");
-    // };
+    const upVote = async (fb) => {
+      fb.votes++;
+      try {
+        const { error } = await supabase.from("feedback_votes").insert([
+          {
+            feedback_id: fb.id,
+          },
+        ]);
+        if (error) throw error;
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-    return { store };
+    return { store, upVote };
   },
   methods: {
     showCreateFeedbackModal() {
@@ -217,15 +245,15 @@ export default {
           align-items: center;
           margin: 0 0 16px;
           .left {
-            margin: 0 12px 0 0;
+            margin: 0 8px 0 0;
             .initials {
               display: flex;
               align-items: center;
               justify-content: center;
-              background: #212430;
+              background: #b6bbcd;
               color: white;
-              height: 36px;
-              width: 36px;
+              height: 32px;
+              width: 32px;
               border-radius: 100%;
               font-size: 12px;
               font-weight: 600;
@@ -255,14 +283,14 @@ export default {
           .tag {
             padding: 4px 6px;
             border-radius: 3px;
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 500;
           }
           .category__issue {
             background: #f0b5bc;
           }
           .category__request {
-            background: #dbdde6;
+            background: #eeeff3;
           }
         }
       }
@@ -301,23 +329,38 @@ export default {
         .left {
           display: flex;
           position: relative;
-          .comments__count {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: absolute;
-            top: -8px;
-            left: -4px;
-            background: #dfe1e9;
-            margin: 0 0 0 12px;
-            border-radius: 100%;
-            height: 16px;
-            width: 16px;
-            font-size: 11.5px;
-            font-weight: 600;
+          align-items: center;
+          justify-content: center;
+          .comment {
+            padding: 4px;
+            margin: -4px;
+          }
+          .comment:hover {
+            background: #eeeff3;
+            border-radius: 3px;
+            cursor: pointer;
+          }
+          svg:hover {
+            fill: #212430;
           }
         }
+        .comment__count {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          position: absolute;
+          top: -8px;
+          left: -4px;
+          background: #212430;
+          margin: 0 0 0 12px;
+          border-radius: 100%;
+          height: 16px;
+          width: 16px;
+          font-size: 11.5px;
+          font-weight: 600;
+        }
+
         .right {
           display: flex;
           flex-direction: row;
@@ -326,6 +369,18 @@ export default {
             font-size: 12px;
             font-weight: 600;
             margin: 0 4px;
+          }
+          .vote {
+            padding: 2px;
+          }
+          .vote__up:hover,
+          .vote__down:hover {
+            background: #eeeff3;
+            border-radius: 3px;
+            cursor: pointer;
+          }
+          svg:hover {
+            fill: #212430;
           }
         }
       }

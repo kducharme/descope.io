@@ -145,6 +145,8 @@ export default {
     const imageName = ref(null);
     const feedbackCategory = ref(null);
     const feedbackProject = ref(null);
+    const initialVote = ref(null);
+
     const errorMsg = ref(null);
     const removeImageFunction = ref(null);
 
@@ -171,25 +173,39 @@ export default {
       generateImageName(id);
 
       // Adds feedback object to supabase
-      addFeedbackToDatabase();
+      addToDatabase();
     };
 
     const generateImageName = (id) => {
       return (imageName.value = id.value + ".jpeg");
     };
 
-    const addFeedbackToDatabase = async () => {
-      // if (!feedbackImage.value) {
-      //   imageName.value = null;
-      // } else {
-      //   console.log(imageName.value);
-      // }
+    const addToDatabase = async () => {
+      feedbackImage.value ? imageName.value : (imageName.value = null);
+      feedbackProject.value
+        ? (feedbackProject.value = feedbackProject.value.id)
+        : (feedbackProject.value = null);
+      await saveInitialVoteToDatabase();
+      await saveFeedbackToDatabase();
+    };
 
-      feedbackImage.value ? imageName.value : imageName.value = null;
-      feedbackProject.value ? feedbackProject.value = feedbackProject.value.id : feedbackProject.value = null;
+    const saveInitialVoteToDatabase = async () => {
+      try {
+        const { data, error } = await supabase.from("feedback_votes").insert([
+          {
+            feedback_id: id.value,
+            created_by: store.state.activeUser.id,
+          },
+        ]);
+        if (error) throw error;
+        initialVote.value = data;
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-      console.log(feedbackProject.value)
-
+    const saveFeedbackToDatabase = async () => {
+      console.log(initialVote.value[0])
       try {
         const { error } = await supabase.from("feedback").insert([
           {
@@ -199,8 +215,8 @@ export default {
             description: feedbackDetails.value,
             category: feedbackCategory.value,
             image: imageName.value,
-            votes: 1,
             source: "app",
+            votes: [`${initialVote.value[0].id}`],
 
             // Supporting data
             organization_id: store.state.organization,
@@ -215,12 +231,13 @@ export default {
 
         if (error) throw error;
       } catch (error) {
+        console.log(error)
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
           errorMsg.value = null;
         }, 5000);
       }
-    };
+    }
 
     // Closes modal when the background or "x" button  is clicked
     const closeModal = () => {
