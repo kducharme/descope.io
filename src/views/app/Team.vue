@@ -32,13 +32,14 @@
             type="submit"
             :priority="secondary_priority"
             :text="secondary_text"
+            :action="showCreateProjectModal"
             class="subnav__button--secondary"
           />
           <BaseButton
             type="submit"
             :priority="primary_priority"
             :text="primary_text"
-            :action="showCreateProjectModal"
+            :action="showCreateFeedbackModal"
             class="subnav__button--primary"
           />
         </div>
@@ -78,9 +79,9 @@ export default {
   data() {
     return {
       primary_priority: "Primary",
-      primary_text: "Create project",
+      primary_text: "Add feedback",
       secondary_priority: "Secondary",
-      secondary_text: "Actions",
+      secondary_text: "Create project",
     };
   },
   setup() {
@@ -123,6 +124,9 @@ export default {
   methods: {
     showCreateProjectModal() {
       store.dispatch("showCreateProjectModal");
+    },
+        showCreateFeedbackModal() {
+      store.dispatch("showCreateFeedbackModal");
     },
   },
 };

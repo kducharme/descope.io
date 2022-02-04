@@ -205,7 +205,6 @@ export default {
     };
 
     const saveFeedbackToDatabase = async () => {
-      console.log(initialVote.value[0])
       try {
         const { error } = await supabase.from("feedback").insert([
           {
@@ -231,13 +230,13 @@ export default {
 
         if (error) throw error;
       } catch (error) {
-        console.log(error)
+        console.log(error);
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
           errorMsg.value = null;
         }, 5000);
       }
-    }
+    };
 
     // Closes modal when the background or "x" button  is clicked
     const closeModal = () => {

@@ -72,10 +72,10 @@ export default {
 }
 
 .btn__secondary {
-  // height: 32px;
   font-weight: 500;
-  background: #eeeff3;
-  border: 2px solid #DBDDE6;
+  background: white;
+  border: 2px solid #f0624c;
+  color: #f0624c;
   padding: 8px 12px;
 }
 .btn__secondary:hover {
