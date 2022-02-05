@@ -81,13 +81,30 @@
 
       <div class="content__bottom--right">
         <div class="actions">
-          <input
-            type="text"
-            v-model="search"
-            class="search"
-            placeholder="Search feedback"
-            @keyup="searchFeedback"
-          />
+          <div class="actions__search">
+            <input
+              type="text"
+              v-model="search"
+              class="actions__search--input"
+              placeholder="Search feedback"
+              @keyup="searchFeedback"
+            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="18px"
+              viewBox="0 0 24 24"
+              width="18px"
+              fill="#7B82A3"
+              class="actions__search--reset"
+              @click="resetSearch()"
+              v-if="this.search"
+            >
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path
+                d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+              />
+            </svg>
+          </div>
           <div class="sort">
             <p class="sort__text">Sort by:</p>
             <div class="sort__value">
@@ -97,7 +114,7 @@
                 height="24px"
                 viewBox="0 0 24 24"
                 width="24px"
-                fill="#000000"
+                fill="#7B82A3"
                 class="sort__value--icon"
               >
                 <path d="M0 0h24v24H0V0z" fill="none" />
@@ -224,9 +241,7 @@
 <script>
 // import { ref } from "vue";
 import store from "../../store/index";
-// import { mapGetters } from "vuex";
 import { supabase } from "../../supabase/init";
-// import { ref } from "vue";
 
 export default {
   name: "All Team Feedback",
@@ -241,19 +256,6 @@ export default {
     // Define variables
     // const search = ref(null);
     // const results = ref(null);
-
-    // const searchFeedback = () => {
-    //   results.value = store.state.feedback_results.filter((fb) => {
-    //     if (
-    //       fb.title.toLowerCase().includes(search.value.toLowerCase()) ||
-    //       fb.description.toLowerCase().includes(search.value.toLowerCase()) ||
-    //       fb._project.name.toLowerCase().includes(search.value.toLowerCase())
-    //     ) {
-    //       return fb;
-    //     }
-    //   });
-    //   console.log(results.value);
-    // };
 
     const upVote = async (fb) => {
       fb.votes++;
@@ -274,6 +276,9 @@ export default {
   methods: {
     showCreateFeedbackModal() {
       store.dispatch("showCreateFeedbackModal");
+    },
+    resetSearch() {
+      this.search = "";
     },
   },
 };
@@ -379,10 +384,28 @@ export default {
         align-items: center;
         justify-content: space-between;
         margin: 0 0 16px 0;
-        .search {
-          border: 1px solid #dbdde6;
+        .actions__search {
+          position: relative;
           width: calc(100% - 150px);
-          border-radius: 5px;
+          .actions__search--input {
+            border: 1px solid #dbdde6;
+            border-radius: 5px;
+            width: 100%;
+          }
+          .actions__search--reset {
+            position: absolute;
+            right: -12px;
+            top: 8px;
+            padding: 2px;
+          }
+          .actions__search--reset:hover {
+            background: #eeeff3;
+            border-radius: 3px;
+            cursor: pointer;
+          }
+          svg:hover {
+            fill: #212430;
+          }
         }
         .sort {
           display: flex;
