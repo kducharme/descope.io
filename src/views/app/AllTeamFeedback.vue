@@ -2,13 +2,25 @@
   <div class="content">
     <div class="content__top"></div>
     <div class="content__bottom">
-      <!-- TODO — Add search and filters -->
       <div class="content__bottom--left">
         <div class="card summary">
           <div class="header">
             <div class="header__bg"></div>
-            <p class="header__avatar">KD</p>
-            <p class="header__title">Summary</p>
+            <div class="header__avatar">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="30px"
+                viewBox="0 0 24 24"
+                width="30px"
+                fill="#B7BBCC"
+              >
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path
+                  d="M12 7V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2h-8zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm9 12h-7v-2h2v-2h-2v-2h2v-2h-2V9h7c.55 0 1 .45 1 1v8c0 .55-.45 1-1 1zm-1-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+                />
+              </svg>
+            </div>
+            <p class="header__title">Feedback</p>
           </div>
           <div class="filters">
             <div class="filter">
@@ -68,6 +80,34 @@
       </div>
 
       <div class="content__bottom--right">
+        <div class="actions">
+          <input
+            type="text"
+            v-model="search"
+            class="search"
+            placeholder="Search feedback"
+            @keyup="searchFeedback"
+          />
+          <div class="sort">
+            <p class="sort__text">Sort by:</p>
+            <div class="sort__value">
+              <p class="sort__value--text">Votes</p>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 0 24 24"
+                width="24px"
+                fill="#000000"
+                class="sort__value--icon"
+              >
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path
+                  d="M8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
         <div
           class="card fb"
           v-for="feedback in store.state.feedback"
@@ -185,6 +225,7 @@
 // import { ref } from "vue";
 import store from "../../store/index";
 import { supabase } from "../../supabase/init";
+import { ref } from "vue";
 
 export default {
   name: "All Team Feedback",
@@ -192,6 +233,15 @@ export default {
   data() {},
   setup() {
     // Define variables
+    const search = ref(null);
+
+    const searchFeedback = () => {
+        const results = store.state.feedback.filter(fb => {
+            return fb.title.toLowerCase().includes(search.value.toLowerCase());
+        })
+
+        console.log(results)
+    }
 
     const upVote = async (fb) => {
       fb.votes++;
@@ -207,7 +257,7 @@ export default {
       }
     };
 
-    return { store, upVote };
+    return { store, upVote, search, searchFeedback };
   },
   methods: {
     showCreateFeedbackModal() {
@@ -237,7 +287,7 @@ export default {
     display: flex;
     flex-direction: row;
     .content__bottom--left {
-      width: 220px;
+      width: 230px;
       margin: 0 12px 0 0;
       height: 100%;
       position: -webkit-sticky; /* Safari */
@@ -251,7 +301,7 @@ export default {
           .header__bg {
             height: 48px;
             width: 100%;
-            background: #3253e4;
+            background-image: linear-gradient(to right, #3253e4, #627df3);
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
             position: relative;
@@ -264,10 +314,10 @@ export default {
             position: absolute;
             height: 72px;
             width: 72px;
-            top: 20px;
+            top: 16px;
             left: 16px;
             border-radius: 100%;
-            background: #eeeff3;
+            background: #dbdde6;
             border: 4px solid white;
             font-weight: 600;
             font-size: 13px;
@@ -311,6 +361,38 @@ export default {
       width: 540px;
       max-width: 540px;
       margin: 0 0 0 12px;
+      .actions {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 0 16px 0;
+        .search {
+          border: 1px solid #dbdde6;
+          width: calc(100% - 150px);
+          border-radius: 5px;
+        }
+        .sort {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          width: 150px;
+          .sort__text {
+            font-size: 13px;
+            color: #777f9c;
+            font-weight: 400;
+            margin: 0 6px 0 0;
+          }
+          .sort__value {
+            display: flex;
+            align-items: center;
+            .sort__value--text {
+              font-weight: 600;
+              margin: 0 -2px 0 0;
+            }
+          }
+        }
+      }
       .fb {
         display: flex;
         flex-direction: column;
