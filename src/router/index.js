@@ -18,6 +18,7 @@ import IndividualProject from "../views/app/IndividualProject.vue";
 import IndividualProjectFeedback from "../views/app/IndividualProjectFeedback.vue";
 import IndividualProjectOverview from "../views/app/IndividualProjectOverview.vue";
 import IndividualProjectSettings from "../views/app/IndividualProjectSettings.vue";
+import FeedbackDetails from "../views/app/FeedbackDetails.vue";
 
 const routes = [
 
@@ -99,6 +100,11 @@ const routes = [
         path: "feedback",
         name: "feedback",
         component: AllTeamFeedback,
+      },
+      {
+        path: "feedback/:feedbackId",
+        name: "feedbackDetails",
+        component: FeedbackDetails,
       },
       {
         path: "settings",

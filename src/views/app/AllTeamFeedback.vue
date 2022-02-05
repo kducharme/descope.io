@@ -142,6 +142,7 @@
           class="card fb"
           v-for="feedback in store.getters.getFeedback(this.search)"
           :key="feedback.id"
+          @click="setActiveFeedback(feedback.id)"
         >
           <div class="fb__top">
             <div class="fb__top--left">
@@ -254,7 +255,8 @@
 <script>
 // import { ref } from "vue";
 import store from "../../store/index";
-import { supabase } from "../../supabase/init";
+// import { supabase } from "../../supabase/init";
+import { useRouter } from "vue-router";
 
 export default {
   name: "All Team Feedback",
@@ -266,25 +268,36 @@ export default {
     };
   },
   setup() {
-    // Define variables
-    // const search = ref(null);
-    // const results = ref(null);
+    // Set variables
+    const router = useRouter();
 
-    const upVote = async (fb) => {
-      fb.votes++;
-      try {
-        const { error } = await supabase.from("feedback_votes").insert([
-          {
-            feedback_id: fb.id,
-          },
-        ]);
-        if (error) throw error;
-      } catch (error) {
-        console.log(error);
-      }
+    const routeToFeedbackDetails = (id) => {
+      router.push({ name: "feedbackDetails", params: { feedbackId: id } });
     };
 
-    return { store, upVote };
+    // When a project is clicked, store the active project in Vuex
+    const setActiveFeedback = (id) => {
+      store.dispatch("setActiveFeedback", {
+        id,
+      });
+      routeToFeedbackDetails(id);
+    };
+
+    // const upVote = async (fb) => {
+    //   fb.votes++;
+    //   try {
+    //     const { error } = await supabase.from("feedback_votes").insert([
+    //       {
+    //         feedback_id: fb.id,
+    //       },
+    //     ]);
+    //     if (error) throw error;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
+
+    return { store, setActiveFeedback };
   },
   methods: {
     showCreateFeedbackModal() {
@@ -329,9 +342,9 @@ export default {
           flex-direction: column;
           margin: 0 0 12px 0;
           .header__bg {
-            height: 48px;
+            height: 56px;
             width: 100%;
-            background-image: linear-gradient(to right, #3253e4, #627df3);
+            background-image: linear-gradient(to right, #212430, #414657);
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
             position: relative;
@@ -342,8 +355,8 @@ export default {
             justify-content: center;
             text-align: center;
             position: absolute;
-            height: 72px;
-            width: 72px;
+            height: 80px;
+            width: 80px;
             top: 16px;
             left: 16px;
             border-radius: 100%;
@@ -401,12 +414,13 @@ export default {
           position: relative;
           width: calc(100% - 180px);
           input {
-            padding-left: 36px;
+            padding: 10px 10px 10px 36px;
+            border-radius: 5px;
           }
           .actions__search--icon {
             position: absolute;
             left: 10px;
-            top: 8px;
+            top: 10px;
           }
           .actions__search--input {
             border: 1px solid #dbdde6;
@@ -416,7 +430,7 @@ export default {
           .actions__search--reset {
             position: absolute;
             right: -36px;
-            top: 8px;
+            top: 10px;
             padding: 2px;
             svg:hover {
               fill: #212430;
@@ -448,6 +462,9 @@ export default {
             }
           }
         }
+      }
+      .fb:hover {
+          cursor: pointer;
       }
       .fb {
         display: flex;

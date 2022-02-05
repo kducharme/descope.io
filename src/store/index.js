@@ -22,6 +22,7 @@ export default new Vuex.Store({
         projects: [],
         projects_active: null,
         feedback: [],
+        feedback_active: null,
 
         // UI Elements
         createTeamModal: false,
@@ -92,11 +93,13 @@ export default new Vuex.Store({
         SET_ACTIVE_PROJECT: (state, project) => {
             state.projects_active = project;
         },
-        SET_ACTIVE_PROJECT_FEEDBACK: (state, feedback) => {
+        SET_ALL_FEEDBACK: (state, feedback) => {
             state.feedback = feedback;
-            state.feedback_results = feedback;
         },
-
+        SET_ACTIVE_FEEDBACK: (state, feedback) => {
+            state.feedback_active = feedback;
+            console.log(state.feedback_active)
+        },
         // SET STATE — UI CONFIGRATUIONS
         SHOW_CREATE_PROJECT_MODAL: (state) => {
             state.createProjectModal = true;
@@ -264,7 +267,7 @@ export default new Vuex.Store({
                 return 0;
             })
 
-            context.commit("SET_ACTIVE_PROJECT_FEEDBACK", await feedback);
+            context.commit("SET_ALL_FEEDBACK", await feedback);
         },
         async setActiveProject(context, payload) {
 
@@ -274,6 +277,16 @@ export default new Vuex.Store({
                 .eq("id", payload.id);
 
             context.commit("SET_ACTIVE_PROJECT", project[0]);
+        },
+
+        async setActiveFeedback(context, payload) {
+
+            const { data: feedback } = await supabase
+                .from("feedback")
+                .select("*")
+                .eq("id", payload.id);
+
+            context.commit("SET_ACTIVE_FEEDBACK", feedback[0]);
         },
 
         // RESET ACTIONS
