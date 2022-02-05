@@ -108,11 +108,7 @@
             </div>
           </div>
         </div>
-        <div
-          class="card fb"
-          v-for="feedback in store.state.feedback"
-          :key="feedback.id"
-        >
+        <div class="card fb" v-for="feedback in results" :key="feedback.id">
           <div class="fb__top">
             <div class="fb__top--left">
               <div class="left">
@@ -224,24 +220,36 @@
 <script>
 // import { ref } from "vue";
 import store from "../../store/index";
+import { mapGetters } from "vuex";
 import { supabase } from "../../supabase/init";
-import { ref } from "vue";
+// import { ref } from "vue";
 
 export default {
   name: "All Team Feedback",
   components: {},
-  data() {},
+  data() {
+    return {
+      search: "",
+      feedback: [],
+    };
+  },
   setup() {
     // Define variables
-    const search = ref(null);
+    // const search = ref(null);
+    // const results = ref(null);
 
-    const searchFeedback = () => {
-        const results = store.state.feedback.filter(fb => {
-            return fb.title.toLowerCase().includes(search.value.toLowerCase());
-        })
-
-        console.log(results)
-    }
+    // const searchFeedback = () => {
+    //   results.value = store.state.feedback_results.filter((fb) => {
+    //     if (
+    //       fb.title.toLowerCase().includes(search.value.toLowerCase()) ||
+    //       fb.description.toLowerCase().includes(search.value.toLowerCase()) ||
+    //       fb._project.name.toLowerCase().includes(search.value.toLowerCase())
+    //     ) {
+    //       return fb;
+    //     }
+    //   });
+    //   console.log(results.value);
+    // };
 
     const upVote = async (fb) => {
       fb.votes++;
@@ -257,11 +265,20 @@ export default {
       }
     };
 
-    return { store, upVote, search, searchFeedback };
+    return { store, upVote };
   },
   methods: {
+      ...mapGetters(["filterFeedbackBySearch"]),
     showCreateFeedbackModal() {
       store.dispatch("showCreateFeedbackModal");
+    },
+    searchFeedback() {
+      store.state.feedback.filter((f) => {
+        if (f.title.toLowerCase().includes(this.search.toLowerCase())) {
+          console.log(f)
+        }
+        console.log(store.state.feedback);
+      });
     },
   },
 };

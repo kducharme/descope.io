@@ -28,6 +28,12 @@ export default new Vuex.Store({
         createProjectModal: false,
         createFeedbackModal: false,
     },
+    getters: {
+        doneTodos: state => {
+            return state.feedback.filter(fb => fb.title.toLowerCase().includes(search.value.toLowerCase()))
+        }
+
+    },
     mutations: {
         // RESET STATE — APP
         RESET_STATE: (state) => {
@@ -83,6 +89,7 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_PROJECT_FEEDBACK: (state, feedback) => {
             state.feedback = feedback;
+            state.feedback_results = feedback;
         },
 
         // SET STATE — UI CONFIGRATUIONS
