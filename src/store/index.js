@@ -33,7 +33,8 @@ export default new Vuex.Store({
             return state.feedback.filter(fb =>
                 fb.title.toLowerCase().includes(payload.toLowerCase()) ||
                 fb.description.toLowerCase().includes(payload.toLowerCase()) ||
-                fb._project.name.toLowerCase().includes(payload.toLowerCase())
+                fb._project.name.toLowerCase().includes(payload.toLowerCase()) ||
+                fb.category.toLowerCase().includes(payload.toLowerCase())
             );
         },
     },
