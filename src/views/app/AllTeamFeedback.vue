@@ -1,7 +1,18 @@
 <template>
   <div class="content">
+    <BaseEmptyState
+      :title="empty_title"
+      :body="empty_body"
+      :buttonType="empty_button_type"
+      :buttonPriority="empty_button_priority"
+      :buttonText="empty_button_text"
+      :buttonAction="showCreateFeedbackModal"
+      class="subnav__button--secondary"
+      v-if="store.state.feedback.length == 0"
+    />
+
     <div class="content__top"></div>
-    <div class="content__bottom">
+    <div class="content__bottom" v-if="store.state.feedback.length !== 0">
       <div class="content__bottom--left">
         <div class="card summary">
           <div class="header">
@@ -257,14 +268,24 @@
 import store from "../../store/index";
 // import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
+import BaseEmptyState from "../../components/global/BaseEmptyState.vue";
 
 export default {
   name: "All Team Feedback",
-  components: {},
+  components: {
+    BaseEmptyState,
+  },
   data() {
     return {
       search: "",
       feedback: [],
+      empty_title: "Add your feedback",
+      empty_body:
+        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+      empty_button_type: "submit",
+      empty_button_priority: "Primary",
+      empty_button_text: "Add feedback",
+      empty_button_action: "showCreateFeedbackModal",
     };
   },
   setup() {
@@ -464,7 +485,7 @@ export default {
         }
       }
       .fb:hover {
-          cursor: pointer;
+        cursor: pointer;
       }
       .fb {
         display: flex;

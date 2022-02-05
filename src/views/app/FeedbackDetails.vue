@@ -20,6 +20,12 @@ export default {
 
 <style lang="scss" scoped>
 .feedback {
-    padding: 24px;
+  padding: 24px;
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  z-index: 99999;
+  background: white;
 }
 </style>
