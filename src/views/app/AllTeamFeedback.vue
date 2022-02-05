@@ -108,7 +108,11 @@
             </div>
           </div>
         </div>
-        <div class="card fb" v-for="feedback in results" :key="feedback.id">
+        <div
+          class="card fb"
+          v-for="feedback in store.getters.getFeedback(this.search)"
+          :key="feedback.id"
+        >
           <div class="fb__top">
             <div class="fb__top--left">
               <div class="left">
@@ -220,7 +224,7 @@
 <script>
 // import { ref } from "vue";
 import store from "../../store/index";
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 import { supabase } from "../../supabase/init";
 // import { ref } from "vue";
 
@@ -268,17 +272,8 @@ export default {
     return { store, upVote };
   },
   methods: {
-      ...mapGetters(["filterFeedbackBySearch"]),
     showCreateFeedbackModal() {
       store.dispatch("showCreateFeedbackModal");
-    },
-    searchFeedback() {
-      store.state.feedback.filter((f) => {
-        if (f.title.toLowerCase().includes(this.search.toLowerCase())) {
-          console.log(f)
-        }
-        console.log(store.state.feedback);
-      });
     },
   },
 };

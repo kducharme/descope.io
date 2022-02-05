@@ -29,11 +29,11 @@ export default new Vuex.Store({
         createFeedbackModal: false,
     },
     getters: {
-        doneTodos: state => {
-            return state.feedback.filter(fb => fb.title.toLowerCase().includes(search.value.toLowerCase()))
-        }
-
+        getFeedback: state => (payload) => {
+            return state.feedback.filter(fb => fb.title.toLowerCase().includes(payload.toLowerCase()));
+        },
     },
+
     mutations: {
         // RESET STATE — APP
         RESET_STATE: (state) => {
