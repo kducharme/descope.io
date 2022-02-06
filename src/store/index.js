@@ -99,7 +99,6 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_FEEDBACK: (state, feedback) => {
             state.feedback_active = feedback;
-            console.log(state.feedback_active)
         },
 
         // SET STATE — UI CONFIGRATUIONS
@@ -170,14 +169,53 @@ export default new Vuex.Store({
         setActiveTeamId(context, payload) {
             context.commit("SET_ACTIVE_TEAM_ID", payload.team_id);
         },
-        async setActiveFeedbackData(context, payload) {
+
+        async setActiveFeedback(context, payload) {
+            const moment = require('moment')
             const { data: fb } = await supabase
                 .from("feedback")
                 .select("*")
                 .eq("id", payload.feedback_id);
 
-            context.commit("SET_ACTIVE_FEEDBACK", await fb[0])
+            const activeFeedback = fb[0];
+
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id", activeFeedback.created_by);
+
+            activeFeedback._addedBy = profile[0].firstname + " " + profile[0].lastname;
+            activeFeedback._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
+            activeFeedback._dateAdded = moment(activeFeedback.created_at).startOf('minute').fromNow();
+            if (activeFeedback.priority === "High") { activeFeedback._priority = 3; }
+            if (activeFeedback.priority === "Med") { activeFeedback._priority = 2; }
+            if (activeFeedback.priority === "Low") { activeFeedback._priority = 1; }
+
+            if (activeFeedback.project_id) {
+                const { data: project } = await supabase
+                    .from("projects")
+                    .select("*")
+                    .eq("id", activeFeedback.project_id);
+
+                activeFeedback._project = project;
+            }
+
+            // Get images and add it to the feedback object
+
+            if (activeFeedback.image) {
+                const { data: img } = await supabase.storage
+                    .from("feedback")
+                    .download(`post/${activeFeedback.image}`)
+
+                const url = URL.createObjectURL(await img);
+                activeFeedback._image = url;
+            }
+
+            console.log(activeFeedback)
+
+            context.commit("SET_ACTIVE_FEEDBACK", await activeFeedback)
         },
+
         setActiveTeamData(context, payload) {
             payload.teams.forEach((team) => {
                 if (team.id == context.state.teams_active_id) {
@@ -250,8 +288,6 @@ export default new Vuex.Store({
 
                 }
 
-
-
                 // Get images and add it to the feedback object
 
                 if (fb.image) {
@@ -284,16 +320,6 @@ export default new Vuex.Store({
                 .eq("id", payload.id);
 
             context.commit("SET_ACTIVE_PROJECT", project[0]);
-        },
-
-        async setActiveFeedback(context, payload) {
-
-            const { data: feedback } = await supabase
-                .from("feedback")
-                .select("*")
-                .eq("id", payload.id);
-
-            context.commit("SET_ACTIVE_FEEDBACK", feedback[0]);
         },
 
         // RESET ACTIONS
