@@ -23,6 +23,7 @@ export default new Vuex.Store({
         projects_active: null,
         feedback: [],
         feedback_active: null,
+        feedback_active_id: null,
 
         // UI Elements
         createTeamModal: false,
@@ -100,6 +101,7 @@ export default new Vuex.Store({
             state.feedback_active = feedback;
             console.log(state.feedback_active)
         },
+
         // SET STATE — UI CONFIGRATUIONS
         SHOW_CREATE_PROJECT_MODAL: (state) => {
             state.createProjectModal = true;
@@ -167,6 +169,14 @@ export default new Vuex.Store({
         },
         setActiveTeamId(context, payload) {
             context.commit("SET_ACTIVE_TEAM_ID", payload.team_id);
+        },
+        async setActiveFeedbackData(context, payload) {
+            const { data: fb } = await supabase
+                .from("feedback")
+                .select("*")
+                .eq("id", payload.feedback_id);
+
+            context.commit("SET_ACTIVE_FEEDBACK", await fb[0])
         },
         setActiveTeamData(context, payload) {
             payload.teams.forEach((team) => {
@@ -251,12 +261,9 @@ export default new Vuex.Store({
 
                     const url = URL.createObjectURL(await img);
                     fb._image = url;
-
                 }
 
-
             }
-
 
             // TODO — sort based on votes then priority
             feedback.sort((a, b) => {

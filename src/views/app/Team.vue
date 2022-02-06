@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+// import { ref } from "vue";
 import { useRouter } from "vue-router";
 import store from "../../store/index";
 import BaseButton from "../../components/global/BaseButton.vue";
@@ -91,28 +91,22 @@ export default {
     // Setup ref to router
     const router = useRouter();
 
-    // Create data
-    const dataLoaded = ref(null);
-    const teamData = ref(null);
+
 
     store.dispatch("setTeams");
 
     // Get data
-    const getActiveTeamData = async () => {
-      // TODO - need to refactor this
+    // const getActiveTeamData = async () => {
+    //   // TODO - need to refactor this
 
-      if (store.state.teams_active_data) {
-        dataLoaded.value = true;
-        teamData.value = store.state.teams_active;
-      }
-    };
 
     const setActiveTeamId = async () => {
       const team_id = router.currentRoute.value.fullPath.split("/")[2];
+      console.log(team_id)
       store.dispatch("setActiveTeamId", {
         team_id,
       });
-      await getActiveTeamData();
+      // await getActiveTeamData();
     };
 
     // TODO - ADD THIS FUNCTIONALITY
@@ -122,7 +116,7 @@ export default {
 
     setActiveTeamId();
 
-    return { dataLoaded, store, teamData, addMember };
+    return { store, addMember };
   },
   methods: {
     showCreateProjectModal() {

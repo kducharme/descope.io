@@ -102,16 +102,16 @@ const routes = [
         component: AllTeamFeedback,
       },
       {
-        path: "feedback/:feedbackId",
-        name: "feedbackDetails",
-        component: FeedbackDetails,
-      },
-      {
         path: "settings",
         name: "teamSettings",
         component: TeamSettings,
       },
     ]
+  },
+  {
+    path: "/team/:id/feedback/:feedbackId",
+    name: "feedbackDetails",
+    component: FeedbackDetails,
   },
   // {
   //   path: "/team/:id/projects/:projectId",
