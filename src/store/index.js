@@ -99,6 +99,7 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_FEEDBACK: (state, feedback) => {
             state.feedback_active = feedback;
+            console.log(state.feedback_active)
         },
 
         // SET STATE — UI CONFIGRATUIONS
@@ -199,7 +200,7 @@ export default new Vuex.Store({
                     .select("*")
                     .eq("id", activeFeedback.project_id);
 
-                activeFeedback._project = project;
+                activeFeedback._project = project[0];
             }
 
             // Get images and add it to the feedback object

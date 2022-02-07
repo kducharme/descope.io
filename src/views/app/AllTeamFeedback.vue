@@ -364,10 +364,10 @@ export default {
             position: absolute;
             height: 80px;
             width: 80px;
-            top: 16px;
+            top: 18px;
             left: 16px;
             border-radius: 100%;
-            background: #dbdde6;
+            background: #eeeff3;
             border: 4px solid white;
             font-weight: 600;
             font-size: 13px;
@@ -493,8 +493,8 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: #b6bbcd;
-                color: white;
+                background: #C9EDDC;
+                // color: white;
                 height: 32px;
                 width: 32px;
                 border-radius: 100%;
