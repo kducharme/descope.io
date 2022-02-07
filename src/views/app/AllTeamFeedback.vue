@@ -298,25 +298,11 @@ export default {
 
     // When a project is clicked, store the active project in Vuex
     const setActiveFeedback = (id) => {
-      store.dispatch("setActiveFeedback", {
-        id,
-      });
+    //   store.dispatch("setActiveFeedback", {
+    //     id,
+    //   });
       routeToFeedbackDetails(id);
     };
-
-    // const upVote = async (fb) => {
-    //   fb.votes++;
-    //   try {
-    //     const { error } = await supabase.from("feedback_votes").insert([
-    //       {
-    //         feedback_id: fb.id,
-    //       },
-    //     ]);
-    //     if (error) throw error;
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
 
     return { store, setActiveFeedback };
   },

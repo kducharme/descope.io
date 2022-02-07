@@ -177,6 +177,8 @@ export default new Vuex.Store({
                 .select("*")
                 .eq("id", payload.feedback_id);
 
+                console.log(fb)
+
             const activeFeedback = fb[0];
 
             const { data: profile } = await supabase
