@@ -1,5 +1,5 @@
 <template>
-  <div class="overview">I am the home page.</div>
+  <div class="overview">I am the company home page</div>
 </template>
 
 <script>
@@ -21,5 +21,6 @@ export default {
 <style lang="scss" scoped>
 .overview {
     margin: 0 0 0 220px;
+    padding: 24px;
 }
 </style>

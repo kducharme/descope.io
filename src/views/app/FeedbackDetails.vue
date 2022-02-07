@@ -71,7 +71,7 @@
       <div class="content__right">
         <div class="top">Comments go here</div>
         <div class="bottom">
-          <div class="chat" contenteditable="true"></div>
+          <BaseChatInput />
         </div>
       </div>
     </div>
@@ -81,10 +81,13 @@
 <script>
 import store from "../../store/index";
 import { useRouter } from "vue-router";
+import BaseChatInput from "../../components/global/BaseChatInput.vue";
 
 export default {
   name: "Feedback Details",
-  components: {},
+  components: {
+    BaseChatInput,
+  },
   setup() {
     // Create data / vars
     const router = useRouter();
@@ -140,12 +143,14 @@ export default {
     width: 96vw;
     background: white;
     border-radius: 12px;
+
     .content__left {
       display: flex;
       flex-direction: column;
       position: relative;
       width: 60%;
-      padding: 56px 80px;
+      padding: 64px 80px;
+      overflow-y: auto;
       .header {
         display: flex;
         flex-direction: column;
@@ -246,7 +251,7 @@ export default {
       justify-content: space-between;
       width: 40%;
       background: #eeeff3;
-      border-left: 1px solid #dbdde6;
+      //   border-left: 1px solid #dbdde6;
       border-top-right-radius: 12px;
       border-bottom-right-radius: 12px;
       .top {
@@ -260,15 +265,6 @@ export default {
         height: 140px;
         width: 100%;
         padding: 16px;
-        .chat {
-          width: 100%;
-          height: 100%;
-          background: white;
-          border: 2px solid #dbdde6;
-          border-radius: 5px;
-          padding: 8px;
-          resize: none;
-        }
       }
     }
   }

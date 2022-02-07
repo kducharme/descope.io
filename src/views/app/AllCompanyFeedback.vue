@@ -1,5 +1,5 @@
 <template>
-  <div class="debt">I am the debt page</div>
+  <div class="feedback">I am the company feedback page</div>
 </template>
 
 <script>
@@ -19,7 +19,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.debt {
+.feedback {
     margin: 0 0 0 220px;
+    padding: 24px;
 }
 </style>

@@ -24,8 +24,8 @@
           <router-link class="nav__link" :to="{ name: 'home' }"
             >Overview</router-link
           >
-          <router-link class="nav__link" :to="{ name: 'debt' }"
-            >Debt</router-link
+          <router-link class="nav__link" :to="{ name: 'allCompanyFeedback' }"
+            >Feedback</router-link
           >
           <div class="title">
             <p class="title__text">Teams</p>
