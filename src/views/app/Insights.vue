@@ -1,7 +1,7 @@
 <template>
-  <div class="body">
+  <div class="overview">
     <span>
-      <!-- {{ store.state.activeLaunch.launch.name}} -->
+      I am the insights page
     </span>
   </div>
 </template>
@@ -9,7 +9,7 @@
 <script>
 import store from "../../store/index";
 export default {
-  name: "Overview",
+  name: "Insights",
   setup() {
     return {store};
   },
@@ -17,4 +17,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.overview {
+  background: #eeeff3;
+  height: calc(100vh - 102px);
+  padding: 24px;
+}
 </style>

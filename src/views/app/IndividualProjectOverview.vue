@@ -1,10 +1,10 @@
 <template>
-  <div class="overview">I am the company home page</div>
+  <div class="overview">I am the individual project overview page</div>
 </template>
 
 <script>
 export default {
-  name: "Home",
+  name: "Individual Project Overview",
   components: {},
   setup() {
     // Create data / vars
@@ -20,7 +20,6 @@ export default {
 
 <style lang="scss" scoped>
 .overview {
-    margin: 0 0 0 220px;
     padding: 24px;
 }
 </style>

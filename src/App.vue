@@ -62,7 +62,7 @@ export default {
         nav.value = NavMarketing;
         document.querySelector("#appContent").classList.remove("app");
         document.querySelector("#appContent").classList.add("marketing");
-        store.dispatch("resetActiveUser");
+        store.dispatch("resetState");
       }
     });
 
@@ -90,6 +90,9 @@ export default {
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap");
 
+body { 
+    overflow-y: auto;
+}
 body,
 h1,
 h2,
@@ -98,9 +101,11 @@ p,
 a,
 div,
 input,
-textarea {
+textarea,
+select,
+select option {
   color: #212430;
-  font-family: "Avenir";
+  font-family: "Avenir Next";
   font-size: 14px;
   margin: 0;
 }
@@ -110,7 +115,7 @@ a {
 }
 
 input {
-  border: 2px solid #eeeff3;
+  border: 2px solid #DBDDE6;
   background: white;
   padding: 8px;
 }
@@ -132,11 +137,16 @@ body {
 
 .app {
   display: flex;
-  flex-direction: row;
+  // flex-direction: row;
 }
 
 .marketing {
   display: flex;
   flex-direction: column;
+}
+
+.noScroll {
+  // height: 100%;
+  overflow: hidden!important;
 }
 </style>

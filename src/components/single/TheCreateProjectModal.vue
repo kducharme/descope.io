@@ -10,22 +10,36 @@
 
       <!-- Create Launch Form -->
       <div class="header">
-        <h1 class="title">Create new launch</h1>
+        <h1 class="title">Create new project</h1>
       </div>
-      <form @submit.prevent="createLaunch" class="form">
+      <form @submit.prevent="createProject" class="form">
         <div class="form__input">
-          <label for="launchName">Launch name</label>
-          <input type="text" required id="launchName" v-model="launchName" />
+          <label for="projectName">Name</label>
+          <input type="text" required id="projectName" v-model="projectName" />
         </div>
         <div class="form__input">
           <label for="team">Team</label>
-          <div class="form__select" id="team">Select team</div>
+          <div class="form__select disabled" id="team">
+            {{ store.state.teams_active_data.name }}
+          </div>
         </div>
         <div class="form__input">
           <label for="owner">Owner</label>
           <div class="form__select" id="owner">
             {{ store.state.activeUser.email }}
           </div>
+        </div>
+        <div class="form__input">
+          <label for="projectDescription"
+            >Description<span class="optional">(optional)</span></label
+          >
+          <textarea
+            type="textarea"
+            id="projectDescription"
+            v-model="projectDescription"
+            rows="3"
+            cols="50"
+          />
         </div>
         <BaseButton
           type="submit"
@@ -41,57 +55,53 @@
 <script>
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
-import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "vue-router";
 import BaseButton from "../global/BaseButton.vue";
 import store from "../../store/index";
 
 export default {
-  name: "TheCreateLaunchModal",
+  name: "TheCreateProjectModal",
   components: {
     BaseButton,
   },
   data() {
     return {
       priority: "Primary",
-      text: "Create launch",
+      text: "Create project",
     };
   },
   setup() {
     // Create data
     const router = useRouter();
-    const team = ref(null);
-    const launchName = ref(null);
+    const projectName = ref(null);
+    const projectDescription = ref(null);
+    const projectOwner = ref(null);
+    const projectTeam = ref(null);
     const errorMsg = ref(null);
-    const id = ref(null);
 
     // Closes modal when the background or "x" button  is clicked
     const closeModal = () => {
-      store.dispatch("hideCreateLaunchModal");
+      store.dispatch("hideCreateProjectModal");
     };
 
     // Creates a new launch in the db when the form is submitted
-    const createLaunch = async () => {
-      // Generate unique id for launch
-      id.value = uuidv4();
-
-      // TODO - check if a launch already exists with that name
-
+    const createProject = async () => {
       try {
-        const { error } = await supabase.from("launches").insert([
+        const { error } = await supabase.from("projects").insert([
           {
-            id: id.value,
-            name: launchName.value,
-            status: "Draft",
-            active: true,
+            name: projectName.value,
+            description: projectDescription.value,
+            owner: store.state.activeUser.id,
+            status: "active",
             created_by: store.state.activeUser.id,
+            team_id: store.state.teams_active_data.id,
             organization_id: store.state.organization,
           },
         ]);
         if (error) throw error;
-        // await store.dispatch("getLaunches");
-        await routeToLaunch();
-        await store.dispatch("hideCreateLaunchModal");
+        await store.dispatch("setActiveTeamProjects");
+        await routeToProject();
+        await store.dispatch("hideCreateProjectModal");
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
@@ -101,14 +111,16 @@ export default {
     };
 
     // Route user to launch view
-    const routeToLaunch = () => {
-      router.push({ name: "launch", params: { id: id.value } });
-      id.value = null;
+    const routeToProject = () => {
+      // router.push({ name: "projects", params: { id: data[0].id } });
+      router.push({ name: "projects" });
     };
     return {
-      createLaunch,
-      team,
-      launchName,
+      createProject,
+      projectName,
+      projectDescription,
+      projectOwner,
+      projectTeam,
       errorMsg,
       closeModal,
       store,
@@ -157,10 +169,25 @@ export default {
           color: #7c83a2;
           padding: 0 0 6px;
         }
+        .optional {
+          color: #9ba1bb;
+          font-weight: 400;
+          margin-left: 4px;
+        }
+        input,
+        textarea {
+          background: white;
+          border: 2px solid #DBDDE6;
+          padding: 8px;
+          resize: none;
+        }
         .form__select {
-          border: 2px solid #eeeff3;
+          border: 2px solid #DBDDE6;
           background: white;
           padding: 8px;
+        }
+        .disabled {
+          background: #eeeff3;
         }
       }
       .form__button {

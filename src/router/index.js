@@ -8,11 +8,17 @@ import ConfirmEmail from "../views/marketing/ConfirmEmail.vue";
 
 // App pages
 import Home from "../views/app/Home.vue";
-import Debt from "../views/app/Debt.vue";
+import AllCompanyFeedback from "../views/app/AllCompanyFeedback.vue";
 import Team from "../views/app/Team.vue";
-import Overview from "../views/app/Overview.vue";
+import Insights from "../views/app/Insights.vue";
 import Projects from "../views/app/Projects.vue";
-import Feedback from "../views/app/Feedback.vue";
+import AllTeamFeedback from "../views/app/AllTeamFeedback.vue";
+import TeamSettings from "../views/app/TeamSettings.vue";
+import IndividualProject from "../views/app/IndividualProject.vue";
+import IndividualProjectFeedback from "../views/app/IndividualProjectFeedback.vue";
+import IndividualProjectOverview from "../views/app/IndividualProjectOverview.vue";
+import IndividualProjectSettings from "../views/app/IndividualProjectSettings.vue";
+import FeedbackDetails from "../views/app/FeedbackDetails.vue";
 
 const routes = [
 
@@ -45,34 +51,73 @@ const routes = [
     component: Home,
   },
   {
-    path: "/debt",
-    name: "debt",
-    component: Debt,
+    path: "/feedback",
+    name: "allCompanyFeedback",
+    component: AllCompanyFeedback,
   },
   {
     path: "/team/:id",
     name: "team",
     component: Team,
-    redirect: { name: 'overview' },
+    redirect: { name: 'projects' },
     children: [
       {
-        path: "overview",
-        name: "overview",
-        component: Overview,
+        path: "insights",
+        name: "insights",
+        component: Insights,
       },
       {
         path: "projects",
         name: "projects",
         component: Projects,
+        children: [
+        ]
+      },
+      {
+        path: "projects/:projectId",
+        name: "project",
+        component: IndividualProject,
+        redirect: { name: 'projectOverview' },
+        children: [
+          {
+            path: "overview",
+            name: "projectOverview",
+            component: IndividualProjectOverview,
+          },
+          {
+            path: "feedback",
+            name: "projectFeedback",
+            component: IndividualProjectFeedback,
+          },
+          {
+            path: "settings",
+            name: "projectSettings",
+            component: IndividualProjectSettings,
+          },
+        ]
       },
       {
         path: "feedback",
         name: "feedback",
-        component: Feedback,
+        component: AllTeamFeedback,
+      },
+      {
+        path: "settings",
+        name: "teamSettings",
+        component: TeamSettings,
       },
     ]
   },
-
+  {
+    path: "/team/:id/feedback/:feedbackId",
+    name: "feedbackDetails",
+    component: FeedbackDetails,
+  },
+  // {
+  //   path: "/team/:id/projects/:projectId",
+  //   name: "project",
+  //   component: IndividualProject,
+  // },
 ];
 
 const router = createRouter({

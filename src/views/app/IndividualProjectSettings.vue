@@ -1,10 +1,10 @@
 <template>
-  <div class="debt">I am the debt page</div>
+  <div class="settings">I am the individual project settings page</div>
 </template>
 
 <script>
 export default {
-  name: "Completed",
+  name: "Individual Project Settings",
   components: {},
   setup() {
     // Create data / vars
@@ -19,7 +19,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.debt {
-    margin: 0 0 0 240px;
+.settings {
+    padding: 24px;
 }
 </style>
