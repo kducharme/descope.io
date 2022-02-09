@@ -99,7 +99,6 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_FEEDBACK: (state, feedback) => {
             state.feedback_active = feedback;
-            console.log(state.feedback_active)
         },
 
         // SET STATE — UI CONFIGRATUIONS
@@ -178,8 +177,6 @@ export default new Vuex.Store({
                 .select("*")
                 .eq("id", payload.feedback_id);
 
-                console.log(fb)
-
             const activeFeedback = fb[0];
 
             const { data: profile } = await supabase
@@ -213,8 +210,6 @@ export default new Vuex.Store({
                 const url = URL.createObjectURL(await img);
                 activeFeedback._image = url;
             }
-
-            console.log(activeFeedback)
 
             context.commit("SET_ACTIVE_FEEDBACK", await activeFeedback)
         },

@@ -71,7 +71,7 @@
       <div class="content__right">
         <div class="top">Comments go here</div>
         <div class="bottom">
-          <BaseChatInput />
+          <BaseChatInput v-model="content" />
         </div>
       </div>
     </div>
@@ -140,7 +140,7 @@ export default {
     flex-direction: row;
     position: fixed;
     height: 96vh;
-    width: 96vw;
+    width: 98vw;
     background: white;
     border-radius: 12px;
 
@@ -255,14 +255,14 @@ export default {
       border-top-right-radius: 12px;
       border-bottom-right-radius: 12px;
       .top {
-        height: calc(100% - 140px);
+        height: calc(100% - 160px);
         padding: 16px;
       }
       .bottom {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 140px;
+        height: 160px;
         width: 100%;
         padding: 16px;
       }
