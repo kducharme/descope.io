@@ -99,22 +99,23 @@ x
 <style lang="scss">
 .chatEditor {
   width: 100%;
-  height: 120px;
   .editor {
-    height: 100%;
+    min-height: 100px;
+    max-height: 450px;
     box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
     border: 1px solid #dbdbdb;
     display: block;
     max-width: 100%;
     min-width: 100%;
-    resize: vertical;
+    resize: none;
     padding: 12px;
     background-color: white;
     border-radius: 4px;
+    overflow-y: auto;
     .ProseMirror {
       height: 100%;
       h1 {
-        font-size: 20px;
+        font-size: 18px;
         margin: 4px 0 4px 0;
       }
       h2 {
@@ -127,6 +128,9 @@ x
       }
     }
   }
+  //   .editor::-webkit-scrollbar {
+  //     border: none;
+  //   }
 
   //   .editor:focus-within {
   //       border: 2px solid #3253e4;
@@ -136,24 +140,26 @@ x
   }
 }
 [contenteditable]:focus {
-  outline: 0px solid transparent;
+  outline: none;
 }
 .menu {
   background: red;
 }
-  .tippy-content button {
-    background: #212430;
-    border: none;
-    padding: 8px 12px;
-    color: white;
-    font-family: "Avenir Next";
-    font-weight: 500;
-  }
-  .tippy-content button:hover {
-      cursor: pointer;
-      background: #2a2e3d;
-  }
-  .tippy-content .is-active {
-      color: #9bc9b3;
-  }
+.tippy-content button {
+  background: #212430;
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  font-family: "Avenir Next";
+  font-weight: 500;
+  border-radius: 3px;
+  margin: 0 -3px;
+}
+.tippy-content button:hover {
+  cursor: pointer;
+  background: #2a2e3d;
+}
+.tippy-content .is-active {
+  color: #9bc9b3;
+}
 </style>

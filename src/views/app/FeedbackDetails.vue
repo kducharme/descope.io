@@ -260,7 +260,7 @@ export default {
       }
       .bottom {
         display: flex;
-        align-items: center;
+        align-items: flex-end;
         justify-content: center;
         height: 160px;
         width: 100%;
