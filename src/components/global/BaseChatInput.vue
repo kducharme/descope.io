@@ -5,13 +5,13 @@
         @click="editor.chain().focus().toggleBold().run()"
         :class="{ 'is-active': editor.isActive('bold') }"
       >
-        bold
+        Bold
       </button>
       <button
         @click="editor.chain().focus().toggleItalic().run()"
         :class="{ 'is-active': editor.isActive('italic') }"
       >
-        italic
+        Italic
       </button>
       <button
         @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
@@ -29,16 +29,16 @@
         @click="editor.chain().focus().toggleBulletList().run()"
         :class="{ 'is-active': editor.isActive('bulletList') }"
       >
-        Bullet List
-      </button>
-      <button
-        @click="editor.chain().focus().toggleStrike().run()"
-        :class="{ 'is-active': editor.isActive('strike') }"
-      >
-        strike
+        List
       </button>
     </bubble-menu>
-    <editor-content :editor="editor" v-model="comment" class="editor" />
+    <editor-content
+      :editor="editor"
+      v-model="comment"
+      class="editor"
+      @mouseenter="addActiveClass"
+      @mouseleave="removeActiveClass"
+    />
   </div>
 </template>
 
@@ -67,6 +67,14 @@ export default {
     // Setup data
     const comment = ref(null);
 
+    const addActiveClass = () => {
+      document.querySelector(".editor").classList.add("editorActive");
+    };
+
+    const removeActiveClass = () => {
+      document.querySelector(".editor").classList.remove("editorActive");
+    };
+
     const editor = useEditor({
       extensions: [
         StarterKit,
@@ -83,7 +91,7 @@ export default {
       injectCSS: false,
     });
 
-    return { props, editor, comment };
+    return { props, editor, comment, addActiveClass, removeActiveClass };
   },
 };
 </script>
@@ -104,27 +112,48 @@ x
     background-color: white;
     border-radius: 4px;
     .ProseMirror {
-        height: 100%;
-        h1 {
-            font-size: 20px;
-            margin: 4px 0 4px 0;
-        }
-        h2 {
-            font-size: 16px;
-            margin: 4px 0 4px 0;
-        }
-        p {
-            color: #383c4e;
-            margin: 2px 0 2px 0;
-
-        }
+      height: 100%;
+      h1 {
+        font-size: 20px;
+        margin: 4px 0 4px 0;
+      }
+      h2 {
+        font-size: 16px;
+        margin: 4px 0 4px 0;
+      }
+      p {
+        color: #383c4e;
+        margin: 2px 0 2px 0;
+      }
     }
+  }
+
+  //   .editor:focus-within {
+  //       border: 2px solid #3253e4;
+  //   }
+  .editorActive {
+    border: 1px solid #212430;
   }
 }
 [contenteditable]:focus {
-    outline: 0px solid transparent;
+  outline: 0px solid transparent;
 }
 .menu {
   background: red;
 }
+  .tippy-content button {
+    background: #212430;
+    border: none;
+    padding: 8px 12px;
+    color: white;
+    font-family: "Avenir Next";
+    font-weight: 500;
+  }
+  .tippy-content button:hover {
+      cursor: pointer;
+      background: #2a2e3d;
+  }
+  .tippy-content .is-active {
+      color: #9bc9b3;
+  }
 </style>
