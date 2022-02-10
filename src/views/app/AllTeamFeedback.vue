@@ -326,7 +326,7 @@ export default {
   min-height: calc(100vh - 102px);
   width: 100%;
   padding: 32px 80px;
-  background: #eeeff3;
+  background: #f3f4f7;
 
   .card {
     border: 1px solid #dbdde6;
@@ -493,7 +493,7 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: #C9EDDC;
+                background: #C8E4F9;
                 // color: white;
                 height: 32px;
                 width: 32px;

@@ -191,12 +191,12 @@ export default {
           align-items: center;
           margin: 0 0 20px;
           .about__left {
-            margin: 0 8px 0 0;
+            margin: 0 12px 0 0;
             .initials {
               display: flex;
               align-items: center;
               justify-content: center;
-              background: #c9eddc;
+              background: #C8E4F9;
               height: 32px;
               width: 32px;
               border-radius: 100%;
@@ -250,8 +250,8 @@ export default {
       flex-direction: column;
       justify-content: space-between;
       width: 40%;
-      background: #eeeff3;
-      //   border-left: 1px solid #dbdde6;
+      background: #f3f4f7;
+        border-left: 1px solid #dbdde6;
       border-top-right-radius: 12px;
       border-bottom-right-radius: 12px;
       .top {
