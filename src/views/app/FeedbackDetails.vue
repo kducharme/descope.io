@@ -69,9 +69,17 @@
         </div>
       </div>
       <div class="content__right">
-        <div class="top">Comments go here</div>
+        <div class="top">
+          <BaseComment
+            v-for="comment in store.state.comments"
+            :key="comment.id"
+            :comment="comment.comment"
+            :created_by="comment.created_by"
+            :created_date="comment.date_created"
+          />
+        </div>
         <div class="bottom">
-          <BaseChatInput v-model="content" />
+          <BaseCommentInput v-model="content" />
         </div>
       </div>
     </div>
@@ -81,12 +89,15 @@
 <script>
 import store from "../../store/index";
 import { useRouter } from "vue-router";
-import BaseChatInput from "../../components/global/BaseChatInput.vue";
+import BaseCommentInput from "../../components/global/BaseCommentInput.vue";
+import BaseComment from "../../components/global/BaseComment.vue";
+
 
 export default {
   name: "Feedback Details",
   components: {
-    BaseChatInput,
+    BaseCommentInput,
+    BaseComment
   },
   setup() {
     // Create data / vars
@@ -97,6 +108,9 @@ export default {
       const team_id = router.currentRoute.value.fullPath.split("/")[2];
       const feedback_id = router.currentRoute.value.fullPath.split("/")[4];
       store.dispatch("setActiveFeedback", {
+        feedback_id,
+      });
+      store.dispatch("setActiveComments", {
         feedback_id,
       });
       store.dispatch("setActiveTeamId", {
@@ -196,7 +210,7 @@ export default {
               display: flex;
               align-items: center;
               justify-content: center;
-              background: #C8E4F9;
+              background: #c8e4f9;
               height: 32px;
               width: 32px;
               border-radius: 100%;
@@ -251,7 +265,7 @@ export default {
       justify-content: space-between;
       width: 40%;
       background: #f3f4f7;
-        border-left: 1px solid #dbdde6;
+      border-left: 1px solid #dbdde6;
       border-top-right-radius: 12px;
       border-bottom-right-radius: 12px;
       .top {

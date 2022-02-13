@@ -298,9 +298,6 @@ export default {
 
     // When a project is clicked, store the active project in Vuex
     const setActiveFeedback = (id) => {
-    //   store.dispatch("setActiveFeedback", {
-    //     id,
-    //   });
       routeToFeedbackDetails(id);
     };
 
@@ -329,9 +326,10 @@ export default {
   background: #f3f4f7;
 
   .card {
-    border: 1px solid #dbdde6;
+    // border: 1px solid #dbdde6;
+    box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
     background: white;
-    border-radius: 8px;
+    border-radius: 12px;
   }
   .content__bottom {
     display: flex;
@@ -476,7 +474,7 @@ export default {
       .fb {
         display: flex;
         flex-direction: column;
-        margin: 0 0 12px;
+        margin: 0 0 16px;
         padding: 16px;
         .fb__top {
           display: flex;
@@ -493,7 +491,7 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: #C8E4F9;
+                background: #c8e4f9;
                 // color: white;
                 height: 32px;
                 width: 32px;

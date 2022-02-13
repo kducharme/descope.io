@@ -98,7 +98,7 @@ import Italic from "@tiptap/extension-italic";
 import Bold from "@tiptap/extension-bold";
 
 export default {
-  name: "BaseButton",
+  name: "BaseCommentInput",
   components: {
     EditorContent,
     BubbleMenu,
@@ -156,7 +156,6 @@ export default {
             },
           ]);
         if (error) throw error;
-        console.log(data);
         initialVote.value = data;
       } catch (error) {
         console.log(error);
@@ -248,7 +247,7 @@ x
 }
 
 .comment__editor:focus-within {
-  border: 1px solid #212430;
+  border: 2px solid #212430;
   border-radius: 5px;
 }
 

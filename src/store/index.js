@@ -21,9 +21,12 @@ export default new Vuex.Store({
         // Project Data
         projects: [],
         projects_active: null,
+
         feedback: [],
         feedback_active: null,
         feedback_active_id: null,
+
+        comments: [],
 
         // UI Elements
         createTeamModal: false,
@@ -99,6 +102,9 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_FEEDBACK: (state, feedback) => {
             state.feedback_active = feedback;
+        },
+        SET_ACTIVE_COMMENTS: (state, comments) => {
+            state.comments = comments;
         },
 
         // SET STATE — UI CONFIGRATUIONS
@@ -212,6 +218,19 @@ export default new Vuex.Store({
             }
 
             context.commit("SET_ACTIVE_FEEDBACK", await activeFeedback)
+        },
+
+        async setActiveComments(context, payload) {
+            // const moment = require('moment')
+            console.log(payload.feedback_id)
+            const { data } = await supabase
+                .from("feedback_comments")
+                .select("*")
+                .eq("feedback_id", payload.feedback_id);
+
+            console.log(data)
+            
+            context.commit("SET_ACTIVE_COMMENTS", await data)
         },
 
         setActiveTeamData(context, payload) {
