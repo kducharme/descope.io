@@ -73,9 +73,7 @@
           <BaseComment
             v-for="comment in store.state.comments"
             :key="comment.id"
-            :comment="comment.comment"
-            :created_by="comment.created_by"
-            :created_date="comment.date_created"
+            :comment="comment"
           />
         </div>
         <div class="bottom">
@@ -92,12 +90,11 @@ import { useRouter } from "vue-router";
 import BaseCommentInput from "../../components/global/BaseCommentInput.vue";
 import BaseComment from "../../components/global/BaseComment.vue";
 
-
 export default {
   name: "Feedback Details",
   components: {
     BaseCommentInput,
-    BaseComment
+    BaseComment,
   },
   setup() {
     // Create data / vars
@@ -211,9 +208,9 @@ export default {
               align-items: center;
               justify-content: center;
               background: #c8e4f9;
-              height: 32px;
-              width: 32px;
-              border-radius: 100%;
+              height: 40px;
+              width: 40px;
+              border-radius: 6px;
               font-size: 12px;
               font-weight: 600;
               letter-spacing: 1.1px;

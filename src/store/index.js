@@ -221,16 +221,27 @@ export default new Vuex.Store({
         },
 
         async setActiveComments(context, payload) {
-            // const moment = require('moment')
-            console.log(payload.feedback_id)
-            const { data } = await supabase
+            const moment = require('moment')
+            const { data: allComments } = await supabase
                 .from("feedback_comments")
                 .select("*")
                 .eq("feedback_id", payload.feedback_id);
 
-            console.log(data)
-            
-            context.commit("SET_ACTIVE_COMMENTS", await data)
+            for (const comment of allComments) {
+
+                const { data: profile } = await supabase
+                    .from("profiles")
+                    .select("*")
+                    .eq("id", comment.created_by);
+
+                comment._addedBy = profile[0].firstname + " " + profile[0].lastname;
+                comment._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
+                comment._dateAdded = moment(comment.date_created).startOf('minute').fromNow();
+                console.log(comment)
+            }
+
+
+            context.commit("SET_ACTIVE_COMMENTS", await allComments)
         },
 
         setActiveTeamData(context, payload) {

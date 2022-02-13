@@ -486,16 +486,15 @@ export default {
             align-items: center;
             margin: 0 0 16px;
             .left {
-              margin: 0 8px 0 0;
+              margin: 0 12px 0 0;
               .initials {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 background: #c8e4f9;
-                // color: white;
-                height: 32px;
-                width: 32px;
-                border-radius: 100%;
+                height: 36px;
+                width: 36px;
+                border-radius: 6px;
                 font-size: 12px;
                 font-weight: 600;
                 letter-spacing: 1.1px;

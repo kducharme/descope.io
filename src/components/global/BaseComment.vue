@@ -1,6 +1,17 @@
 <template>
   <div class="comment">
-    <editor-content :editor="editor" />
+    <div class="comment__left">
+      <p class="initials">
+        {{ props.comment._initials }}
+      </p>
+    </div>
+    <div class="comment__right">
+      <div class="details">
+        <p class="name">{{ props.comment._addedBy }}</p>
+        <p class="time">{{ props.comment._dateAdded }}</p>
+      </div>
+      <editor-content :editor="editor" class="content" />
+    </div>
   </div>
 </template>
 
@@ -15,22 +26,22 @@ export default {
   },
   props: {
     comment: {
-      type: String,
+      type: Object,
     },
-    created_by: {
-      type: String,
-    },
-    created_date: {
-      type: Function,
-    },
-    votes: {
-      type: Array,
-    },
+    // created_by: {
+    //   type: String,
+    // },
+    // created_date: {
+    //   type: Function,
+    // },
+    // votes: {
+    //   type: Array,
+    // },
   },
   setup(props) {
     const editor = useEditor({
       editable: false,
-      content: props.comment,
+      content: props.comment.comment,
       extensions: [StarterKit],
     });
     return { props, editor };
@@ -38,8 +49,48 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .comment {
-    margin:0 0 16px;
+  display: flex;
+  flex-direction: row;
+  margin: 0 0 16px;
+  box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
+  padding: 16px;
+  border-radius: 12px;
+  .comment__left {
+    margin: 0 12px 0 0;
+    .initials {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #c8e4f9;
+      height: 40px;
+      width: 40px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.1px;
+    }
+  }
+  .comment__right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .details {
+      display: flex;
+      margin: 0 0 4px 0;
+      .name {
+        font-size: 13px;
+        font-weight: 600;
+        margin: 0 4px 0 0;
+      }
+      .time {
+          font-size: 13px;
+          color: #636c92;
+      }
+    }
+    .content {
+    }
+  }
 }
 </style>
