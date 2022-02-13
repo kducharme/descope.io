@@ -220,28 +220,82 @@ export default new Vuex.Store({
             context.commit("SET_ACTIVE_FEEDBACK", await activeFeedback)
         },
 
-        async setActiveComments(context, payload) {
-            const moment = require('moment')
+        async getComments(context, payload) {
+            // const moment = require('moment')
+
             const { data: allComments } = await supabase
                 .from("feedback_comments")
                 .select("*")
                 .eq("feedback_id", payload.feedback_id);
 
-            for (const comment of allComments) {
-
+            const getProfile = async (comment) => {
                 const { data: profile } = await supabase
                     .from("profiles")
                     .select("*")
                     .eq("id", comment.created_by);
-
-                comment._addedBy = profile[0].firstname + " " + profile[0].lastname;
-                comment._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
-                comment._dateAdded = moment(comment.date_created).startOf('minute').fromNow();
-                console.log(comment)
+                return profile[0];
             }
 
+            const promises = allComments.map(async comment => {
+                const profile = await getProfile(comment)
+                return profile;
+            })
 
-            context.commit("SET_ACTIVE_COMMENTS", await allComments)
+            const allProfiles = await Promise.all(promises)
+            console.log(allProfiles)
+            
+            // array1.filter(element => array2.includes(element));
+
+
+
+
+
+            // const moment = require('moment')
+            // const { data: allComments } = await supabase
+            //     .from("feedback_comments")
+            //     .select("*")
+            //     .eq("feedback_id", payload.feedback_id);
+
+            // const promise = new Promise((resolve, reject) => {
+            //     const { data: profile } = await supabase
+            //         .from("profiles")
+            //         .select("*")
+            //         .eq("id", comment.created_by);
+            //     setTimeout(() => resolve("done"), 1000);
+            // });
+
+            // console.log(promise)
+
+            // Promise.all(allComments.map(v =>
+            //     someAsyncFunc(v))).then((resolvedValues) => {
+            //         resolvedValues.forEach((value) => {
+            //             // Do your stuff here
+            //         });
+            //     });
+
+
+            // for (const comment of allComments) {
+
+            //     const { data: profile } = await supabase
+            //         .from("profiles")
+            //         .select("*")
+            //         .eq("id", comment.created_by);
+
+            //     console.log(profile)
+
+            //     comment._addedBy = profile[0].firstname + " " + profile[0].lastname;
+            //     comment._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
+            //     comment._dateAdded = moment(comment.date_created).startOf('minute').fromNow();
+            // }
+
+            // allComments.sort((a, b) => {
+            //     if (a.date_created > b.date_created) { return -1; }
+            //     if (a.date_created < b.date_created) { return 1; }
+            //     return 0;
+            // })
+
+
+            // context.commit("SET_ACTIVE_COMMENTS", await allComments)
         },
 
         setActiveTeamData(context, payload) {

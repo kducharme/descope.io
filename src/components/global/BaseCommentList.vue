@@ -28,15 +28,6 @@ export default {
     comment: {
       type: Object,
     },
-    // created_by: {
-    //   type: String,
-    // },
-    // created_date: {
-    //   type: Function,
-    // },
-    // votes: {
-    //   type: Array,
-    // },
   },
   setup(props) {
     const editor = useEditor({
@@ -53,10 +44,10 @@ export default {
 .comment {
   display: flex;
   flex-direction: row;
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
   padding: 16px;
-  border-radius: 12px;
+  border-radius: 6px;
   .comment__left {
     margin: 0 12px 0 0;
     .initials {
@@ -85,8 +76,8 @@ export default {
         margin: 0 4px 0 0;
       }
       .time {
-          font-size: 13px;
-          color: #636c92;
+        font-size: 13px;
+        color: #636c92;
       }
     }
     .content {

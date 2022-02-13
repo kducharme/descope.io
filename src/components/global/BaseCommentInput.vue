@@ -163,6 +163,7 @@ export default {
     };
 
     const saveCommentToDatabase = async () => {
+      const feedback_id = store.state.feedback_active.id;
       try {
         const { error } = await supabase.from("feedback_comments").insert([
           {
@@ -176,6 +177,9 @@ export default {
           },
         ]);
         if (error) throw error;
+        store.dispatch("getComments", {
+          feedback_id,
+        });
       } catch (error) {
         console.log(error);
       }
