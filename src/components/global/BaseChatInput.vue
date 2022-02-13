@@ -136,16 +136,12 @@ export default {
       injectCSS: false,
     });
 
-    // Generate unique id for comment
-    const generateCommentId = () => {
-      id.value = uuidv4();
-    };
-
-    generateCommentId();
-
     const saveToDatabase = async () => {
+      id.value = uuidv4();
       await saveInitialVoteToDatabase();
       await saveCommentToDatabase();
+      editor.value.commands.clearContent();
+      editor.value.commands.setContent();
     };
 
     const saveInitialVoteToDatabase = async () => {
@@ -160,7 +156,7 @@ export default {
             },
           ]);
         if (error) throw error;
-        console.log(data)
+        console.log(data);
         initialVote.value = data;
       } catch (error) {
         console.log(error);
@@ -168,12 +164,11 @@ export default {
     };
 
     const saveCommentToDatabase = async () => {
-      const comment = editor.value.getJSON();
       try {
         const { error } = await supabase.from("feedback_comments").insert([
           {
             id: id.value,
-            comment: comment.value,
+            comment: editor.value.getJSON(),
             votes: [`${initialVote.value[0].id}`],
             created_by: store.state.activeUser.id,
             feedback_id: store.state.feedback_active.id,
