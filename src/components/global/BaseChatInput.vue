@@ -74,11 +74,7 @@
       <editor-content :editor="editor" v-model="comment" class="editor" />
     </div>
     <div class="comment__actions">
-      <button
-        type="submit"
-        class="btn btn__small"
-        @click="saveCommentToDatabase"
-      >
+      <button type="submit" class="btn btn__small" @click="saveToDatabase">
         Comment
       </button>
     </div>
@@ -87,6 +83,8 @@
 
 <script>
 import store from "../../store/index";
+import { supabase } from "../../supabase/init";
+import { v4 as uuidv4 } from "uuid";
 import { ref } from "vue";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/vue-3";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -114,6 +112,8 @@ export default {
   setup(props) {
     // Setup data
     const comment = ref(null);
+    const initialVote = ref(null);
+    const id = ref(null);
 
     const editor = useEditor({
       extensions: [
@@ -136,31 +136,58 @@ export default {
       injectCSS: false,
     });
 
-    const saveCommentToDatabase = () => {
-      const json = editor.value.getJSON();
+    // Generate unique id for comment
+    const generateCommentId = () => {
+      id.value = uuidv4();
+    };
+
+    generateCommentId();
+
+    const saveToDatabase = async () => {
+      await saveInitialVoteToDatabase();
+      await saveCommentToDatabase();
+    };
+
+    const saveInitialVoteToDatabase = async () => {
       try {
-        const { data, error } = await supabase.from("feedback_comments").insert([
+        const { data, error } = await supabase
+          .from("feedback_comments_votes")
+          .insert([
+            {
+              comment_id: id.value,
+              feedback_id: store.state.feedback_active.id,
+              created_by: store.state.activeUser.id,
+            },
+          ]);
+        if (error) throw error;
+        console.log(data)
+        initialVote.value = data;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const saveCommentToDatabase = async () => {
+      const comment = editor.value.getJSON();
+      try {
+        const { error } = await supabase.from("feedback_comments").insert([
           {
-            name: teamName.value,
-            description: teamDescription.value,
-            members: [`${store.state.activeUser.id}`],
+            id: id.value,
+            comment: comment.value,
+            votes: [`${initialVote.value[0].id}`],
             created_by: store.state.activeUser.id,
+            feedback_id: store.state.feedback_active.id,
+            project_id: store.state.feedback_active._project.id,
             organization_id: store.state.organization,
           },
         ]);
         if (error) throw error;
-        await store.dispatch("setTeams");
-        routeToTeam(data);
-        store.dispatch("hideCreateTeamModal");
       } catch (error) {
-        errorMsg.value = `Error: ${error.message}`;
-        setTimeout(() => {
-          errorMsg.value = null;
-        }, 5000);
+        console.log(error);
       }
     };
 
-    return { props, editor, comment, store, saveCommentToDatabase };
+    return { props, editor, comment, store, saveToDatabase };
   },
 };
 </script>
