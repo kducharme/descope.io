@@ -1,88 +1,86 @@
 <template>
   <div class="comment">
     <div class="comment__editor">
-      <div>
-        <bubble-menu :editor="editor" v-if="editor">
-          <button
-            @click="editor.chain().focus().toggleBold().run()"
-            :class="{ 'is-active': editor.isActive('bold') }"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="22px"
-              viewBox="0 0 24 24"
-              width="22px"
-              fill="#fff"
-            >
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path
-                d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H8c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h5.78c2.07 0 3.96-1.69 3.97-3.77.01-1.53-.85-2.84-2.15-3.44zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"
-              />
-            </svg>
-          </button>
-          <button
-            @click="editor.chain().focus().toggleItalic().run()"
-            :class="{ 'is-active': editor.isActive('italic') }"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="22px"
-              viewBox="0 0 24 24"
-              width="22px"
-              fill="#fff"
-            >
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path
-                d="M10 5.5c0 .83.67 1.5 1.5 1.5h.71l-3.42 8H7.5c-.83 0-1.5.67-1.5 1.5S6.67 18 7.5 18h5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5h-.71l3.42-8h1.29c.83 0 1.5-.67 1.5-1.5S17.33 4 16.5 4h-5c-.83 0-1.5.67-1.5 1.5z"
-              />
-            </svg>
-          </button>
-          <button
-            @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-            :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="22px"
-              viewBox="0 0 24 24"
-              width="22px"
-              fill="#fff"
-            >
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path
-                d="M5 5.5C5 6.33 5.67 7 6.5 7h4v10.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V7h4c.83 0 1.5-.67 1.5-1.5S18.33 4 17.5 4h-11C5.67 4 5 4.67 5 5.5z"
-              />
-            </svg>
-          </button>
-          <button
-            @click="editor.chain().focus().toggleBulletList().run()"
-            :class="{ 'is-active': editor.isActive('bulletList') }"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="22px"
-              viewBox="0 0 24 24"
-              width="22px"
-              fill="#fff"
-            >
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path
-                d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM8 19h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0-6h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 6c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1z"
-              />
-            </svg>
-          </button>
-        </bubble-menu>
-      </div>
-      <editor-content :editor="editor" v-model="comment" class="editor" />
-      <div class="comment__actions">
+      <bubble-menu :editor="editor" v-if="editor">
         <button
-          type="submit"
-          class="btn btn__small"
-          @click="saveCommentToDatabase"
+          @click="editor.chain().focus().toggleBold().run()"
+          :class="{ 'is-active': editor.isActive('bold') }"
         >
-          Comment
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="22px"
+            viewBox="0 0 24 24"
+            width="22px"
+            fill="#fff"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H8c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h5.78c2.07 0 3.96-1.69 3.97-3.77.01-1.53-.85-2.84-2.15-3.44zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"
+            />
+          </svg>
         </button>
-      </div>
+        <button
+          @click="editor.chain().focus().toggleItalic().run()"
+          :class="{ 'is-active': editor.isActive('italic') }"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="22px"
+            viewBox="0 0 24 24"
+            width="22px"
+            fill="#fff"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M10 5.5c0 .83.67 1.5 1.5 1.5h.71l-3.42 8H7.5c-.83 0-1.5.67-1.5 1.5S6.67 18 7.5 18h5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5h-.71l3.42-8h1.29c.83 0 1.5-.67 1.5-1.5S17.33 4 16.5 4h-5c-.83 0-1.5.67-1.5 1.5z"
+            />
+          </svg>
+        </button>
+        <button
+          @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+          :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="22px"
+            viewBox="0 0 24 24"
+            width="22px"
+            fill="#fff"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M5 5.5C5 6.33 5.67 7 6.5 7h4v10.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V7h4c.83 0 1.5-.67 1.5-1.5S18.33 4 17.5 4h-11C5.67 4 5 4.67 5 5.5z"
+            />
+          </svg>
+        </button>
+        <button
+          @click="editor.chain().focus().toggleBulletList().run()"
+          :class="{ 'is-active': editor.isActive('bulletList') }"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="22px"
+            viewBox="0 0 24 24"
+            width="22px"
+            fill="#fff"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM8 19h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0-6h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 6c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1z"
+            />
+          </svg>
+        </button>
+      </bubble-menu>
+      <editor-content :editor="editor" v-model="comment" class="editor" />
+    </div>
+    <div class="comment__actions">
+      <button
+        type="submit"
+        class="btn btn__small"
+        @click="saveCommentToDatabase"
+      >
+        Comment
+      </button>
     </div>
   </div>
 </template>
@@ -136,16 +134,30 @@ export default {
       autofocus: true,
       editable: true,
       injectCSS: false,
-      onSubmit: ({ editor }) => {
-        const json = editor.getHTML();
-        console.log(json);
-        // send the content to an API here
-      },
     });
 
     const saveCommentToDatabase = () => {
       const json = editor.value.getJSON();
-      console.log(json);
+      try {
+        const { data, error } = await supabase.from("feedback_comments").insert([
+          {
+            name: teamName.value,
+            description: teamDescription.value,
+            members: [`${store.state.activeUser.id}`],
+            created_by: store.state.activeUser.id,
+            organization_id: store.state.organization,
+          },
+        ]);
+        if (error) throw error;
+        await store.dispatch("setTeams");
+        routeToTeam(data);
+        store.dispatch("hideCreateTeamModal");
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
+      }
     };
 
     return { props, editor, comment, store, saveCommentToDatabase };
@@ -156,13 +168,13 @@ x
 <style lang="scss">
 .comment {
   display: flex;
-  align-items: flex-end;
   width: 100%;
   background-color: white;
   .comment__editor {
+    position: relative;
     width: 100%;
-    border: 1px solid #dbdbdb;
     border-radius: 5px;
+    border: 1px solid #dbdbdb;
     .expandEditor {
       height: 140px;
     }
@@ -172,7 +184,7 @@ x
       max-width: 100%;
       min-width: 100%;
       resize: none;
-      padding: 12px;
+      padding: 12px 100px 12px 12px;
       border-radius: 4px;
       overflow-y: auto;
       .ProseMirror {
@@ -189,6 +201,26 @@ x
     }
     .editorActive {
       border: 1px solid #212430;
+    }
+  }
+  .comment__actions {
+    display: flex;
+    align-items: flex-end;
+    position: absolute;
+    right: 28px;
+    bottom: 25px;
+    .btn {
+      display: flex;
+      align-items: flex-end;
+      display: flex;
+      align-items: flex-end;
+      border: none;
+      background: #3253e4;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 3px;
     }
   }
 }
