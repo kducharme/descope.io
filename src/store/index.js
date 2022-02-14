@@ -42,6 +42,11 @@ export default new Vuex.Store({
                 fb.category.toLowerCase().includes(payload.toLowerCase())
             );
         },
+        getComments: state => () => {
+            return state.comments.sort((a, b) => {
+                return a._dateAdded - b._dateAdded;
+            })
+        }
     },
 
     mutations: {
@@ -177,7 +182,8 @@ export default new Vuex.Store({
         },
 
         async setActiveFeedback(context, payload) {
-            const moment = require('moment')
+            const moment = require('moment');
+
             const { data: fb } = await supabase
                 .from("feedback")
                 .select("*")
@@ -221,81 +227,26 @@ export default new Vuex.Store({
         },
 
         async getComments(context, payload) {
-            // const moment = require('moment')
+            const moment = require('moment')
 
             const { data: allComments } = await supabase
-                .from("feedback_comments")
-                .select("*")
+                .from('feedback_comments')
+                .select('*,profiles(*)')
                 .eq("feedback_id", payload.feedback_id);
 
-            const getProfile = async (comment) => {
-                const { data: profile } = await supabase
-                    .from("profiles")
-                    .select("*")
-                    .eq("id", comment.created_by);
-                return profile[0];
-            }
-
-            const promises = allComments.map(async comment => {
-                const profile = await getProfile(comment)
-                return profile;
+            allComments.map(comment => {
+                comment._addedBy = comment.profiles.firstname + " " + comment.profiles.lastname;
+                comment._initials = comment.profiles.firstname.charAt(0) + comment.profiles.lastname.charAt(0);
+                comment._dateAdded = moment(comment.date_created).startOf('minute').fromNow();
             })
 
-            const allProfiles = await Promise.all(promises)
-            console.log(allProfiles)
-            
-            // array1.filter(element => array2.includes(element));
+            allComments.sort(function(a,b){
+                return new Date(b.date_created) - new Date(a.date_created);
+              });
 
+            console.log(allComments)
 
-
-
-
-            // const moment = require('moment')
-            // const { data: allComments } = await supabase
-            //     .from("feedback_comments")
-            //     .select("*")
-            //     .eq("feedback_id", payload.feedback_id);
-
-            // const promise = new Promise((resolve, reject) => {
-            //     const { data: profile } = await supabase
-            //         .from("profiles")
-            //         .select("*")
-            //         .eq("id", comment.created_by);
-            //     setTimeout(() => resolve("done"), 1000);
-            // });
-
-            // console.log(promise)
-
-            // Promise.all(allComments.map(v =>
-            //     someAsyncFunc(v))).then((resolvedValues) => {
-            //         resolvedValues.forEach((value) => {
-            //             // Do your stuff here
-            //         });
-            //     });
-
-
-            // for (const comment of allComments) {
-
-            //     const { data: profile } = await supabase
-            //         .from("profiles")
-            //         .select("*")
-            //         .eq("id", comment.created_by);
-
-            //     console.log(profile)
-
-            //     comment._addedBy = profile[0].firstname + " " + profile[0].lastname;
-            //     comment._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
-            //     comment._dateAdded = moment(comment.date_created).startOf('minute').fromNow();
-            // }
-
-            // allComments.sort((a, b) => {
-            //     if (a.date_created > b.date_created) { return -1; }
-            //     if (a.date_created < b.date_created) { return 1; }
-            //     return 0;
-            // })
-
-
-            // context.commit("SET_ACTIVE_COMMENTS", await allComments)
+            context.commit("SET_ACTIVE_COMMENTS", allComments)
         },
 
         setActiveTeamData(context, payload) {
