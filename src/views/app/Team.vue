@@ -102,7 +102,6 @@ export default {
 
     const setActiveTeamId = async () => {
       const team_id = router.currentRoute.value.fullPath.split("/")[2];
-      console.log(team_id)
       store.dispatch("setActiveTeamId", {
         team_id,
       });

@@ -74,12 +74,12 @@ export default {
         .eq("id", session.user.id)
         .single();
 
-      if (!profile) {
+      if (profile) {
         modal.value = TheOnboardingModal;
       }
-      if (profile) {
-        modal.value = null;
-      }
+      // if (profile) {
+      //   modal.value = null;
+      // }
     };
 
     return { store, modal, nav };

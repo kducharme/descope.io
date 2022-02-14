@@ -200,6 +200,7 @@ x
     width: 100%;
     border-radius: 5px;
     border: 1px solid #dbdbdb;
+    padding: 1px;
     .expandEditor {
       height: 140px;
     }
@@ -253,6 +254,7 @@ x
 .comment__editor:focus-within {
   border: 2px solid #212430;
   border-radius: 5px;
+  margin: -1px;
 }
 
 [contenteditable]:focus {

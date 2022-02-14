@@ -244,8 +244,6 @@ export default new Vuex.Store({
                 return new Date(b.date_created) - new Date(a.date_created);
               });
 
-            console.log(allComments)
-
             context.commit("SET_ACTIVE_COMMENTS", allComments)
         },
 

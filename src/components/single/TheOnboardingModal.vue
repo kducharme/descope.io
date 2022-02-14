@@ -61,7 +61,21 @@ export default {
     const firstName = ref(null);
     const lastName = ref(null);
     const companyName = ref(null);
+    const color = ref(null);
     const errorMsg = ref(null);
+
+    const colors = [
+      "C8E5F9",
+      "FE938C",
+      "EDAF97",
+      "F9FBB2",
+      "F59CA9",
+      "B0CA87",
+      "D6FFB7",
+      "F0C987",
+      "F6EFA6",
+      "FFC49B"
+    ];
 
     // Register function
     const createProfile = async () => {
@@ -69,7 +83,7 @@ export default {
 
       try {
         const user = supabase.auth.user();
-        console.log(user.id)
+        console.log(user.id);
         const updates = {
           id: user.id,
           firstname: firstName.value,
@@ -77,6 +91,7 @@ export default {
           email: user.email,
           updated_at: new Date(),
           onboarded: true,
+          color: colors[Math.floor(Math.random() * colors.length)],
           organization_id: org[0].id,
         };
         let { error } = await supabase.from("profiles").upsert(updates);
@@ -167,7 +182,7 @@ export default {
         input,
         textarea {
           background: white;
-          border: 2px solid #DBDDE6;
+          border: 2px solid #dbdde6;
           padding: 8px;
           resize: none;
         }

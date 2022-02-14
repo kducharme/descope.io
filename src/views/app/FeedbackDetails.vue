@@ -282,7 +282,7 @@ export default {
         flex-direction: column-reverse;
         // justify-content: flex-end;
         height: 100%;
-        padding: 16px;
+        padding: 16px 16px 0 16px;
         overflow-y: auto;
       }
       .comments__add {
