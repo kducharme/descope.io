@@ -74,12 +74,12 @@ export default {
         .eq("id", session.user.id)
         .single();
 
-      if (profile) {
+      if (!profile) {
         modal.value = TheOnboardingModal;
       }
-      // if (profile) {
-      //   modal.value = null;
-      // }
+      if (profile) {
+        modal.value = null;
+      }
     };
 
     return { store, modal, nav };
@@ -90,8 +90,8 @@ export default {
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap");
 
-body { 
-    overflow-y: auto;
+body {
+  overflow-y: auto;
 }
 body,
 h1,
@@ -115,7 +115,7 @@ a {
 }
 
 input {
-  border: 2px solid #DBDDE6;
+  border: 2px solid #dbdde6;
   background: white;
   padding: 8px;
 }
@@ -147,6 +147,44 @@ body {
 
 .noScroll {
   // height: 100%;
-  overflow: hidden!important;
+  overflow: hidden !important;
+}
+
+// Avatar colors
+
+.C8E5F9 {
+  background: #c8e5f9;
+}
+
+.FE938C {
+  background: #fe938c;
+}
+
+.EDAF97 {
+  background: #edaf97;
+}
+
+.F59CA9 {
+  background: #f59ca9;
+}
+
+.B0CA87 {
+  background: #b0ca87;
+}
+
+.D6FFB7 {
+  background: #d6ffb7;
+}
+
+.F0C987 {
+  background: #f0c987;
+}
+
+.F6EFA6 {
+  background: #f6efa6;
+}
+
+.FFC49B {
+  background: #ffc49b;
 }
 </style>

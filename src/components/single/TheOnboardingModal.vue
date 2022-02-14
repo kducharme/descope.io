@@ -61,7 +61,6 @@ export default {
     const firstName = ref(null);
     const lastName = ref(null);
     const companyName = ref(null);
-    const color = ref(null);
     const errorMsg = ref(null);
 
     const colors = [

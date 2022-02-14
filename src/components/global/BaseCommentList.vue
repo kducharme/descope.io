@@ -1,7 +1,7 @@
 <template>
   <div class="comment">
     <div class="comment__left">
-      <p class="initials">
+      <p :class="[props.comment.profiles.color, initials]">
         {{ props.comment._initials }}
       </p>
     </div>
@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import { useEditor, EditorContent } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 
@@ -30,12 +31,23 @@ export default {
     },
   },
   setup(props) {
+    // Setup data
+    const initials = ref(null);
+
     const editor = useEditor({
       editable: false,
       content: props.comment.comment,
       extensions: [StarterKit],
+
     });
-    return { props, editor };
+
+    const initialStyling = () => {
+      initials.value = 'initials'
+    }
+
+    initialStyling();
+
+    return { props, editor, initials };
   },
 };
 </script>
@@ -54,13 +66,13 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #c8e4f9;
       height: 40px;
       width: 40px;
       border-radius: 6px;
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 1.1px;
+      padding: 0 0 0 2px;
     }
   }
   .comment__right {
