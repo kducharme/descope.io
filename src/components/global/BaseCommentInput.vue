@@ -165,6 +165,7 @@ export default {
       const comment = editor.value.getJSON();
 
       if (comment.content[0].content) {
+        document.querySelector('#commentButton').classList.add('disabled');
         id.value = uuidv4();
         await saveInitialVoteToDatabase();
         await saveCommentToDatabase();
@@ -279,10 +280,16 @@ x
       border-radius: 3px;
     }
     .disabled {
-      opacity: 0.5;
+      background: #e9e6e6;
+      color: #979ebe;
     }
-    .active {
-      opacity: 1;
+    .btn:hover {
+      cursor: pointer;
+      background: #2a4ad4;
+    }
+    .disabled:hover {
+      cursor: not-allowed;
+      background: #e9e6e6;
     }
   }
 }
