@@ -71,10 +71,20 @@
           </svg>
         </button>
       </bubble-menu>
-      <editor-content :editor="editor" v-model="comment" class="editor" />
+      <editor-content
+        :editor="editor"
+        v-model="comment"
+        class="editor"
+        @change="checkComment"
+      />
     </div>
     <div class="comment__actions">
-      <button type="submit" class="btn btn__small" @click="saveToDatabase">
+      <button
+        type="submit"
+        @click="saveToDatabase"
+        class="btn btn__small disabled"
+        id="commentButton"
+      >
         Comment
       </button>
     </div>
@@ -82,6 +92,8 @@
 </template>
 
 <script>
+// TODO: Add disabled button when there isn't content
+
 import store from "../../store/index";
 import { supabase } from "../../supabase/init";
 import { v4 as uuidv4 } from "uuid";
@@ -109,6 +121,11 @@ export default {
       default: "",
     },
   },
+  data() {
+    return {
+      commentActive: false,
+    };
+  },
   setup(props) {
     // Setup data
     const comment = ref(null);
@@ -134,14 +151,26 @@ export default {
       autofocus: true,
       editable: true,
       injectCSS: false,
+      onUpdate({ editor }) {
+        if (editor.getText() === "") {
+          document.querySelector('#commentButton').classList.add('disabled')
+        } else {
+          document.querySelector('#commentButton').classList.remove('disabled')
+        }
+        console.log(this.commentActive);
+      },
     });
 
     const saveToDatabase = async () => {
-      id.value = uuidv4();
-      await saveInitialVoteToDatabase();
-      await saveCommentToDatabase();
-      editor.value.commands.clearContent();
-      editor.value.commands.setContent();
+      const comment = editor.value.getJSON();
+
+      if (comment.content[0].content) {
+        id.value = uuidv4();
+        await saveInitialVoteToDatabase();
+        await saveCommentToDatabase();
+        editor.value.commands.clearContent();
+        editor.value.commands.setContent();
+      }
     };
 
     const saveInitialVoteToDatabase = async () => {
@@ -187,6 +216,7 @@ export default {
 
     return { props, editor, comment, store, saveToDatabase };
   },
+  methods: {},
 };
 </script>
 x
@@ -247,6 +277,12 @@ x
       font-weight: 600;
       padding: 8px 12px;
       border-radius: 3px;
+    }
+    .disabled {
+      opacity: 0.5;
+    }
+    .active {
+      opacity: 1;
     }
   }
 }
