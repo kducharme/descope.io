@@ -129,7 +129,7 @@
               />
             </svg>
           </div>
-          <div class="sort">
+          <!-- <div class="sort">
             <p class="sort__text">Sort by:</p>
             <div class="sort__value">
               <p class="sort__value--text">Votes</p>
@@ -147,7 +147,7 @@
                 />
               </svg>
             </div>
-          </div>
+          </div> -->
         </div>
         <div
           class="card fb"
@@ -161,10 +161,10 @@
                 <p class="initials">{{ feedback._initials }}</p>
               </div>
               <div class="right">
-                <p class="project" v-if="feedback._project">
-                  {{ feedback._project.name }}
+                <p class="project" v-if="feedback.projects">
+                  {{ feedback.projects.name }}
                 </p>
-                <p class="project" v-if="!feedback._project">
+                <p class="project" v-show="!feedback.projects">
                   {{ store.state.teams_active_data.name }} Team
                   <span class="team">(no project)</span>
                 </p>
@@ -406,21 +406,17 @@ export default {
       }
     }
     .content__bottom--right {
-      width: 540px;
-      max-width: 540px;
+      width: 100%;
+      max-width: 100%;
       margin: 0 0 0 12px;
       .actions {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
         margin: 0 0 16px 0;
         .actions__search {
           position: relative;
-          width: calc(100% - 180px);
           input {
+            width: 540px;
             padding: 10px 10px 10px 36px;
-            border-radius: 5px;
+            border-radius: 6px;
           }
           .actions__search--icon {
             position: absolute;
@@ -430,7 +426,9 @@ export default {
           .actions__search--input {
             border: 1px solid #dbdde6;
             border-radius: 5px;
-            width: 100%;
+            // width: 200px;
+            // min-width: 540px;
+            // max-width: 540px;
           }
           .actions__search--reset {
             position: absolute;
@@ -447,26 +445,26 @@ export default {
             cursor: pointer;
           }
         }
-        .sort {
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          width: 180px;
-          .sort__text {
-            font-size: 13px;
-            color: #777f9c;
-            font-weight: 400;
-            margin: 0 6px 0 0;
-          }
-          .sort__value {
-            display: flex;
-            align-items: center;
-            .sort__value--text {
-              font-weight: 600;
-              margin: 0 -2px 0 0;
-            }
-          }
-        }
+        // .sort {
+        //   display: flex;
+        //   align-items: center;
+        //   justify-content: flex-end;
+        //   width: 180px;
+        //   .sort__text {
+        //     font-size: 13px;
+        //     color: #777f9c;
+        //     font-weight: 400;
+        //     margin: 0 6px 0 0;
+        //   }
+        //   .sort__value {
+        //     display: flex;
+        //     align-items: center;
+        //     .sort__value--text {
+        //       font-weight: 600;
+        //       margin: 0 -2px 0 0;
+        //     }
+        //   }
+        // }
       }
       .fb:hover {
         cursor: pointer;

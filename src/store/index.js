@@ -298,7 +298,7 @@ export default new Vuex.Store({
             allFeedback.map(async fb => {
                 fb._addedBy = fb.profiles.firstname + " " + fb.profiles.lastname;
                 fb._initials = fb.profiles.firstname.charAt(0) + fb.profiles.lastname.charAt(0);
-                fb._dateAdded = moment(fb.date_created).startOf('minute').fromNow();
+                fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
 
                 // Set priority value
                 if (fb.priority === "High") { fb._priority = 3; }
@@ -326,6 +326,8 @@ export default new Vuex.Store({
                 if (a._priority > b._priority) { return -1; }
                 return 0;
             })
+
+            console.log(allFeedback)
 
             context.commit("SET_ALL_FEEDBACK", allFeedback)
         },

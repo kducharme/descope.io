@@ -225,7 +225,7 @@ export default {
           },
         ]);
 
-        store.dispatch("setAllTeamFeedback");
+        store.dispatch("getAllTeamFeedback");
         closeModal();
 
         if (error) throw error;
