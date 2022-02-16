@@ -22,9 +22,12 @@ export default new Vuex.Store({
         projects: [],
         projects_active: null,
 
-        feedback: [],
+        feedback: null,
         feedback_active: null,
         feedback_active_id: null,
+
+        feedback_chart_debt: null,
+        feedback_chart_requests: null,
 
         comments: [],
 
@@ -38,7 +41,7 @@ export default new Vuex.Store({
             return state.feedback.filter(fb =>
                 fb.title.toLowerCase().includes(payload.toLowerCase()) ||
                 fb.description.toLowerCase().includes(payload.toLowerCase()) ||
-                fb._project.name.toLowerCase().includes(payload.toLowerCase()) ||
+                fb.projects.name.toLowerCase().includes(payload.toLowerCase()) ||
                 fb.category.toLowerCase().includes(payload.toLowerCase())
             );
         },
@@ -103,7 +106,16 @@ export default new Vuex.Store({
             state.projects_active = project;
         },
         SET_ALL_FEEDBACK: (state, feedback) => {
-            state.feedback = feedback;
+            if (feedback.length > 0) {
+                state.feedback = feedback;
+            }
+            else { state.feedback = null }
+        },
+        SET_FEEDBACK_CHART_DATA: (state, data) => {
+            state.feedback_chart_debt = data.arrDebtReduced;
+            state.feedback_chart_requests = data.arrRequestsReduced;
+
+            console.log(state.feedback_chart_debt)
         },
         SET_ACTIVE_FEEDBACK: (state, feedback) => {
             state.feedback_active = feedback;
@@ -289,36 +301,66 @@ export default new Vuex.Store({
         },
         async getAllTeamFeedback(context) {
             const moment = require('moment')
+            const arrDebt = [];
+            const arrRequests = [];
+
 
             const { data: allFeedback } = await supabase
                 .from('feedback')
                 .select('*,profiles(*),projects(*)')
                 .eq("team_id", context.state.teams_active_data.id);
 
-            allFeedback.map(async fb => {
+            // console.log(allFeedback)
+
+            allFeedback.map(fb => {
+                // TODO - Get image from storage and add to feedback object
+                
+                // Hydrate the feedback object
                 fb._addedBy = fb.profiles.firstname + " " + fb.profiles.lastname;
                 fb._initials = fb.profiles.firstname.charAt(0) + fb.profiles.lastname.charAt(0);
+                fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
                 fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
 
-                // Set priority value
-                if (fb.priority === "High") { fb._priority = 3; }
-                if (fb.priority === "Med") { fb._priority = 2; }
-                if (fb.priority === "Low") { fb._priority = 1; }
 
-                // TODO - Get image from storage and add to feedback object
-
-                // if (fb.image) {
-                //     const { data: img } = await supabase.storage
-                //         .from("feedback")
-                //         .download(`post/${fb.image}`)
-
-                //     console.log(img)
-
-                //     const url = URL.createObjectURL(await img);
-                //     fb._image = url;
+                if (fb.category.includes("issue")) {
+                    const obj = {};
+                    obj["x"] = fb._date;
+                    obj["y"] = 1;
+                    arrDebt.push(obj)
+                }
+                // if (fb.category.includes("request")) {
+                //     const obj = {};
+                //     obj["x"] = fb._date;
+                //     obj["y"] = 1;
+                //     arrRequests.push(obj)
                 // }
             })
-            
+
+            let arrDebtReduced = arrDebt.reduce((acc, curr) => {
+                let item = acc.find(item => item.x === curr.x);
+
+                if (item) {
+                    item.y += 1;
+                } else {
+                    acc.push(curr);
+                }
+                return acc;
+            }, []);
+
+            // console.log(arrDebtReduced)
+
+            let arrRequestsReduced = arrRequests.reduce((acc, curr) => {
+                let item = acc.find(item => item.date === curr.date && item.type === curr.type);
+
+                if (item) {
+                    item.total += 1;
+                } else {
+                    acc.push(curr);
+                }
+
+                return acc;
+            }, []);
+
             allFeedback.sort((a, b) => {
                 if (a.votes > b.votes) { return -1; }
                 if (a.votes < b.votes) { return 1; }
@@ -327,9 +369,8 @@ export default new Vuex.Store({
                 return 0;
             })
 
-            console.log(allFeedback)
-
             context.commit("SET_ALL_FEEDBACK", allFeedback)
+            context.commit("SET_FEEDBACK_CHART_DATA", { arrDebtReduced, arrRequestsReduced })
         },
         async setActiveProject(context, payload) {
 

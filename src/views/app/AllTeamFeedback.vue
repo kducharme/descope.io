@@ -1,105 +1,59 @@
 <template>
-  <div class="content">
-    <BaseEmptyState
-      :title="empty_title"
-      :body="empty_body"
-      :buttonType="empty_button_type"
-      :buttonPriority="empty_button_priority"
-      :buttonText="empty_button_text"
-      :buttonAction="showCreateFeedbackModal"
-      class="subnav__button--secondary"
-      v-if="store.state.feedback.length == 0"
-    />
+  <div class="page">
+    <div class="content">
+      <BaseEmptyState
+        :title="empty_title"
+        :body="empty_body"
+        :buttonType="empty_button_type"
+        :buttonPriority="empty_button_priority"
+        :buttonText="empty_button_text"
+        :buttonAction="showCreateFeedbackModal"
+        class="subnav__button--secondary"
+        v-if="!store.state.feedback"
+      />
 
-    <div class="content__top"></div>
-    <div class="content__bottom" v-if="store.state.feedback.length !== 0">
-      <div class="content__bottom--left">
-        <div class="card summary">
-          <div class="header">
-            <div class="header__bg"></div>
-            <div class="header__avatar">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="30px"
-                viewBox="0 0 24 24"
-                width="30px"
-                fill="#B7BBCC"
-              >
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path
-                  d="M12 7V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2h-8zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm9 12h-7v-2h2v-2h-2v-2h2v-2h-2V9h7c.55 0 1 .45 1 1v8c0 .55-.45 1-1 1zm-1-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+      <div class="content__top"></div>
+      <div class="content__bottom" v-if="store.state.feedback">
+        <div class="content__bottom--left">
+          <div class="card summary">
+            <p class="title">Summary</p>
+            <div class="analytics">
+              <div class="data">
+                <p class="label">Total issues</p>
+                <p class="metric">
+                  {{
+                    store.state.feedback.filter((f) =>
+                      f.category.includes("issue")
+                    ).length
+                  }}
+                </p>
+                <LineChart
+                  :chartData="store.state.feedback_chart_debt" :options="options"
                 />
-              </svg>
-            </div>
-            <p class="header__title">Summary</p>
-          </div>
-          <div class="filters">
-            <div class="filter">
-              <p class="filter__title">Debt</p>
-              <p class="filter__count">
-                {{
-                  store.state.feedback.filter((f) =>
-                    f.category.includes("issue")
-                  ).length
-                }}
-              </p>
-            </div>
-            <div class="filter debt">
-              <p class="filter__title">Design</p>
-              <p class="filter__count">
-                {{
-                  store.state.feedback.filter(
-                    (f) => f.category == "issue_design"
-                  ).length
-                }}
-              </p>
-            </div>
-            <div class="filter debt">
-              <p class="filter__title">Product</p>
-              <p class="filter__count">
-                {{
-                  store.state.feedback.filter(
-                    (f) => f.category == "issue_product"
-                  ).length
-                }}
-              </p>
-            </div>
-            <div class="filter debt">
-              <p class="filter__title">Technical</p>
-              <p class="filter__count">
-                {{
-                  store.state.feedback.filter(
-                    (f) => f.category == "issue_technical"
-                  ).length
-                }}
-              </p>
-            </div>
-            <div class="filter">
-              <p class="filter__title">Feature Request</p>
-              <p class="filter__count">
-                {{
-                  store.state.feedback.filter(
-                    (f) => f.category == "request_feature"
-                  ).length
-                }}
-              </p>
+              </div>
+              <div class="data">
+                <p class="label">Feature requests</p>
+                <p class="metric">
+                  {{
+                    store.state.feedback.filter((f) =>
+                      f.category.includes("request")
+                    ).length
+                  }}
+                </p>
+              </div>
             </div>
           </div>
-
-          <div class="actions"></div>
         </div>
-      </div>
 
-      <div class="content__bottom--right">
-        <div class="actions">
-          <div class="actions__search">
+        <div class="content__bottom--right">
+          <div class="search">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="20px"
               viewBox="0 0 24 24"
               width="20px"
               fill="#7B82A3"
-              class="actions__search--icon"
+              class="search__input--icon"
             >
               <path d="M0 0h24v24H0V0z" fill="none" />
               <path
@@ -109,8 +63,8 @@
             <input
               type="text"
               v-model="search"
-              class="actions__search--input"
-              placeholder="Search feedback"
+              class="search__input"
+              placeholder="Search description, label, project"
               @keyup="searchFeedback"
             />
             <svg
@@ -119,7 +73,7 @@
               viewBox="0 0 24 24"
               width="18px"
               fill="#7B82A3"
-              class="actions__search--reset"
+              class="search__input--reset"
               @click="resetSearch()"
               v-if="this.search"
             >
@@ -129,132 +83,110 @@
               />
             </svg>
           </div>
-          <!-- <div class="sort">
-            <p class="sort__text">Sort by:</p>
-            <div class="sort__value">
-              <p class="sort__value--text">Votes</p>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24px"
-                viewBox="0 0 24 24"
-                width="24px"
-                fill="#7B82A3"
-                class="sort__value--icon"
-              >
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path
-                  d="M8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71z"
-                />
-              </svg>
+          <div
+            class="card fb"
+            v-for="feedback in store.getters.searchFeedback(this.search)"
+            :key="feedback.id"
+            @click="setActiveFeedback(feedback.id)"
+          >
+            <div class="fb__top">
+              <div class="fb__top--left">
+                <div class="left">
+                  <p class="initials">{{ feedback._initials }}</p>
+                </div>
+                <div class="right">
+                  <p class="project" v-if="feedback.projects">
+                    {{ feedback.projects.name }}
+                  </p>
+                  <p class="project" v-show="!feedback.projects">
+                    {{ store.state.teams_active_data.name }} Team
+                    <span class="team">(no project)</span>
+                  </p>
+                  <p class="details">
+                    Added by {{ feedback._addedBy }} {{ feedback._dateAdded }}
+                  </p>
+                </div>
+              </div>
+              <div class="fb__top--right">
+                <p
+                  class="tag category__issue"
+                  v-if="feedback.category === 'issue_design'"
+                >
+                  Design Issue
+                </p>
+                <p
+                  class="tag category__issue"
+                  v-if="feedback.category === 'issue_product'"
+                >
+                  Product Issue
+                </p>
+                <p
+                  class="tag category__issue"
+                  v-if="feedback.category === 'issue_technical'"
+                >
+                  Tech Issue
+                </p>
+                <p
+                  class="tag category__request"
+                  v-if="feedback.category === 'request_feature'"
+                >
+                  Feature Request
+                </p>
+              </div>
             </div>
-          </div> -->
-        </div>
-        <div
-          class="card fb"
-          v-for="feedback in store.getters.searchFeedback(this.search)"
-          :key="feedback.id"
-          @click="setActiveFeedback(feedback.id)"
-        >
-          <div class="fb__top">
-            <div class="fb__top--left">
+            <div class="fb__mid">
+              <p class="title">{{ feedback.title }}</p>
+              <p class="description">{{ feedback.description }}</p>
+            </div>
+            <div class="fb__bottom">
               <div class="left">
-                <p class="initials">{{ feedback._initials }}</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="16px"
+                  viewBox="0 0 24 24"
+                  width="16px"
+                  fill="#7B82A3"
+                  class="comment"
+                >
+                  <path d="M0 0h24v24H0V0z" fill="none" />
+                  <path
+                    d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"
+                  />
+                </svg>
+                <div class="comment__count" v-if="feedback.comments">
+                  {{ feedback.comments.length }}
+                </div>
               </div>
               <div class="right">
-                <p class="project" v-if="feedback.projects">
-                  {{ feedback.projects.name }}
-                </p>
-                <p class="project" v-show="!feedback.projects">
-                  {{ store.state.teams_active_data.name }} Team
-                  <span class="team">(no project)</span>
-                </p>
-                <p class="details">
-                  Added by {{ feedback._addedBy }} {{ feedback._dateAdded }}
-                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="18px"
+                  viewBox="0 0 24 24"
+                  width="18px"
+                  fill="#7B82A3"
+                  class="vote vote__up"
+                  @click="upVote(feedback)"
+                >
+                  <path d="M0 0h24v24H0V0z" fill="none" />
+                  <path
+                    d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
+                  />
+                </svg>
+                <p class="count">{{ feedback.votes.length }}</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="18px"
+                  viewBox="0 0 24 24"
+                  width="18px"
+                  fill="#7B82A3"
+                  class="vote vote__down"
+                >
+                  <path d="M0 0h24v24H0V0z" fill="none" />
+                  <path
+                    d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                  />
+                </svg>
               </div>
-            </div>
-            <div class="fb__top--right">
-              <p
-                class="tag category__issue"
-                v-if="feedback.category === 'issue_design'"
-              >
-                Design Debt
-              </p>
-              <p
-                class="tag category__issue"
-                v-if="feedback.category === 'issue_product'"
-              >
-                Product Debt
-              </p>
-              <p
-                class="tag category__issue"
-                v-if="feedback.category === 'issue_technical'"
-              >
-                Tech Debt
-              </p>
-              <p
-                class="tag category__request"
-                v-if="feedback.category === 'request_feature'"
-              >
-                Feature Request
-              </p>
-            </div>
-          </div>
-          <div class="fb__mid">
-            <p class="title">{{ feedback.title }}</p>
-            <p class="description">{{ feedback.description }}</p>
-          </div>
-          <!-- <div class="fb__image" >
-            <img :src="feedback._image" />
-          </div> -->
-          <div class="fb__bottom">
-            <div class="left">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="16px"
-                viewBox="0 0 24 24"
-                width="16px"
-                fill="#7B82A3"
-                class="comment"
-              >
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path
-                  d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"
-                />
-              </svg>
-              <div class="comment__count" v-if="feedback.comments">
-                {{ feedback.comments.length }}
-              </div>
-            </div>
-            <div class="right">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="18px"
-                viewBox="0 0 24 24"
-                width="18px"
-                fill="#7B82A3"
-                class="vote vote__up"
-                @click="upVote(feedback)"
-              >
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path
-                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                />
-              </svg>
-              <p class="count">{{ feedback.votes.length }}</p>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="18px"
-                viewBox="0 0 24 24"
-                width="18px"
-                fill="#7B82A3"
-                class="vote vote__down"
-              >
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path
-                  d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
-                />
-              </svg>
             </div>
           </div>
         </div>
@@ -264,19 +196,28 @@
 </template>
 
 <script>
-// import { ref } from "vue";
+import { ref } from "vue";
 import store from "../../store/index";
-// import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import BaseEmptyState from "../../components/global/BaseEmptyState.vue";
+// import BaseLineChart from "../../components/global/BaseLineChart.vue";
+
+// import { defineComponent } from 'vue';
+import { LineChart } from 'vue-chart-3';
+import { Chart, registerables } from "chart.js";
+
+Chart.register(...registerables);
 
 export default {
   name: "All Team Feedback",
   components: {
     BaseEmptyState,
+    LineChart,
   },
+
   data() {
     return {
+      loading: true,
       search: "",
       feedback: [],
       empty_title: "Add your feedback",
@@ -286,11 +227,45 @@ export default {
       empty_button_priority: "Primary",
       empty_button_text: "Add feedback",
       empty_button_action: "showCreateFeedbackModal",
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+      },
+      chartData: []
     };
   },
   setup() {
     // Set variables
     const router = useRouter();
+    const datacollection = ref(null);
+
+    // const data = store.state.feedback_chart_debt;
+
+    const testData = {
+      labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre'],
+      datasets: [
+        {
+          data: [30, 40, 60, 70, 5],
+          backgroundColor: ['#77CEFF', '#0079AF', '#123E6B', '#97B0C4', '#A5C8ED'],
+        },
+      ],
+    };
+
+    const options = ref({
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+          position: 'top',
+        },
+        title: {
+          display: false,
+        },
+      },
+    });
+
+    // setup charts
+    // this.renderChart(data, options);
 
     const routeToFeedbackDetails = (id) => {
       router.push({ name: "feedbackDetails", params: { feedbackId: id } });
@@ -301,7 +276,7 @@ export default {
       routeToFeedbackDetails(id);
     };
 
-    return { store, setActiveFeedback };
+    return { store, setActiveFeedback, datacollection, testData, options };
   },
   methods: {
     showCreateFeedbackModal() {
@@ -311,10 +286,19 @@ export default {
       this.search = "";
     },
   },
+  mounted() {
+    this.chartData = store.state.feedback_chart_debt;
+    console.log(store.state.feedback)
+  }
 };
 </script>
 
 <style lang="scss" scoped>
+.page {
+  background: #f3f4f7;
+  min-height: calc(100vh - 102px);
+  width: 100%;
+}
 .content {
   display: flex;
   flex-direction: column;
@@ -322,128 +306,97 @@ export default {
   align-items: center;
   min-height: calc(100vh - 102px);
   width: 100%;
-  padding: 32px 80px;
-  background: #f3f4f7;
+  padding: 32px 100px;
 
-  .card {
-    // border: 1px solid #dbdde6;
-    box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
-    background: white;
-    border-radius: 12px;
-  }
   .content__bottom {
     display: flex;
     flex-direction: row;
+
     .content__bottom--left {
-      width: 230px;
+      width: 200px;
       margin: 0 12px 0 0;
       height: 100%;
       position: -webkit-sticky; /* Safari */
       position: sticky;
       top: 24px;
+      .card {
+        box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
+        background: white;
+        border-radius: 12px;
+      }
       .summary {
-        .header {
-          display: flex;
-          flex-direction: column;
-          margin: 0 0 12px 0;
-          .header__bg {
-            height: 56px;
-            width: 100%;
-            background-image: linear-gradient(to right, #212430, #414657);
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-            position: relative;
-          }
-          .header__avatar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: absolute;
-            height: 80px;
-            width: 80px;
-            top: 18px;
-            left: 16px;
-            border-radius: 100%;
-            background: #eeeff3;
-            border: 4px solid white;
-            font-weight: 600;
-            font-size: 13px;
-          }
-          .header__title {
-            font-size: 16px;
-            font-weight: 600;
-            padding: 56px 16px 0;
-          }
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        .title {
+          font-size: 15px;
+          font-weight: 600;
+          margin: 0 0 8px 0;
         }
-        .filters {
-          padding: 0 16px 16px;
-          .filter {
+        .analytics {
+          .data {
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            margin: 16px 0;
-          }
-          .debt {
-            .filter__title,
-            .filter__count {
-              font-size: 13px;
-              color: #7981a4;
-              font-weight: 400;
+            flex-direction: column;
+            border-top: 1px solid #dbdde6;
+            padding: 24px 0;
+            .label {
+              font-size: 12px;
+              color: #636c92;
+              font-weight: 600;
+              margin: 0 0 8px;
             }
-            .filter__title {
-              padding: 0 0 0 8px;
+            .metric {
+              font-size: 24px;
+              font-weight: 500;
             }
           }
-          .filter__title,
-          .filter__count {
-            font-weight: 500;
+          .data:first-child {
+            border: none;
           }
-          .filter:last-child {
-            margin: 16px 0 0 0;
+          .data:last-child {
+            padding: 24px 0 0 0;
           }
         }
       }
     }
     .content__bottom--right {
-      width: 100%;
-      max-width: 100%;
+      width: 580px;
+      max-width: 580px;
       margin: 0 0 0 12px;
-      .actions {
+      .card {
+        box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
+        background: white;
+        border-radius: 12px;
+      }
+      .search {
         margin: 0 0 16px 0;
-        .actions__search {
-          position: relative;
-          input {
-            width: 540px;
-            padding: 10px 10px 10px 36px;
-            border-radius: 6px;
-          }
-          .actions__search--icon {
-            position: absolute;
-            left: 10px;
-            top: 10px;
-          }
-          .actions__search--input {
-            border: 1px solid #dbdde6;
-            border-radius: 5px;
-            // width: 200px;
-            // min-width: 540px;
-            // max-width: 540px;
-          }
-          .actions__search--reset {
-            position: absolute;
-            right: -36px;
-            top: 10px;
-            padding: 2px;
-            svg:hover {
-              fill: #212430;
-            }
-          }
-          .actions__search--reset:hover {
-            background: #eeeff3;
-            border-radius: 3px;
-            cursor: pointer;
-          }
+        position: relative;
+        width: 100%;
+        width: 580px;
+        max-width: 580px;
+        input {
+          width: 100%;
+          padding: 10px 10px 10px 36px;
+          border-radius: 6px;
+        }
+        .search__input--icon {
+          position: absolute;
+          left: 10px;
+          top: 10px;
+        }
+        .search__input--reset {
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          padding: 2px;
+        }
+        svg:hover {
+          fill: #212430;
+        }
+        .search__input--reset:hover {
+          background: #eeeff3;
+          border-radius: 3px;
+          cursor: pointer;
         }
         // .sort {
         //   display: flex;

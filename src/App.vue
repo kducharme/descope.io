@@ -124,7 +124,8 @@ div,
 span,
 section,
 article,
-nav {
+nav,
+input {
   box-sizing: border-box;
 }
 
