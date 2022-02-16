@@ -157,7 +157,6 @@ export default {
         } else {
           document.querySelector('#commentButton').classList.remove('disabled')
         }
-        console.log(this.commentActive);
       },
     });
 

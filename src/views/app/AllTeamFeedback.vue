@@ -151,7 +151,7 @@
         </div>
         <div
           class="card fb"
-          v-for="feedback in store.getters.getFeedback(this.search)"
+          v-for="feedback in store.getters.searchFeedback(this.search)"
           :key="feedback.id"
           @click="setActiveFeedback(feedback.id)"
         >
@@ -204,9 +204,9 @@
             <p class="title">{{ feedback.title }}</p>
             <p class="description">{{ feedback.description }}</p>
           </div>
-          <div class="fb__image" v-if="feedback._image">
+          <!-- <div class="fb__image" >
             <img :src="feedback._image" />
-          </div>
+          </div> -->
           <div class="fb__bottom">
             <div class="left">
               <svg

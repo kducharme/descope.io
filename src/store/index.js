@@ -34,7 +34,7 @@ export default new Vuex.Store({
         createFeedbackModal: false,
     },
     getters: {
-        getFeedback: state => (payload) => {
+        searchFeedback: state => (payload) => {
             return state.feedback.filter(fb =>
                 fb.title.toLowerCase().includes(payload.toLowerCase()) ||
                 fb.description.toLowerCase().includes(payload.toLowerCase()) ||
@@ -240,9 +240,9 @@ export default new Vuex.Store({
                 comment._dateAdded = moment(comment.date_created).startOf('minute').fromNow();
             })
 
-            allComments.sort(function(a,b){
+            allComments.sort((a, b) => {
                 return new Date(b.date_created) - new Date(a.date_created);
-              });
+            });
 
             context.commit("SET_ACTIVE_COMMENTS", allComments)
         },
@@ -255,7 +255,7 @@ export default new Vuex.Store({
             })
             context.dispatch("setActiveTeamMembers")
             context.dispatch("setAllTeamProjects")
-            context.dispatch("setAllTeamFeedback")
+            context.dispatch("getAllTeamFeedback")
         },
         async setActiveTeamMembers(context) {
             if (context.state.teams_active_data) {
@@ -287,53 +287,39 @@ export default new Vuex.Store({
                 context.commit("SET_PROJECTS", projects);
             }
         },
-        async setAllTeamFeedback(context) {
-            // Create variables
+        async getAllTeamFeedback(context) {
             const moment = require('moment')
 
-            const { data: feedback } = await supabase
-                .from("feedback")
-                .select("*")
+            const { data: allFeedback } = await supabase
+                .from('feedback')
+                .select('*,profiles(*),projects(*)')
                 .eq("team_id", context.state.teams_active_data.id);
 
-            for (const fb of feedback) {
-                const { data: profile } = await supabase
-                    .from("profiles")
-                    .select("*")
-                    .eq("id", fb.created_by);
+            allFeedback.map(async fb => {
+                fb._addedBy = fb.profiles.firstname + " " + fb.profiles.lastname;
+                fb._initials = fb.profiles.firstname.charAt(0) + fb.profiles.lastname.charAt(0);
+                fb._dateAdded = moment(fb.date_created).startOf('minute').fromNow();
 
-                fb._addedBy = profile[0].firstname + " " + profile[0].lastname;
-                fb._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
-                fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
+                // Set priority value
                 if (fb.priority === "High") { fb._priority = 3; }
                 if (fb.priority === "Med") { fb._priority = 2; }
                 if (fb.priority === "Low") { fb._priority = 1; }
 
-                if (fb.project_id) {
-                    const { data: project } = await supabase
-                        .from("projects")
-                        .select("*")
-                        .eq("id", fb.project_id);
+                // TODO - Get image from storage and add to feedback object
 
-                    fb._project = project[0];
+                // if (fb.image) {
+                //     const { data: img } = await supabase.storage
+                //         .from("feedback")
+                //         .download(`post/${fb.image}`)
 
-                }
+                //     console.log(img)
 
-                // Get images and add it to the feedback object
-
-                if (fb.image) {
-                    const { data: img } = await supabase.storage
-                        .from("feedback")
-                        .download(`post/${fb.image}`)
-
-                    const url = URL.createObjectURL(await img);
-                    fb._image = url;
-                }
-
-            }
-
-            // TODO — sort based on votes then priority
-            feedback.sort((a, b) => {
+                //     const url = URL.createObjectURL(await img);
+                //     fb._image = url;
+                // }
+            })
+            
+            allFeedback.sort((a, b) => {
                 if (a.votes > b.votes) { return -1; }
                 if (a.votes < b.votes) { return 1; }
                 if (a._priority < b._priority) { return 1; }
@@ -341,7 +327,7 @@ export default new Vuex.Store({
                 return 0;
             })
 
-            context.commit("SET_ALL_FEEDBACK", await feedback);
+            context.commit("SET_ALL_FEEDBACK", allFeedback)
         },
         async setActiveProject(context, payload) {
 
