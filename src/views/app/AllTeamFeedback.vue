@@ -9,11 +9,11 @@
         :buttonText="empty_button_text"
         :buttonAction="showCreateFeedbackModal"
         class="subnav__button--secondary"
-        v-if="!store.state.feedback"
+        v-if="!store.state.teams_active_feedback"
       />
 
       <div class="content__top"></div>
-      <div class="content__bottom" v-if="store.state.feedback">
+      <div class="content__bottom" v-if="store.state.teams_active_feedback">
         <div class="content__bottom--left">
           <div class="card summary">
             <p class="title">Summary</p>
@@ -22,20 +22,21 @@
                 <p class="label">Total issues</p>
                 <p class="metric">
                   {{
-                    store.state.feedback.filter((f) =>
+                    store.state.teams_active_feedback.filter((f) =>
                       f.category.includes("issue")
                     ).length
                   }}
                 </p>
                 <LineChart
-                  :chartData="store.state.feedback_chart_debt" :options="options"
+                  :chartData="store.state.feedback_chart_debt"
+                  :options="options"
                 />
               </div>
               <div class="data">
                 <p class="label">Feature requests</p>
                 <p class="metric">
                   {{
-                    store.state.feedback.filter((f) =>
+                    store.state.teams_active_feedback.filter((f) =>
                       f.category.includes("request")
                     ).length
                   }}
@@ -99,7 +100,7 @@
                     {{ feedback.projects.name }}
                   </p>
                   <p class="project" v-show="!feedback.projects">
-                    {{ store.state.teams_active_data.name }} Team
+                    {{ store.state.teams_active.name }} Team
                     <span class="team">(no project)</span>
                   </p>
                   <p class="details">
@@ -203,7 +204,7 @@ import BaseEmptyState from "../../components/global/BaseEmptyState.vue";
 // import BaseLineChart from "../../components/global/BaseLineChart.vue";
 
 // import { defineComponent } from 'vue';
-import { LineChart } from 'vue-chart-3';
+import { LineChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 
 Chart.register(...registerables);
@@ -231,7 +232,7 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       },
-      chartData: []
+      chartData: [],
     };
   },
   setup() {
@@ -242,11 +243,17 @@ export default {
     // const data = store.state.feedback_chart_debt;
 
     const testData = {
-      labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre'],
+      labels: ["Paris", "Nîmes", "Toulon", "Perpignan", "Autre"],
       datasets: [
         {
           data: [30, 40, 60, 70, 5],
-          backgroundColor: ['#77CEFF', '#0079AF', '#123E6B', '#97B0C4', '#A5C8ED'],
+          backgroundColor: [
+            "#77CEFF",
+            "#0079AF",
+            "#123E6B",
+            "#97B0C4",
+            "#A5C8ED",
+          ],
         },
       ],
     };
@@ -256,7 +263,7 @@ export default {
       plugins: {
         legend: {
           display: false,
-          position: 'top',
+          position: "top",
         },
         title: {
           display: false,
@@ -288,8 +295,8 @@ export default {
   },
   mounted() {
     this.chartData = store.state.feedback_chart_debt;
-    console.log(store.state.feedback)
-  }
+    console.log(this.chart);
+  },
 };
 </script>
 

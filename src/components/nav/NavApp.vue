@@ -58,14 +58,12 @@
 import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import TheTeamList from "./TheTeamList.vue";
-// import BaseButton from "../global/BaseButton.vue";
 import TheCreateTeamModal from "../single/TheCreateTeamModal.vue";
 import store from "../../store/index";
 
 export default {
   components: {
     TheTeamList,
-    // BaseButton,
     TheCreateTeamModal,
   },
   data() {

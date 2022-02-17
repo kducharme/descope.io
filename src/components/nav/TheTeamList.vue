@@ -1,12 +1,11 @@
 <template>
-  <div v-if="store.state.teams_all.length > 0" class="launches">
+  <div v-if="store.state.teams" class="launches">
     <router-link
       class="launches__link"
       :to="{ name: 'team', params: { id: team.id } }"
-      v-for="team in store.state.teams_all"
+      v-for="team in store.state.teams"
       :key="team.id"
     >
-      <!-- <img src="../../assets/images/tag.svg" class="launch__img" /> -->
       <p class="launch__text">{{ team.name }}</p>
     </router-link>
   </div>
@@ -23,7 +22,7 @@ export default {
 
     // Get data from store
     const getData = async () => {
-      teams.value = store.state.teams_all;
+      teams.value = store.state.teams;
     };
 
     // Run get data function

@@ -1,11 +1,11 @@
 <template>
-  <div class="team" v-if="store.state.teams_active_data">
+  <div class="team" v-if="store.state.teams_active">
     <TheCreateFeedbackModal v-if="store.state.createFeedbackModal" />
     <TheCreateProjectModal v-if="store.state.createProjectModal" />
     <nav class="subnav">
       <div class="top">
         <div class="top__left">
-          <h2 class="title">{{ store.state.teams_active_data.name }}</h2>
+          <h2 class="title">{{ store.state.teams_active.name }}</h2>
         </div>
         <div class="top__right">
           <div class="members">
@@ -46,11 +46,11 @@
         </div>
       </div>
       <div class="bottom">
-        <router-link class="nav__link" :to="{ name: 'projects' }"
-          >Projects</router-link
-        >
         <router-link class="nav__link" :to="{ name: 'feedback' }"
           >Feedback</router-link
+        >
+        <router-link class="nav__link" :to="{ name: 'projects' }"
+          >Projects</router-link
         >
         <router-link class="nav__link" :to="{ name: 'insights' }"
           >Insights</router-link
@@ -66,7 +66,7 @@
 
 <script>
 // import { ref } from "vue";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 import store from "../../store/index";
 import BaseButton from "../../components/global/BaseButton.vue";
 import TheCreateProjectModal from "../../components/single/TheCreateProjectModal.vue";
@@ -88,32 +88,12 @@ export default {
     };
   },
   setup() {
-    // Setup ref to router
-    const router = useRouter();
-
-
-
-    store.dispatch("setTeams");
-
-    // Get data
-    // const getActiveTeamData = async () => {
-    //   // TODO - need to refactor this
-
-
-    const setActiveTeamId = async () => {
-      const team_id = router.currentRoute.value.fullPath.split("/")[2];
-      store.dispatch("setActiveTeamId", {
-        team_id,
-      });
-      // await getActiveTeamData();
-    };
+    store.dispatch("setActiveTeamData");
 
     // TODO - ADD THIS FUNCTIONALITY
     const addMember = () => {
-      console.log('add member')
-    }
-
-    setActiveTeamId();
+      console.log("add member");
+    };
 
     return { store, addMember };
   },
@@ -121,7 +101,7 @@ export default {
     showCreateProjectModal() {
       store.dispatch("showCreateProjectModal");
     },
-        showCreateFeedbackModal() {
+    showCreateFeedbackModal() {
       store.dispatch("showCreateFeedbackModal");
     },
   },
@@ -131,9 +111,8 @@ export default {
 <style lang="scss" scoped>
 .team {
   margin: 0 0 0 220px;
-  width: 100%; 
+  width: 100%;
   overflow-x: hidden;
-  
 }
 // Subnav styling
 .subnav {
@@ -198,10 +177,9 @@ export default {
     }
     .router-link-active {
       font-weight: 600;
-      border-bottom: 2px solid #3253E4;
+      border-bottom: 2px solid #3253e4;
       border-radius: 2px;
     }
   }
 }
-
 </style>

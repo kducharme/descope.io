@@ -30,6 +30,9 @@ export default {
     // Set active user
     const user = supabase.auth.user();
 
+    // Set teams
+    store.dispatch("setTeams");
+
     // Configures the nav component
     if (user) {
       nav.value = NavApp;
@@ -54,6 +57,9 @@ export default {
         store.dispatch("setActiveUserProfile", {
           session,
         });
+
+        // Set teams
+        store.dispatch("setTeams");
 
         // Check if the user has been onboarded
         checkOnboardedStatus(session);

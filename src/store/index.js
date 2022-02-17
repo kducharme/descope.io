@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import { supabase } from "../supabase/init";
+import { useRouter } from "vue-router";
 
 
 export default new Vuex.Store({
@@ -11,15 +12,17 @@ export default new Vuex.Store({
         onboarded: null,
         profile: null,
         organization: null,
+        members: null,
 
         // Team Data
-        teams_all: [],
-        teams_active_id: null,
-        teams_active_data: null,
-        teams_active_members: [],
+        teams: [],
+        teams_active: null,
+        teams_active_feedback: null,
+        teams_active_projects: null,
+        teams_active_members: null,
 
         // Project Data
-        projects: [],
+        // projects: [],
         projects_active: null,
 
         feedback: null,
@@ -38,7 +41,8 @@ export default new Vuex.Store({
     },
     getters: {
         searchFeedback: state => (payload) => {
-            return state.feedback.filter(fb =>
+            console.log(state.teams_active_feedback)
+            return state.teams_active_feedback.filter(fb =>
                 fb.title.toLowerCase().includes(payload.toLowerCase()) ||
                 fb.description.toLowerCase().includes(payload.toLowerCase()) ||
                 fb.projects.name.toLowerCase().includes(payload.toLowerCase()) ||
@@ -58,7 +62,7 @@ export default new Vuex.Store({
             state.activeUser = null;
             state.profile = null;
             state.organization = null;
-            state.teams_all = [];
+            state.teams = [];
             state.teams_active_id = null;
             state.teams_active_data = null;
             state.teams_active_members = [];
@@ -85,14 +89,20 @@ export default new Vuex.Store({
         SET_ORGANIZATION: (state, organization) => {
             state.organization = organization;
         },
+        SET_MEMBERS: (state, members) => {
+            state.members = members;
+        },
         SET_TEAMS: (state, teams) => {
-            state.teams_all = teams;
+            state.teams = teams;
         },
-        SET_ACTIVE_TEAM_ID: (state, team) => {
-            state.teams_active_id = team;
+        SET_ACTIVE_TEAM: (state, id) => {
+            state.teams_active = id;
         },
-        SET_ACTIVE_TEAM_DATA: (state, team) => {
-            state.teams_active_data = team;
+        SET_ACTIVE_TEAM_PROJECTS: (state, projects) => {
+            state.teams_active_projects = projects;
+        },
+        SET_ACTIVE_TEAM_FEEDBACK: (state, feedback) => {
+            state.teams_active_feedback = feedback;
         },
         SET_ACTIVE_TEAM_MEMBERS: (state, members) => {
             state.teams_active_members = members;
@@ -114,8 +124,6 @@ export default new Vuex.Store({
         SET_FEEDBACK_CHART_DATA: (state, data) => {
             state.feedback_chart_debt = data.arrDebtReduced;
             state.feedback_chart_requests = data.arrRequestsReduced;
-
-            console.log(state.feedback_chart_debt)
         },
         SET_ACTIVE_FEEDBACK: (state, feedback) => {
             state.feedback_active = feedback;
@@ -159,6 +167,7 @@ export default new Vuex.Store({
             if (profile[0]) {
                 context.commit("SET_PROFILE", profile);
                 context.commit("SET_ORGANIZATION", profile[0].organization_id);
+                context.dispatch("setMembers")
             }
             context.dispatch("setTeams")
         },
@@ -183,59 +192,133 @@ export default new Vuex.Store({
                         return 0;
                     })
 
-                    context.commit("SET_TEAMS", await teams);
-                    await context.dispatch("setActiveTeamData", { teams })
+                    context.commit("SET_TEAMS", teams);
                 }
             }
-
         },
-        setActiveTeamId(context, payload) {
-            context.commit("SET_ACTIVE_TEAM_ID", payload.team_id);
-        },
-
-        async setActiveFeedback(context, payload) {
-            const moment = require('moment');
-
-            const { data: fb } = await supabase
-                .from("feedback")
-                .select("*")
-                .eq("id", payload.feedback_id);
-
-            const activeFeedback = fb[0];
-
-            const { data: profile } = await supabase
+        async setMembers(context) {
+            const { data: members } = await supabase
                 .from("profiles")
                 .select("*")
-                .eq("id", activeFeedback.created_by);
+                .eq("organization_id", context.state.organization);
 
-            activeFeedback._addedBy = profile[0].firstname + " " + profile[0].lastname;
-            activeFeedback._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
-            activeFeedback._dateAdded = moment(activeFeedback.created_at).startOf('minute').fromNow();
-            if (activeFeedback.priority === "High") { activeFeedback._priority = 3; }
-            if (activeFeedback.priority === "Med") { activeFeedback._priority = 2; }
-            if (activeFeedback.priority === "Low") { activeFeedback._priority = 1; }
+            context.commit("SET_MEMBERS", members);
+        },
 
-            if (activeFeedback.project_id) {
-                const { data: project } = await supabase
-                    .from("projects")
-                    .select("*")
-                    .eq("id", activeFeedback.project_id);
+        async setActiveTeamData(context) {
+            // Setup ref to router
+            const router = useRouter();
+            const team_id = router.currentRoute.value.fullPath.split("/")[2];
 
-                activeFeedback._project = project[0];
-            }
+            const { data: teamData } = await supabase
+                .from('teams')
+                .select('*,feedback(*)')
+                .eq("id", team_id);
 
-            // Get images and add it to the feedback object
+            const members = teamData[0].members
 
-            if (activeFeedback.image) {
-                const { data: img } = await supabase.storage
-                    .from("feedback")
-                    .download(`post/${activeFeedback.image}`)
+            context.commit("SET_ACTIVE_TEAM", teamData[0]);
 
-                const url = URL.createObjectURL(await img);
-                activeFeedback._image = url;
-            }
+            context.dispatch("setActiveTeamProjects")
+            context.dispatch("setActiveTeamFeedback")
+            context.dispatch("setActiveTeamMembers", { members })
+        },
 
-            context.commit("SET_ACTIVE_FEEDBACK", await activeFeedback)
+        async setActiveTeamFeedback(context) {
+            const moment = require('moment')
+            const arrDebt = [];
+            const arrRequests = [];
+
+            const { data: allFeedback } = await supabase
+                .from('feedback')
+                .select('*,profiles(*),projects(*)')
+                .eq("team_id", context.state.teams_active.id);
+
+            allFeedback.map(fb => {
+                // TODO - Get image from storage and add to feedback object
+
+                // Hydrate the feedback object
+                fb._addedBy = fb.profiles.firstname + " " + fb.profiles.lastname;
+                fb._initials = fb.profiles.firstname.charAt(0) + fb.profiles.lastname.charAt(0);
+                fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
+                fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
+
+
+                if (fb.category.includes("issue")) {
+                    const obj = {};
+                    obj["x"] = fb._date;
+                    obj["y"] = 1;
+                    arrDebt.push(obj)
+                }
+                if (fb.category.includes("request")) {
+                    const obj = {};
+                    obj["x"] = fb._date;
+                    obj["y"] = 1;
+                    arrRequests.push(obj)
+                }
+            })
+
+            let arrDebtReduced = arrDebt.reduce((acc, curr) => {
+                let item = acc.find(item => item.x === curr.x);
+
+                if (item) {
+                    item.y += 1;
+                } else {
+                    acc.push(curr);
+                }
+                return acc;
+            }, []);
+
+            let arrRequestsReduced = arrRequests.reduce((acc, curr) => {
+                let item = acc.find(item => item.x === curr.x);
+
+                if (item) {
+                    item.total += 1;
+                } else {
+                    acc.push(curr);
+                }
+
+                return acc;
+            }, []);
+
+            allFeedback.sort((a, b) => {
+                if (a.votes > b.votes) { return -1; }
+                if (a.votes < b.votes) { return 1; }
+                if (a._priority < b._priority) { return 1; }
+                if (a._priority > b._priority) { return -1; }
+                return 0;
+            })
+
+            context.commit("SET_ACTIVE_TEAM_FEEDBACK", allFeedback)
+            context.commit("SET_FEEDBACK_CHART_DATA", { arrDebtReduced, arrRequestsReduced })
+        },
+
+        async setActiveTeamMembers(context, payload) {
+
+            const memberIds = payload.members;
+
+            const { data: profiles } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("organization_id", context.state.organization);
+
+            profiles.forEach(p => {
+                p._initials = p.firstname.charAt(0) + p.lastname.charAt(0);
+            })
+
+            const members = profiles.filter(p => memberIds.includes(p.id));
+            context.commit("SET_ACTIVE_TEAM_MEMBERS", members);
+        },
+
+
+        async setActiveTeamProjects(context) {
+
+            const { data: projects } = await supabase
+                .from("projects")
+                .select("*")
+                .eq("team_id", context.state.teams_active.id);
+
+            context.commit("SET_ACTIVE_TEAM_PROJECTS", projects);
         },
 
         async getComments(context, payload) {
@@ -258,120 +341,6 @@ export default new Vuex.Store({
 
             context.commit("SET_ACTIVE_COMMENTS", allComments)
         },
-
-        setActiveTeamData(context, payload) {
-            payload.teams.forEach((team) => {
-                if (team.id == context.state.teams_active_id) {
-                    context.commit("SET_ACTIVE_TEAM_DATA", team);
-                }
-            })
-            context.dispatch("setActiveTeamMembers")
-            context.dispatch("setAllTeamProjects")
-            context.dispatch("getAllTeamFeedback")
-        },
-        async setActiveTeamMembers(context) {
-            if (context.state.teams_active_data) {
-
-                const teamMemberIds = context.state.teams_active_data.members;
-
-                const { data: profiles } = await supabase
-                    .from("profiles")
-                    .select("*")
-                    .eq("organization_id", context.state.organization);
-
-                profiles.forEach(p => {
-                    p._initials = p.firstname.charAt(0) + p.lastname.charAt(0);
-                })
-
-                const members = profiles.filter(p => teamMemberIds.includes(p.id));
-
-                context.commit("SET_ACTIVE_TEAM_MEMBERS", members);
-            }
-        },
-        async setAllTeamProjects(context) {
-            if (context.state.teams_active_data) {
-
-                const { data: projects } = await supabase
-                    .from("projects")
-                    .select("*")
-                    .eq("team_id", context.state.teams_active_data.id);
-
-                context.commit("SET_PROJECTS", projects);
-            }
-        },
-        async getAllTeamFeedback(context) {
-            const moment = require('moment')
-            const arrDebt = [];
-            const arrRequests = [];
-
-
-            const { data: allFeedback } = await supabase
-                .from('feedback')
-                .select('*,profiles(*),projects(*)')
-                .eq("team_id", context.state.teams_active_data.id);
-
-            // console.log(allFeedback)
-
-            allFeedback.map(fb => {
-                // TODO - Get image from storage and add to feedback object
-                
-                // Hydrate the feedback object
-                fb._addedBy = fb.profiles.firstname + " " + fb.profiles.lastname;
-                fb._initials = fb.profiles.firstname.charAt(0) + fb.profiles.lastname.charAt(0);
-                fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
-                fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
-
-
-                if (fb.category.includes("issue")) {
-                    const obj = {};
-                    obj["x"] = fb._date;
-                    obj["y"] = 1;
-                    arrDebt.push(obj)
-                }
-                // if (fb.category.includes("request")) {
-                //     const obj = {};
-                //     obj["x"] = fb._date;
-                //     obj["y"] = 1;
-                //     arrRequests.push(obj)
-                // }
-            })
-
-            let arrDebtReduced = arrDebt.reduce((acc, curr) => {
-                let item = acc.find(item => item.x === curr.x);
-
-                if (item) {
-                    item.y += 1;
-                } else {
-                    acc.push(curr);
-                }
-                return acc;
-            }, []);
-
-            // console.log(arrDebtReduced)
-
-            let arrRequestsReduced = arrRequests.reduce((acc, curr) => {
-                let item = acc.find(item => item.date === curr.date && item.type === curr.type);
-
-                if (item) {
-                    item.total += 1;
-                } else {
-                    acc.push(curr);
-                }
-
-                return acc;
-            }, []);
-
-            allFeedback.sort((a, b) => {
-                if (a.votes > b.votes) { return -1; }
-                if (a.votes < b.votes) { return 1; }
-                if (a._priority < b._priority) { return 1; }
-                if (a._priority > b._priority) { return -1; }
-                return 0;
-            })
-
-            context.commit("SET_ALL_FEEDBACK", allFeedback)
-            context.commit("SET_FEEDBACK_CHART_DATA", { arrDebtReduced, arrRequestsReduced })
-        },
         async setActiveProject(context, payload) {
 
             const { data: project } = await supabase
@@ -381,6 +350,50 @@ export default new Vuex.Store({
 
             context.commit("SET_ACTIVE_PROJECT", project[0]);
         },
+        // async setActiveFeedback(context, payload) {
+        //     const moment = require('moment');
+
+        //     const { data: fb } = await supabase
+        //         .from("feedback")
+        //         .select("*")
+        //         .eq("id", payload.feedback_id);
+
+        //     const activeFeedback = fb[0];
+
+        //     const { data: profile } = await supabase
+        //         .from("profiles")
+        //         .select("*")
+        //         .eq("id", activeFeedback.created_by);
+
+        //     activeFeedback._addedBy = profile[0].firstname + " " + profile[0].lastname;
+        //     activeFeedback._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
+        //     activeFeedback._dateAdded = moment(activeFeedback.created_at).startOf('minute').fromNow();
+        //     if (activeFeedback.priority === "High") { activeFeedback._priority = 3; }
+        //     if (activeFeedback.priority === "Med") { activeFeedback._priority = 2; }
+        //     if (activeFeedback.priority === "Low") { activeFeedback._priority = 1; }
+
+        //     if (activeFeedback.project_id) {
+        //         const { data: project } = await supabase
+        //             .from("projects")
+        //             .select("*")
+        //             .eq("id", activeFeedback.project_id);
+
+        //         activeFeedback._project = project[0];
+        //     }
+
+        //     // Get images and add it to the feedback object
+
+        //     if (activeFeedback.image) {
+        //         const { data: img } = await supabase.storage
+        //             .from("feedback")
+        //             .download(`post/${activeFeedback.image}`)
+
+        //         const url = URL.createObjectURL(await img);
+        //         activeFeedback._image = url;
+        //     }
+
+        //     context.commit("SET_ACTIVE_FEEDBACK", await activeFeedback)
+        // },
 
         // RESET ACTIONS
         resetState(context) {

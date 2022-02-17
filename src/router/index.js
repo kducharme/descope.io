@@ -59,7 +59,7 @@ const routes = [
     path: "/team/:id",
     name: "team",
     component: Team,
-    redirect: { name: 'projects' },
+    redirect: { name: 'feedback' },
     children: [
       {
         path: "insights",
