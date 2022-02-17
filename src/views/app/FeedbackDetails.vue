@@ -105,7 +105,6 @@ export default {
 
     // Get data
     const setActiveFeedbackData = async () => {
-      const team_id = router.currentRoute.value.fullPath.split("/")[2];
       const feedback_id = router.currentRoute.value.fullPath.split("/")[4];
       store.dispatch("setActiveFeedback", {
         feedback_id,
@@ -113,10 +112,8 @@ export default {
       store.dispatch("getComments", {
         feedback_id,
       });
-      store.dispatch("setActiveTeamId", {
-        team_id,
-      });
-    };
+      store.dispatch("setActiveTeamData");
+    }
 
     setActiveFeedbackData();
 
@@ -125,7 +122,7 @@ export default {
       router.push({
         name: "feedback",
         params: {
-          id: store.state.teams_active_data.id,
+          id: store.state.teams_active.id,
         },
       });
     };

@@ -64,7 +64,7 @@
           <select name="projects" id="project" v-model="feedbackProject">
             <option value="" selected id="placeholder">Select a team</option>
             <option
-              v-for="project in store.state.projects"
+              v-for="project in store.state.teams_active_projects"
               :key="project.id"
               :value="project"
             >
@@ -219,7 +219,7 @@ export default {
 
             // Supporting data
             organization_id: store.state.organization,
-            team_id: store.state.teams_active_data.id,
+            team_id: store.state.teams_active.id,
             project_id: feedbackProject.value,
             created_by: store.state.activeUser.id,
           },

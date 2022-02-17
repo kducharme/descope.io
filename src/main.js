@@ -1,10 +1,8 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import VueChartJs from 'vue-chartjs';
 
-createApp(App, VueChartJs)
+createApp(App)
   .use(router)
-  .use(VueChartJs)
   .mount("#app");
  

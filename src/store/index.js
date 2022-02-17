@@ -41,7 +41,6 @@ export default new Vuex.Store({
     },
     getters: {
         searchFeedback: state => (payload) => {
-            console.log(state.teams_active_feedback)
             return state.teams_active_feedback.filter(fb =>
                 fb.title.toLowerCase().includes(payload.toLowerCase()) ||
                 fb.description.toLowerCase().includes(payload.toLowerCase()) ||
@@ -226,8 +225,6 @@ export default new Vuex.Store({
 
         async setActiveTeamFeedback(context) {
             const moment = require('moment')
-            const arrDebt = [];
-            const arrRequests = [];
 
             const { data: allFeedback } = await supabase
                 .from('feedback')
@@ -242,44 +239,7 @@ export default new Vuex.Store({
                 fb._initials = fb.profiles.firstname.charAt(0) + fb.profiles.lastname.charAt(0);
                 fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
                 fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
-
-
-                if (fb.category.includes("issue")) {
-                    const obj = {};
-                    obj["x"] = fb._date;
-                    obj["y"] = 1;
-                    arrDebt.push(obj)
-                }
-                if (fb.category.includes("request")) {
-                    const obj = {};
-                    obj["x"] = fb._date;
-                    obj["y"] = 1;
-                    arrRequests.push(obj)
-                }
             })
-
-            let arrDebtReduced = arrDebt.reduce((acc, curr) => {
-                let item = acc.find(item => item.x === curr.x);
-
-                if (item) {
-                    item.y += 1;
-                } else {
-                    acc.push(curr);
-                }
-                return acc;
-            }, []);
-
-            let arrRequestsReduced = arrRequests.reduce((acc, curr) => {
-                let item = acc.find(item => item.x === curr.x);
-
-                if (item) {
-                    item.total += 1;
-                } else {
-                    acc.push(curr);
-                }
-
-                return acc;
-            }, []);
 
             allFeedback.sort((a, b) => {
                 if (a.votes > b.votes) { return -1; }
@@ -290,7 +250,6 @@ export default new Vuex.Store({
             })
 
             context.commit("SET_ACTIVE_TEAM_FEEDBACK", allFeedback)
-            context.commit("SET_FEEDBACK_CHART_DATA", { arrDebtReduced, arrRequestsReduced })
         },
 
         async setActiveTeamMembers(context, payload) {
@@ -350,50 +309,50 @@ export default new Vuex.Store({
 
             context.commit("SET_ACTIVE_PROJECT", project[0]);
         },
-        // async setActiveFeedback(context, payload) {
-        //     const moment = require('moment');
+        async setActiveFeedback(context, payload) {
+            const moment = require('moment');
 
-        //     const { data: fb } = await supabase
-        //         .from("feedback")
-        //         .select("*")
-        //         .eq("id", payload.feedback_id);
+            const { data: fb } = await supabase
+                .from("feedback")
+                .select("*")
+                .eq("id", payload.feedback_id);
 
-        //     const activeFeedback = fb[0];
+            const activeFeedback = fb[0];
 
-        //     const { data: profile } = await supabase
-        //         .from("profiles")
-        //         .select("*")
-        //         .eq("id", activeFeedback.created_by);
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id", activeFeedback.created_by);
 
-        //     activeFeedback._addedBy = profile[0].firstname + " " + profile[0].lastname;
-        //     activeFeedback._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
-        //     activeFeedback._dateAdded = moment(activeFeedback.created_at).startOf('minute').fromNow();
-        //     if (activeFeedback.priority === "High") { activeFeedback._priority = 3; }
-        //     if (activeFeedback.priority === "Med") { activeFeedback._priority = 2; }
-        //     if (activeFeedback.priority === "Low") { activeFeedback._priority = 1; }
+            activeFeedback._addedBy = profile[0].firstname + " " + profile[0].lastname;
+            activeFeedback._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
+            activeFeedback._dateAdded = moment(activeFeedback.created_at).startOf('minute').fromNow();
+            if (activeFeedback.priority === "High") { activeFeedback._priority = 3; }
+            if (activeFeedback.priority === "Med") { activeFeedback._priority = 2; }
+            if (activeFeedback.priority === "Low") { activeFeedback._priority = 1; }
 
-        //     if (activeFeedback.project_id) {
-        //         const { data: project } = await supabase
-        //             .from("projects")
-        //             .select("*")
-        //             .eq("id", activeFeedback.project_id);
+            if (activeFeedback.project_id) {
+                const { data: project } = await supabase
+                    .from("projects")
+                    .select("*")
+                    .eq("id", activeFeedback.project_id);
 
-        //         activeFeedback._project = project[0];
-        //     }
+                activeFeedback._project = project[0];
+            }
 
-        //     // Get images and add it to the feedback object
+            // Get images and add it to the feedback object
 
-        //     if (activeFeedback.image) {
-        //         const { data: img } = await supabase.storage
-        //             .from("feedback")
-        //             .download(`post/${activeFeedback.image}`)
+            if (activeFeedback.image) {
+                const { data: img } = await supabase.storage
+                    .from("feedback")
+                    .download(`post/${activeFeedback.image}`)
 
-        //         const url = URL.createObjectURL(await img);
-        //         activeFeedback._image = url;
-        //     }
+                const url = URL.createObjectURL(await img);
+                activeFeedback._image = url;
+            }
 
-        //     context.commit("SET_ACTIVE_FEEDBACK", await activeFeedback)
-        // },
+            context.commit("SET_ACTIVE_FEEDBACK", await activeFeedback)
+        },
 
         // RESET ACTIONS
         resetState(context) {

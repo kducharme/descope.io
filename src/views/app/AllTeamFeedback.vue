@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page" v-if="!loading">
     <div class="content">
       <BaseEmptyState
         :title="empty_title"
@@ -27,10 +27,7 @@
                     ).length
                   }}
                 </p>
-                <LineChart
-                  :chartData="store.state.feedback_chart_debt"
-                  :options="options"
-                />
+                <BaseLineChart />
               </div>
               <div class="data">
                 <p class="label">Feature requests</p>
@@ -41,6 +38,7 @@
                     ).length
                   }}
                 </p>
+                <BaseLineChart />
               </div>
             </div>
           </div>
@@ -198,27 +196,22 @@
 
 <script>
 import { ref } from "vue";
+import { supabase } from "../../supabase/init";
 import store from "../../store/index";
 import { useRouter } from "vue-router";
 import BaseEmptyState from "../../components/global/BaseEmptyState.vue";
-// import BaseLineChart from "../../components/global/BaseLineChart.vue";
-
-// import { defineComponent } from 'vue';
-import { LineChart } from "vue-chart-3";
-import { Chart, registerables } from "chart.js";
-
-Chart.register(...registerables);
+import BaseLineChart from "../../components/global/BaseLineChart.vue";
 
 export default {
   name: "All Team Feedback",
   components: {
     BaseEmptyState,
-    LineChart,
+    BaseLineChart,
   },
 
   data() {
     return {
-      loading: true,
+      loading: false,
       search: "",
       feedback: [],
       empty_title: "Add your feedback",
@@ -232,47 +225,13 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       },
-      chartData: [],
+      debtChartData: [],
     };
   },
   setup() {
     // Set variables
     const router = useRouter();
     const datacollection = ref(null);
-
-    // const data = store.state.feedback_chart_debt;
-
-    const testData = {
-      labels: ["Paris", "Nîmes", "Toulon", "Perpignan", "Autre"],
-      datasets: [
-        {
-          data: [30, 40, 60, 70, 5],
-          backgroundColor: [
-            "#77CEFF",
-            "#0079AF",
-            "#123E6B",
-            "#97B0C4",
-            "#A5C8ED",
-          ],
-        },
-      ],
-    };
-
-    const options = ref({
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false,
-          position: "top",
-        },
-        title: {
-          display: false,
-        },
-      },
-    });
-
-    // setup charts
-    // this.renderChart(data, options);
 
     const routeToFeedbackDetails = (id) => {
       router.push({ name: "feedbackDetails", params: { feedbackId: id } });
@@ -283,7 +242,11 @@ export default {
       routeToFeedbackDetails(id);
     };
 
-    return { store, setActiveFeedback, datacollection, testData, options };
+    return {
+      store,
+      setActiveFeedback,
+      datacollection,
+    };
   },
   methods: {
     showCreateFeedbackModal() {
@@ -294,8 +257,62 @@ export default {
     },
   },
   mounted() {
-    this.chartData = store.state.feedback_chart_debt;
-    console.log(this.chart);
+    // Set variables
+    const router = useRouter();
+
+    const getChartData = async () => {
+      const arrDebt = [];
+      const arrRequests = [];
+
+      const { data: allFeedback } = await supabase
+        .from("feedback")
+        .select("*,profiles(*),projects(*)")
+        .eq("team_id", router.currentRoute.value.fullPath.split("/")[2]);
+
+      allFeedback.map((fb) => {
+        const moment = require("moment");
+        fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
+
+        if (fb.category.includes("issue")) {
+          const obj = {};
+          obj["date"] = fb._date;
+          obj["count"] = 1;
+          arrDebt.push(obj);
+        }
+        if (fb.category.includes("request")) {
+          const obj = {};
+          obj["date"] = fb._date;
+          obj["count"] = 1;
+          arrRequests.push(obj);
+        }
+      });
+
+      let arrDebtReduced = arrDebt.reduce((acc, curr) => {
+        let item = acc.find((item) => item.date === curr.date);
+
+        if (item) {
+          item.count += 1;
+        } else {
+          acc.push(curr);
+        }
+        return acc;
+      }, []);
+
+      // let arrRequestsReduced = arrRequests.reduce((acc, curr) => {
+      //   let item = acc.find((item) => item.date === curr.date);
+
+      //   if (item) {
+      //     item.count += 1;
+      //   } else {
+      //     acc.push(curr);
+      //   }
+
+      //   return acc;
+      // }, []);
+
+      this.debtChartData = arrDebtReduced;
+    };
+    getChartData();
   },
 };
 </script>
@@ -355,6 +372,7 @@ export default {
             .metric {
               font-size: 24px;
               font-weight: 500;
+              margin: 0 0 12px 0;
             }
           }
           .data:first-child {
