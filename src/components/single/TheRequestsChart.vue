@@ -15,6 +15,11 @@ export default {
       chartData: chartData,
     };
   },
+  setup() {
+      
+
+
+  },
   mounted() {
     const ctx = document.getElementById("requests-chart");
     new Chart(ctx, this.chartData);
@@ -25,7 +30,8 @@ export default {
 <style lang="scss" scoped>
 
 .chart {
-    height: 56px;
+    height: 72px;
+    max-width: 232px;
 }
 
 </style>

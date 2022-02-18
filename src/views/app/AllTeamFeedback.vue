@@ -339,12 +339,9 @@ export default {
     flex-direction: row;
 
     .content__bottom--left {
-      width: 200px;
+      width: 232px;
       margin: 0 12px 0 0;
       height: 100%;
-      position: -webkit-sticky; /* Safari */
-      position: sticky;
-      top: 24px;
       .card {
         box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
         background: white;
@@ -353,11 +350,10 @@ export default {
       .summary {
         display: flex;
         flex-direction: column;
-        padding: 16px;
+        padding: 20px;
         .title {
           font-size: 15px;
           font-weight: 600;
-          margin: 0 0 8px 0;
         }
         .analytics {
           .data {

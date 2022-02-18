@@ -1,65 +1,8 @@
-// import { supabase } from "../../supabase/init";
+let start = new Date(),
+    end = new Date();
 
-// Set variables
-// let debtChartData = [];
-// let requestsChartData = [];
-
-const getChartData = async () => {
-    // const arrDebt = [];
-    // const arrRequests = [];
-
-    // const { data: allFeedback } = await supabase
-    //     .from("feedback")
-    //     .select("*,profiles(*),projects(*)")
-    //     .eq("team_id", window.location.pathname.split("/")[2]);
-
-    // allFeedback.map((fb) => {
-    //     const moment = require("moment");
-    //     fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
-
-    //     if (fb.category.includes("issue")) {
-    //         const obj = {};
-    //         obj["date"] = fb._date;
-    //         obj["count"] = 1;
-    //         arrDebt.push(obj);
-    //     }
-    //     if (fb.category.includes("request")) {
-    //         const obj = {};
-    //         obj["date"] = fb._date;
-    //         obj["count"] = 1;
-    //         arrRequests.push(obj);
-    //     }
-    // });
-
-    // debtChartData = arrDebt.reduce((acc, curr) => {
-    //     let item = acc.find((item) => item.date === curr.date);
-
-    //     if (item) {
-    //         item.count += 1;
-    //     } else {
-    //         acc.push(curr);
-    //     }
-    //     return acc;
-    // }, []);
-
-    // requestsChartData = arrRequests.reduce((acc, curr) => {
-    //     let item = acc.find((item) => item.date === curr.date);
-
-    //     if (item) {
-    //         item.count += 1;
-    //     } else {
-    //         acc.push(curr);
-    //     }
-
-    //     return acc;
-    // }, []);
-
-    // formatChartData();
-
-    // console.log(debtChartData);
-    // console.log(requestsChartData);
-};
-getChartData();
+start.setDate(start.getDate() - 7); // set to 'now' minus 7 days.
+start.setHours(0, 0, 0, 0); // set to midnight.
 
 export const chartData = {
     type: "line",
@@ -109,6 +52,12 @@ export const chartData = {
                         display: false,
                         beginAtZero: true,
                         padding: 0
+                    },
+                    type: "time",
+                    time: {
+                        min: start,
+                        max: end,
+                        unit: "day"
                     }
                 },
             ]
