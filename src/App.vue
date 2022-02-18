@@ -53,6 +53,10 @@ export default {
           session,
         });
 
+        store.dispatch("setOrganization", {
+          session,
+        });
+
         // Set active user profile
         store.dispatch("setActiveUserProfile", {
           session,

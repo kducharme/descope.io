@@ -165,10 +165,17 @@ export default new Vuex.Store({
 
             if (profile[0]) {
                 context.commit("SET_PROFILE", profile);
-                context.commit("SET_ORGANIZATION", profile[0].organization_id);
                 context.dispatch("setMembers")
             }
             context.dispatch("setTeams")
+        },
+        async setOrganization(context, payload) {
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id", payload.session.user.id);
+
+            context.commit("SET_ORGANIZATION", profile[0].organization_id);
         },
         async setTeams(context) {
             if (context.state.organization) {
@@ -252,20 +259,25 @@ export default new Vuex.Store({
             context.commit("SET_ACTIVE_TEAM_FEEDBACK", allFeedback)
         },
 
-        async setActiveTeamMembers(context, payload) {
+        async setActiveTeamMembers(context) {
 
-            const memberIds = payload.members;
+            // const memberIds = payload.members;
 
-            const { data: profiles } = await supabase
+            const { data: profile } = await supabase
                 .from("profiles")
                 .select("*")
-                .eq("organization_id", context.state.organization);
+                .eq("id", context.state.activeUser.id);
 
-            profiles.forEach(p => {
+                const { data: allMembers } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("organization_id", profile[0].organization_id);
+
+            allMembers.forEach(p => {
                 p._initials = p.firstname.charAt(0) + p.lastname.charAt(0);
             })
 
-            const members = profiles.filter(p => memberIds.includes(p.id));
+            const members = allMembers.filter(m => context.state.teams_active.members.includes(m.id));
             context.commit("SET_ACTIVE_TEAM_MEMBERS", members);
         },
 

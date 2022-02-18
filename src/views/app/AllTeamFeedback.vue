@@ -27,7 +27,7 @@
                     ).length
                   }}
                 </p>
-                <BaseLineChart />
+                <TheDebtChart />
               </div>
               <div class="data">
                 <p class="label">Feature requests</p>
@@ -38,7 +38,7 @@
                     ).length
                   }}
                 </p>
-                <BaseLineChart />
+                <TheRequestsChart />
               </div>
             </div>
           </div>
@@ -200,13 +200,15 @@ import { supabase } from "../../supabase/init";
 import store from "../../store/index";
 import { useRouter } from "vue-router";
 import BaseEmptyState from "../../components/global/BaseEmptyState.vue";
-import BaseLineChart from "../../components/global/BaseLineChart.vue";
+import TheDebtChart from "../../components/single/TheDebtChart.vue";
+import TheRequestsChart from "../../components/single/TheRequestsChart.vue";
 
 export default {
   name: "All Team Feedback",
   components: {
     BaseEmptyState,
-    BaseLineChart,
+    TheDebtChart,
+    TheRequestsChart,
   },
 
   data() {
@@ -362,7 +364,7 @@ export default {
             display: flex;
             flex-direction: column;
             border-top: 1px solid #dbdde6;
-            padding: 24px 0;
+            padding: 24px 0 16px 0;
             .label {
               font-size: 12px;
               color: #636c92;
@@ -370,7 +372,7 @@ export default {
               margin: 0 0 8px;
             }
             .metric {
-              font-size: 24px;
+              font-size: 28px;
               font-weight: 500;
               margin: 0 0 12px 0;
             }

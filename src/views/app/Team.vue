@@ -88,6 +88,7 @@ export default {
     };
   },
   setup() {
+    
     store.dispatch("setActiveTeamData");
 
     // TODO - ADD THIS FUNCTIONALITY

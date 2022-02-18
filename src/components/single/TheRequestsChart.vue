@@ -1,22 +1,22 @@
 <template>
   <div>
-    <canvas id="debt-chart" class="chart"></canvas>
+    <canvas id="requests-chart" class="chart"></canvas>
   </div>
 </template>
 
 <script>
 import Chart from "chart.js";
-import chartData from "./chart-data.js";
+import chartData from "../global/chart-data.js";
 
 export default {
-  name: "PlanetChart",
+  name: "TheRequestsChart",
   data() {
     return {
       chartData: chartData,
     };
   },
   mounted() {
-    const ctx = document.getElementById("debt-chart");
+    const ctx = document.getElementById("requests-chart");
     new Chart(ctx, this.chartData);
   },
 };
@@ -25,7 +25,7 @@ export default {
 <style lang="scss" scoped>
 
 .chart {
-    height: 80px;
+    height: 56px;
 }
 
 </style>
