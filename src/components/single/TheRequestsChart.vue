@@ -41,9 +41,10 @@ export default {
                 yAxisKey: "y",
                 xAxisKey: "x",
               },
-              backgroundColor: "#C9D1F8",
-              borderColor: "#3253e4",
+              backgroundColor: "#F1F1F9",
+              borderColor: "#8C8CCF",
               borderWidth: 3,
+              pointRadius: 2,
             },
           ],
         },
@@ -51,11 +52,8 @@ export default {
           layout: {
             padding: {
               top: 5,
-              right: 0,
-            },
-            margin: {
-              top: 5,
-              right: 0,
+              right: 3,
+              left: 3,
             },
           },
           legend: {

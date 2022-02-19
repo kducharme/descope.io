@@ -501,10 +501,10 @@ export default {
               font-weight: 500;
             }
             .category__issue {
-              background: #f1c7cc;
+              background: #FBDADC;
             }
             .category__request {
-              background: #eeeff3;
+              background: #E2E2F3;
             }
           }
         }
