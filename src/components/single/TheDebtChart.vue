@@ -20,7 +20,6 @@ export default {
   setup() {
     // Setup variables and data
     const debtChartData = ref(null);
-    const chartData = ref(null);
 
     const renderChart = () => {
       // let start = new Date(),
@@ -102,27 +101,28 @@ export default {
     };
 
     const getChartData = async () => {
-      const arrDebt = [];
+      // const arrDebt = [];
       const moment = require("moment");
 
       const timePeriod = [0, 1, 2, 3, 4, 5, 6];
-      // const chartData = []
+      const chartData = []
 
-      timePeriod.forEach(t => {
+      timePeriod.forEach((t) => {
         let date = new Date();
-        date.setDate(date.getDate() - t)
-        date = moment(date).format("MMM D, YYYY")
+        date.setDate(date.getDate() - t);
+        date = moment(date).format("MMM D, YYYY");
 
         const dateObject = {
-          "x": date,
-          "y": 0
-        }
+          x: date,
+          y: 0,
+        };
 
-        chartData.value.push(dateObject)
+        chartData.push(dateObject);
+      });
 
-      })
+      debtChartData.value = chartData;
 
-      console.log(chartData.value)
+      console.log(debtChartData.value)
 
       const { data: allFeedback } = await supabase
         .from("feedback")
@@ -134,27 +134,34 @@ export default {
         fb._date = moment(fb.created_at).format("MMM D, YYYY");
 
         if (fb.category.includes("issue")) {
-          const obj = {};
-          obj["id"] = fb.id;
-          obj["x"] = fb._date;
-          obj["y"] = 1;
-          arrDebt.push(obj);
+
+          debtChartData.value.forEach(date => {
+            if (date.x === fb._date) {
+              return date.y += 1;
+            }
+          })
+
+          // const obj = {};
+          // obj["id"] = fb.id;
+          // obj["x"] = fb._date;
+          // obj["y"] = 1;
+          // arrDebt.push(obj);
         }
       });
 
-      debtChartData.value = arrDebt.reduce((acc, curr) => {
-        let item = acc.find((item) => item.x === curr.x);
-        if (item) {
-          item.y += 1;
-        } else {
-          acc.push(curr);
-        }
-        return acc;
-      }, []);
+      // debtChartData.value = arrDebt.reduce((acc, curr) => {
+      //   let item = acc.find((item) => item.x === curr.x);
+      //   if (item) {
+      //     item.y += 1;
+      //   } else {
+      //     acc.push(curr);
+      //   }
+      //   return acc;
+      // }, []);
 
-      debtChartData.value.sort(function (a, b) {
-        return new Date(b.x) - new Date(a.x);
-      });
+      // debtChartData.value.sort(function (a, b) {
+      //   return new Date(b.x) - new Date(a.x);
+      // });
 
       renderChart();
     };
