@@ -1,7 +1,9 @@
 <template>
   <div v-show="loaded">
     <p class="weekly">{{ totalRequestCount }} added in the last 7 days</p>
+    <div class="chartContainer">
     <canvas id="requests-chart" class="chart"></canvas>
+    </div>
   </div>
 </template>
 
@@ -39,11 +41,12 @@ export default {
                 yAxisKey: "y",
                 xAxisKey: "x",
               },
-              backgroundColor: "#E7E8EE",
-              borderColor: "#424861",
+              backgroundColor: "#E6E7F0",
+              borderColor: "#6E75A8",
               borderWidth: 3,
-              pointRadius: 0,
-              pointBackgroundColor: "#424861",
+              pointRadius: 1.5,
+              pointBackgroundColor: "#666DA3",
+              pointHoverBackgroundColor: "#666DA3",
               // pointBorderColor: '#FFF',
             },
           ],
@@ -60,7 +63,8 @@ export default {
             display: false,
             position: "bottom",
           },
-          maintainAspectRatio: true,
+          maintainAspectRatio: false,
+          responsive: false,
           elements: {
             point: {
               radius: 1,
@@ -153,14 +157,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.chartContainer {
+  height: 64px;
+  width: 192px;
+}
+
 .chart {
-  height: 80px;
+  height: 64px;
+  width: 192px;
   margin-left: -4px;
+  margin-bottom: 8px;
 }
 
 .weekly {
   color: #636c92;
   font-size: 12px;
-  margin: 8px 0 16px 0;
+  margin: 8px 0 16px 0px;
 }
 </style>

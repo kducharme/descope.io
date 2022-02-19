@@ -216,13 +216,12 @@ export default new Vuex.Store({
 
             // Get team id
             const team_id = window.location.pathname.split("/")[2];
-            const team_id_backup = router.currentRoute.value.fullPath.split("/")[2];
-
+            
             if (team_id) {
                 const { data: teamData } = await supabase
-                    .from('teams')
-                    .select('*,feedback(*)')
-                    .eq("id", team_id);
+                .from('teams')
+                .select('*,feedback(*)')
+                .eq("id", team_id);
                 const members = teamData[0].members
                 context.commit("SET_ACTIVE_TEAM", teamData[0]);
                 context.dispatch("setActiveTeamProjects")
@@ -230,6 +229,7 @@ export default new Vuex.Store({
                 context.dispatch("setActiveTeamMembers", { members })
             }
             else {
+                const team_id_backup = router.currentRoute.value.fullPath.split("/")[2];
                 const { data: teamData } = await supabase
                     .from('teams')
                     .select('*,feedback(*)')

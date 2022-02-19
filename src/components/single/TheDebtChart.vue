@@ -1,7 +1,9 @@
 <template>
   <div v-show="loaded">
-    <p class="weekly" >{{ totalDebtCount }} added in the last 7 days</p>
-    <canvas id="debt-chart" class="chart"></canvas>
+    <p class="weekly">{{ totalDebtCount }} added in the last 7 days</p>
+    <div class="chartContainer">
+      <canvas id="debt-chart" class="chart"></canvas>
+    </div>
   </div>
 </template>
 
@@ -45,11 +47,12 @@ export default {
                 yAxisKey: "y",
                 xAxisKey: "x",
               },
-              backgroundColor: "#FAF1F0",
-              borderColor: "#C05746",
+              backgroundColor: "#F3E6E2",
+              borderColor: "#994636",
               borderWidth: 3,
-              pointRadius: 0,
+              pointRadius: 1.5,
               pointBackgroundColor: "#EF767A",
+              pointHoverBackgroundColor: "#883E30",
               // pointBorderColor: '#FFF',
             },
           ],
@@ -66,7 +69,8 @@ export default {
             display: false,
             position: "bottom",
           },
-          maintainAspectRatio: true,
+          maintainAspectRatio: false,
+          responsive: false,
           elements: {
             point: {
               radius: 1,
@@ -160,15 +164,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.chartContainer {
+  height: 64px;
+  width: 192px;
+}
+
 .chart {
-  height: 80px;
+  height: 64px;
+  width: 192px;
   margin-left: -4px;
+  margin-bottom: 8px;
 }
 
 .weekly {
   color: #636c92;
   font-size: 12px;
-  margin: 8px 0 16px 0;
+  margin: 8px 0 16px 0px;
 }
-
 </style>

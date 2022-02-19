@@ -13,7 +13,10 @@
       />
 
       <div class="content__top"></div>
-      <div class="content__bottom" v-if="store.state.teams_active_feedback.length > 0">
+      <div
+        class="content__bottom"
+        v-if="store.state.teams_active_feedback.length > 0"
+      >
         <div class="content__bottom--left">
           <div class="card summary">
             <p class="title">Summary</p>
@@ -27,7 +30,9 @@
                     ).length
                   }}
                 </p>
-                <TheDebtChart />
+                <div class="chart">
+                  <TheDebtChart />
+                </div>
               </div>
               <div class="data">
                 <p class="label">Feature requests</p>
@@ -38,7 +43,9 @@
                     ).length
                   }}
                 </p>
-                <TheRequestsChart />
+                <div class="chart">
+                  <TheRequestsChart />
+                </div>
               </div>
             </div>
           </div>
@@ -195,8 +202,6 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { supabase } from "../../supabase/init";
 import store from "../../store/index";
 import { useRouter } from "vue-router";
 import BaseEmptyState from "../../components/global/BaseEmptyState.vue";
@@ -223,17 +228,11 @@ export default {
       empty_button_priority: "Primary",
       empty_button_text: "Add feedback",
       empty_button_action: "showCreateFeedbackModal",
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
-      debtChartData: [],
     };
   },
   setup() {
     // Set variables
     const router = useRouter();
-    const datacollection = ref(null);
 
     const routeToFeedbackDetails = (id) => {
       router.push({ name: "feedbackDetails", params: { feedbackId: id } });
@@ -247,7 +246,6 @@ export default {
     return {
       store,
       setActiveFeedback,
-      datacollection,
     };
   },
   methods: {
@@ -258,64 +256,7 @@ export default {
       this.search = "";
     },
   },
-  mounted() {
-    // Set variables
-    const router = useRouter();
-
-    const getChartData = async () => {
-      const arrDebt = [];
-      const arrRequests = [];
-
-      const { data: allFeedback } = await supabase
-        .from("feedback")
-        .select("*,profiles(*),projects(*)")
-        .eq("team_id", router.currentRoute.value.fullPath.split("/")[2]);
-
-      allFeedback.map((fb) => {
-        const moment = require("moment");
-        fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
-
-        if (fb.category.includes("issue")) {
-          const obj = {};
-          obj["date"] = fb._date;
-          obj["count"] = 1;
-          arrDebt.push(obj);
-        }
-        if (fb.category.includes("request")) {
-          const obj = {};
-          obj["date"] = fb._date;
-          obj["count"] = 1;
-          arrRequests.push(obj);
-        }
-      });
-
-      let arrDebtReduced = arrDebt.reduce((acc, curr) => {
-        let item = acc.find((item) => item.date === curr.date);
-
-        if (item) {
-          item.count += 1;
-        } else {
-          acc.push(curr);
-        }
-        return acc;
-      }, []);
-
-      // let arrRequestsReduced = arrRequests.reduce((acc, curr) => {
-      //   let item = acc.find((item) => item.date === curr.date);
-
-      //   if (item) {
-      //     item.count += 1;
-      //   } else {
-      //     acc.push(curr);
-      //   }
-
-      //   return acc;
-      // }, []);
-
-      this.debtChartData = arrDebtReduced;
-    };
-    getChartData();
-  },
+  mounted() {},
 };
 </script>
 
@@ -350,9 +291,9 @@ export default {
       .summary {
         display: flex;
         flex-direction: column;
-        padding: 20px;
+        padding: 24px 20px;
         .title {
-          font-size: 15px;
+          font-size: 16px;
           font-weight: 600;
         }
         .analytics {
@@ -360,7 +301,7 @@ export default {
             display: flex;
             flex-direction: column;
             border-top: 1px solid #dbdde6;
-            padding: 24px 0 16px 0;
+            padding: 20px 0 20px 0;
             .label {
               font-size: 12px;
               color: #636c92;
@@ -371,6 +312,10 @@ export default {
               font-size: 28px;
               font-weight: 500;
               // margin: 0 0 12px 0;
+            }
+            .chart {
+              height: 132px;
+              min-height: 132px;
             }
           }
           .data:first-child {
@@ -421,26 +366,6 @@ export default {
           border-radius: 3px;
           cursor: pointer;
         }
-        // .sort {
-        //   display: flex;
-        //   align-items: center;
-        //   justify-content: flex-end;
-        //   width: 180px;
-        //   .sort__text {
-        //     font-size: 13px;
-        //     color: #777f9c;
-        //     font-weight: 400;
-        //     margin: 0 6px 0 0;
-        //   }
-        //   .sort__value {
-        //     display: flex;
-        //     align-items: center;
-        //     .sort__value--text {
-        //       font-weight: 600;
-        //       margin: 0 -2px 0 0;
-        //     }
-        //   }
-        // }
       }
       .fb:hover {
         cursor: pointer;
@@ -501,10 +426,10 @@ export default {
               font-weight: 500;
             }
             .category__issue {
-              background: #F5E2E0;
+              background: #F4E4E1;
             }
             .category__request {
-              background: #E7E8EE;
+              background: #D9DAE8;
             }
           }
         }
