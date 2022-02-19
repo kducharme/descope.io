@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { supabase } from "../supabase/init";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 
 
 export default new Vuex.Store({
@@ -17,7 +17,7 @@ export default new Vuex.Store({
         // Team Data
         teams: [],
         teams_active: null,
-        teams_active_feedback: null,
+        teams_active_feedback: [],
         teams_active_projects: null,
         teams_active_members: null,
 
@@ -212,9 +212,8 @@ export default new Vuex.Store({
         },
 
         async setActiveTeamData(context) {
-            // Setup ref to router
-            const router = useRouter();
-            const team_id = router.currentRoute.value.fullPath.split("/")[2];
+            // Get team id
+            const team_id = window.location.pathname.split("/")[2];
 
             const { data: teamData } = await supabase
                 .from('teams')

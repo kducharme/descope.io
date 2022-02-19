@@ -9,11 +9,11 @@
         :buttonText="empty_button_text"
         :buttonAction="showCreateFeedbackModal"
         class="subnav__button--secondary"
-        v-if="!store.state.teams_active_feedback"
+        v-if="store.state.teams_active_feedback.length === 0"
       />
 
       <div class="content__top"></div>
-      <div class="content__bottom" v-if="store.state.teams_active_feedback">
+      <div class="content__bottom" v-if="store.state.teams_active_feedback.length > 0">
         <div class="content__bottom--left">
           <div class="card summary">
             <p class="title">Summary</p>

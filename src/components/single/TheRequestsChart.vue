@@ -136,8 +136,6 @@ export default {
         return new Date(b.x) - new Date(a.x);
       });
 
-      console.log(requestsChart.value);
-
       renderChart();
     };
     getChartData();

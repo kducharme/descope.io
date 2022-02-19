@@ -20,9 +20,9 @@ export default {
   setup() {
     // Setup variables and data
     const debtChartData = ref(null);
+    const chartData = ref(null);
 
     const renderChart = () => {
-      // console.log(chartData.value);
       // let start = new Date(),
       //   end = new Date();
 
@@ -75,7 +75,7 @@ export default {
                 },
                 ticks: {
                   display: false,
-                  beginAtZero: false,
+                  beginAtZero: true,
                   padding: 0,
                 },
                 type: "time",
@@ -103,6 +103,26 @@ export default {
 
     const getChartData = async () => {
       const arrDebt = [];
+      const moment = require("moment");
+
+      const timePeriod = [0, 1, 2, 3, 4, 5, 6];
+      // const chartData = []
+
+      timePeriod.forEach(t => {
+        let date = new Date();
+        date.setDate(date.getDate() - t)
+        date = moment(date).format("MMM D, YYYY")
+
+        const dateObject = {
+          "x": date,
+          "y": 0
+        }
+
+        chartData.value.push(dateObject)
+
+      })
+
+      console.log(chartData.value)
 
       const { data: allFeedback } = await supabase
         .from("feedback")
