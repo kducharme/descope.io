@@ -370,7 +370,7 @@ export default {
             .metric {
               font-size: 28px;
               font-weight: 500;
-              margin: 0 0 12px 0;
+              // margin: 0 0 12px 0;
             }
           }
           .data:first-child {

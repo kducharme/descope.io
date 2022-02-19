@@ -19,42 +19,69 @@ export default {
   },
   setup() {
     // Setup variables and data
-    const chartData = ref(null);
+    const debtChartData = ref(null);
 
     const renderChart = () => {
-      console.log(chartData.value);
-      let start = new Date(),
-        end = new Date();
+      // console.log(chartData.value);
+      // let start = new Date(),
+      //   end = new Date();
 
-      start.setDate(start.getDate() - 7); // set to 'now' minus 7 days.
-      start.setHours(0, 0, 0, 0); // set to midnight.
+      // start.setDate(start.getDate() - 7); // set to 'now' minus 7 days.
+      // start.setHours(0, 0, 0, 0); // set to midnight.
 
       const ctx = document.getElementById("debt-chart");
       new Chart(ctx, {
         type: "line",
         data: {
-          labels: ["A", "B", "B", "B", "B"],
           datasets: [
             {
               label: false,
-              data: chartData.value,
+              data: debtChartData.value,
               parsing: {
-                yAxisKey: "count",
+                yAxisKey: "y",
+                xAxisKey: "x",
               },
+              backgroundColor: "#C9D1F8",
+              borderColor: "#3253e4",
+              borderWidth: 3,
             },
           ],
         },
         options: {
+          layout: {
+            padding: {
+              top: 5,
+              right: 0,
+            },
+            margin: {
+              top: 5,
+              right: 0,
+            },
+          },
           legend: {
             display: false,
+            position: "bottom",
+          },
+          maintainAspectRatio: true,
+          elements: {
+            point: {
+              radius: 1,
+              backgroundColor: "#3253e4",
+            },
           },
           scales: {
             xAxes: [
               {
+                gridLines: {
+                  display: false,
+                },
+                ticks: {
+                  display: false,
+                  beginAtZero: false,
+                  padding: 0,
+                },
                 type: "time",
                 time: {
-                  min: start,
-                  max: end,
                   unit: "day",
                 },
               },
@@ -71,24 +98,6 @@ export default {
                 },
               },
             ],
-            // xAxes: [
-            //   {
-            //     gridLines: {
-            //       display: false,
-            //     },
-            //     ticks: {
-            //       display: false,
-            //       beginAtZero: true,
-            //       padding: 0,
-            //     },
-            //     // type: "time",
-            //     // time: {
-            //     //   min: start,
-            //     //   max: end,
-            //     //   unit: "day",
-            //     // },
-            //   },
-            // ],
           },
         },
       });
@@ -99,29 +108,37 @@ export default {
 
       const { data: allFeedback } = await supabase
         .from("feedback")
-
         .select("*,profiles(*),projects(*)")
         .eq("team_id", window.location.pathname.split("/")[2]);
-      allFeedback.map((fb) => {
+
+      allFeedback.forEach((fb) => {
         const moment = require("moment");
-        fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
+        fb._date = moment(fb.created_at).format("MMM D, YYYY");
+
         if (fb.category.includes("issue")) {
           const obj = {};
-          obj["date"] = fb._date;
-          obj["count"] = 1;
+          obj["id"] = fb.id;
+          obj["x"] = fb._date;
+          obj["y"] = 1;
           arrDebt.push(obj);
         }
       });
 
-      chartData.value = arrDebt.reduce((acc, curr) => {
-        let item = acc.find((item) => item.date === curr.date);
+      debtChartData.value = arrDebt.reduce((acc, curr) => {
+        let item = acc.find((item) => item.x === curr.x);
         if (item) {
-          item.count += 1;
+          item.y += 1;
         } else {
           acc.push(curr);
         }
         return acc;
       }, []);
+
+      debtChartData.value.sort(function (a, b) {
+        return new Date(b.x) - new Date(a.x);
+      });
+
+      console.log(debtChartData.value);
 
       renderChart();
     };
@@ -135,7 +152,9 @@ export default {
 
 <style lang="scss" scoped>
 .chart {
-  height: 72px;
-  max-width: 232px;
+  height: 80px;
+  // max-width: 240px;
+  margin-left: -4px;
+  // padding: 5px;
 }
 </style>
