@@ -1,34 +1,32 @@
 <template>
-  <div>
+  <div v-show="loaded">
+    <p class="weekly">{{ totalRequestCount }} added in the last 7 days</p>
     <canvas id="requests-chart" class="chart"></canvas>
   </div>
 </template>
 
 <script>
 import Chart from "chart.js";
-import chartData from "../global/chart-data.js";
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 
 export default {
-  name: "TheDebtChart",
-  data() {
-    return {
-      chartData: chartData,
-    };
-  },
+  name: "TheRequestsChart",
   setup() {
     // Setup variables and data
-    const requestsChart = ref(null);
+    const requestsChartData = ref(null);
+    const totalRequestCount = ref(null);
+    const loaded = ref(null);
+
+    const countTotal = () => {
+      let total = 0;
+      requestsChartData.value.forEach((d) => {
+        total += d.y;
+      });
+      totalRequestCount.value = total;
+    };
 
     const renderChart = () => {
-      // console.log(chartData.value);
-      // let start = new Date(),
-      //   end = new Date();
-
-      // start.setDate(start.getDate() - 7); // set to 'now' minus 7 days.
-      // start.setHours(0, 0, 0, 0); // set to midnight.
-
       const ctx = document.getElementById("requests-chart");
       new Chart(ctx, {
         type: "line",
@@ -36,15 +34,17 @@ export default {
           datasets: [
             {
               label: false,
-              data: requestsChart.value,
+              data: requestsChartData.value,
               parsing: {
                 yAxisKey: "y",
                 xAxisKey: "x",
               },
-              backgroundColor: "#F1F1F9",
-              borderColor: "#8C8CCF",
+              backgroundColor: "#E7E8EE",
+              borderColor: "#424861",
               borderWidth: 3,
-              pointRadius: 2,
+              pointRadius: 0,
+              pointBackgroundColor: "#424861",
+              // pointBorderColor: '#FFF',
             },
           ],
         },
@@ -75,7 +75,7 @@ export default {
                 },
                 ticks: {
                   display: false,
-                  beginAtZero: false,
+                  beginAtZero: true,
                   padding: 0,
                 },
                 type: "time",
@@ -99,10 +99,29 @@ export default {
           },
         },
       });
+      loaded.value = true;
     };
 
     const getChartData = async () => {
-      const arrDebt = [];
+      const moment = require("moment");
+
+      const timePeriod = [0, 1, 2, 3, 4, 5, 6];
+      const chartData = [];
+
+      timePeriod.forEach((t) => {
+        let date = new Date();
+        date.setDate(date.getDate() - t);
+        date = moment(date).format("MMM D, YYYY");
+
+        const dateObject = {
+          x: date,
+          y: 0,
+        };
+
+        chartData.push(dateObject);
+      });
+
+      requestsChartData.value = chartData;
 
       const { data: allFeedback } = await supabase
         .from("feedback")
@@ -114,33 +133,20 @@ export default {
         fb._date = moment(fb.created_at).format("MMM D, YYYY");
 
         if (fb.category.includes("request")) {
-          const obj = {};
-          obj["id"] = fb.id;
-          obj["x"] = fb._date;
-          obj["y"] = 1;
-          arrDebt.push(obj);
+          requestsChartData.value.forEach((date) => {
+            if (date.x === fb._date) {
+              return (date.y += 1);
+            }
+          });
         }
-      });
-
-      requestsChart.value = arrDebt.reduce((acc, curr) => {
-        let item = acc.find((item) => item.x === curr.x);
-        if (item) {
-          item.y += 1;
-        } else {
-          acc.push(curr);
-        }
-        return acc;
-      }, []);
-
-      requestsChart.value.sort(function (a, b) {
-        return new Date(b.x) - new Date(a.x);
       });
 
       renderChart();
+      countTotal();
     };
     getChartData();
 
-    return {};
+    return { totalRequestCount, loaded };
   },
   mounted() {},
 };
@@ -149,8 +155,12 @@ export default {
 <style lang="scss" scoped>
 .chart {
   height: 80px;
-  // max-width: 240px;
   margin-left: -4px;
-  // padding: 5px;
+}
+
+.weekly {
+  color: #636c92;
+  font-size: 12px;
+  margin: 8px 0 16px 0;
 }
 </style>

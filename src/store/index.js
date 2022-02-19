@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { supabase } from "../supabase/init";
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 
 export default new Vuex.Store({
@@ -212,21 +212,37 @@ export default new Vuex.Store({
         },
 
         async setActiveTeamData(context) {
+            const router = useRouter();
+
             // Get team id
             const team_id = window.location.pathname.split("/")[2];
+            const team_id_backup = router.currentRoute.value.fullPath.split("/")[2];
 
-            const { data: teamData } = await supabase
-                .from('teams')
-                .select('*,feedback(*)')
-                .eq("id", team_id);
+            if (team_id) {
+                const { data: teamData } = await supabase
+                    .from('teams')
+                    .select('*,feedback(*)')
+                    .eq("id", team_id);
+                const members = teamData[0].members
+                context.commit("SET_ACTIVE_TEAM", teamData[0]);
+                context.dispatch("setActiveTeamProjects")
+                context.dispatch("setActiveTeamFeedback")
+                context.dispatch("setActiveTeamMembers", { members })
+            }
+            else {
+                const { data: teamData } = await supabase
+                    .from('teams')
+                    .select('*,feedback(*)')
+                    .eq("id", team_id_backup);
+                const members = teamData[0].members
+                context.commit("SET_ACTIVE_TEAM", teamData[0]);
+                context.dispatch("setActiveTeamProjects")
+                context.dispatch("setActiveTeamFeedback")
+                context.dispatch("setActiveTeamMembers", { members })
 
-            const members = teamData[0].members
+            }
 
-            context.commit("SET_ACTIVE_TEAM", teamData[0]);
 
-            context.dispatch("setActiveTeamProjects")
-            context.dispatch("setActiveTeamFeedback")
-            context.dispatch("setActiveTeamMembers", { members })
         },
 
         async setActiveTeamFeedback(context) {
@@ -267,7 +283,7 @@ export default new Vuex.Store({
                 .select("*")
                 .eq("id", context.state.activeUser.id);
 
-                const { data: allMembers } = await supabase
+            const { data: allMembers } = await supabase
                 .from("profiles")
                 .select("*")
                 .eq("organization_id", profile[0].organization_id);
