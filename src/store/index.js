@@ -222,8 +222,7 @@ export default new Vuex.Store({
                 .from('teams')
                 .select('*,feedback(*)')
                 .eq("id", team_id);
-
-                console.log(teamData)
+                
                 const members = teamData[0].members
                 context.commit("SET_ACTIVE_TEAM", teamData[0]);
                 context.dispatch("setActiveTeamProjects")
@@ -252,8 +251,10 @@ export default new Vuex.Store({
 
             const { data: allFeedback } = await supabase
                 .from('feedback')
-                .select('*,profiles(*),projects(*)')
+                .select('*,profiles(*),projects(id, *)')
                 .eq("team_id", context.state.teams_active.id);
+
+                console.log(allFeedback)
 
             allFeedback.map(fb => {
                 // TODO - Get image from storage and add to feedback object

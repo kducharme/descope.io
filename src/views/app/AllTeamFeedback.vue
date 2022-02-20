@@ -163,7 +163,7 @@
                   {{ feedback.comments.length }}
                 </div>
               </div>
-              <div class="right">
+              <div class="right" id="voting">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="18px"
@@ -171,7 +171,7 @@
                   width="18px"
                   fill="#7B82A3"
                   class="vote vote__up"
-                  @click="upVote(feedback)"
+                  @click.stop="upVote(feedback)"
                 >
                   <path d="M0 0h24v24H0V0z" fill="none" />
                   <path
@@ -186,7 +186,7 @@
                   width="18px"
                   fill="#7B82A3"
                   class="vote vote__down"
-                  @click="downVote(feedback)"
+                  @click.stop="downVote(feedback)"
                 >
                   <path d="M0 0h24v24H0V0z" fill="none" />
                   <path
@@ -440,7 +440,7 @@ export default {
               background: #f4e4e1;
             }
             .category__request {
-              background: #e7e8ee;
+              background: #E7E8EE;
             }
           }
         }

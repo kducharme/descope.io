@@ -131,7 +131,7 @@ export default {
 
       const { data: allFeedback } = await supabase
         .from("feedback")
-        .select("*,profiles(*),projects(*)")
+        .select("*,profiles(*),projects(id, *)")
         .eq("team_id", window.location.pathname.split("/")[2]);
 
       allFeedback.forEach((fb) => {
