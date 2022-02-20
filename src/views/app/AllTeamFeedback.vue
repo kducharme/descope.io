@@ -186,6 +186,7 @@
                   width="18px"
                   fill="#7B82A3"
                   class="vote vote__down"
+                  @click="downVote(feedback)"
                 >
                   <path d="M0 0h24v24H0V0z" fill="none" />
                   <path
@@ -243,9 +244,19 @@ export default {
       routeToFeedbackDetails(id);
     };
 
+    const upVote = async () => {
+      console.log("up");
+    };
+
+    const downVote = async () => {
+      console.log("down");
+    };
+
     return {
       store,
       setActiveFeedback,
+      upVote,
+      downVote,
     };
   },
   methods: {
@@ -280,8 +291,8 @@ export default {
     flex-direction: row;
 
     .content__bottom--left {
-      width: 232px;
-      margin: 0 12px 0 0;
+      width: 240px;
+      margin: 0 16px 0 0;
       height: 100%;
       .card {
         box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
@@ -309,7 +320,7 @@ export default {
               margin: 0 0 8px;
             }
             .metric {
-              font-size: 28px;
+              font-size: 30px;
               font-weight: 500;
               // margin: 0 0 12px 0;
             }
@@ -330,7 +341,7 @@ export default {
     .content__bottom--right {
       width: 580px;
       max-width: 580px;
-      margin: 0 0 0 12px;
+      margin: 0 0 0 16px;
       .card {
         box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
         background: white;
@@ -426,10 +437,10 @@ export default {
               font-weight: 500;
             }
             .category__issue {
-              background: #F4E4E1;
+              background: #f4e4e1;
             }
             .category__request {
-              background: #D9DAE8;
+              background: #e7e8ee;
             }
           }
         }

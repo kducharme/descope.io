@@ -1,6 +1,6 @@
 <template>
   <div v-show="loaded">
-    <p class="weekly">{{ totalRequestCount }} added in the last 7 days</p>
+    <p class="weekly">{{ totalRequestCount }} added in the last 14 days</p>
     <div class="chartContainer">
     <canvas id="requests-chart" class="chart"></canvas>
     </div>
@@ -41,12 +41,12 @@ export default {
                 yAxisKey: "y",
                 xAxisKey: "x",
               },
-              backgroundColor: "#E6E7F0",
-              borderColor: "#6E75A8",
+              backgroundColor: "#E7E8EE",
+              borderColor: "#6D769C",
               borderWidth: 3,
-              pointRadius: 1.5,
-              pointBackgroundColor: "#666DA3",
-              pointHoverBackgroundColor: "#666DA3",
+              pointRadius: 1,
+              pointBackgroundColor: "#6D769C",
+              pointHoverBackgroundColor: "#6D769C",
               // pointBorderColor: '#FFF',
             },
           ],
@@ -108,12 +108,14 @@ export default {
 
     const getChartData = async () => {
       const moment = require("moment");
+      moment.suppressDeprecationWarnings = true;
 
-      const timePeriod = [0, 1, 2, 3, 4, 5, 6];
+      const timePeriod = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
       const chartData = [];
 
       timePeriod.forEach((t) => {
-        let date = new Date();
+       let date = new Date();
+
         date.setDate(date.getDate() - t);
         date = moment(date).format("MMM D, YYYY");
 
@@ -159,12 +161,12 @@ export default {
 <style lang="scss" scoped>
 .chartContainer {
   height: 64px;
-  width: 192px;
+  width: 200px;
 }
 
 .chart {
   height: 64px;
-  width: 192px;
+  width: 200px;
   margin-left: -4px;
   margin-bottom: 8px;
 }

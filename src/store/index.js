@@ -222,6 +222,8 @@ export default new Vuex.Store({
                 .from('teams')
                 .select('*,feedback(*)')
                 .eq("id", team_id);
+
+                console.log(teamData)
                 const members = teamData[0].members
                 context.commit("SET_ACTIVE_TEAM", teamData[0]);
                 context.dispatch("setActiveTeamProjects")
