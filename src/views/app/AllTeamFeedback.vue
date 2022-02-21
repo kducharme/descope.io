@@ -168,9 +168,9 @@
               <div class="right" id="voting">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  height="18px"
-                  viewBox="0 0 24 24"
-                  width="18px"
+                  height="16px"
+                  viewBox="2 2 20 20"
+                  width="16px"
                   :class="[
                     feedback._vote_up ? 'disabled' : 'enabled',
                     'vote vote__up',
@@ -182,12 +182,21 @@
                     d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
                   />
                 </svg>
-                <p class="count">{{ feedback._votes_total }}</p>
+                <p
+                  :class="[
+                    feedback._vote_up || feedback._vote_down
+                      ? 'count__active'
+                      : 'count__inactive',
+                    'count',
+                  ]"
+                >
+                  {{ feedback._votes_total }}
+                </p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  height="18px"
-                  viewBox="0 0 24 24"
-                  width="18px"
+                  height="16px"
+                  viewBox="2 2 20 20"
+                  width="16px"
                   :class="[
                     feedback._vote_down ? 'disabled' : 'enabled',
                     'vote vote__down',
@@ -210,6 +219,7 @@
 
 <script>
 import store from "../../store/index";
+import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import BaseEmptyState from "../../components/global/BaseEmptyState.vue";
 import TheDebtChart from "../../components/single/TheDebtChart.vue";
@@ -250,8 +260,20 @@ export default {
       routeToFeedbackDetails(id);
     };
 
-    const upVote = async () => {
-      console.log("up");
+    const upVote = async (feedback) => {
+
+      console.log(store.state.activeUser.id)
+
+      const { data } = await supabase
+        .from("feedback")
+        .select("*")
+        .eq('id', feedback.id)
+        .select('votes_up', store.state.activeUser.id)
+        // .select('votes')
+
+        console.log(data)
+        // console.log(error)
+
     };
 
     const downVote = async () => {
@@ -524,30 +546,33 @@ export default {
             flex-direction: row;
             align-items: center;
             .count {
-              font-size: 12px;
-              font-weight: 600;
+              font-size: 14px;
+              font-weight: 500;
               margin: 0 4px;
+              color: #7b82a3;
+              font-family: "avenir next";
+            }
+            .count__active {
+              font-weight: 700;
+              color: #212430;
             }
             .vote {
-              padding: 2px;
+              padding: 4px;
             }
-            // .vote__up:hover,
-            // .vote__down:hover {
-            //   background: #eeeff3;
-            //   border-radius: 3px;
-            //   cursor: pointer;
-            // }
-            // svg:hover {
-            //   fill: #212430;
-            // }
             .disabled {
-              fill: #3253e4;
-              // stroke: black;
-              // stroke-width: "10";
+              fill: #212430;
+              stroke: #212430;
+              border-radius: 5px;
             }
 
             .enabled {
-              fill: #7b82a3;
+              fill: #9398b4;
+            }
+            .enabled:hover {
+              background: #eeeff3;
+              border-radius: 3px;
+              cursor: pointer;
+              fill: #212430;
             }
           }
         }

@@ -299,8 +299,8 @@ export default new Vuex.Store({
             })
 
             allFeedback.sort((a, b) => {
-                if (a.votes > b.votes) { return -1; }
-                if (a.votes < b.votes) { return 1; }
+                if (a._votes_total > b._votes_total) { return -1; }
+                if (a._votes_total < b._votes_total) { return 1; }
                 if (a._priority < b._priority) { return 1; }
                 if (a._priority > b._priority) { return -1; }
                 return 0;
