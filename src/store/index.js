@@ -223,6 +223,8 @@ export default new Vuex.Store({
                     .select('*,feedback(*)')
                     .eq("id", team_id);
 
+                console.log(teamData)
+
                 const members = teamData[0].members
                 context.commit("SET_ACTIVE_TEAM", teamData[0]);
                 context.dispatch("setActiveTeamProjects")
@@ -258,21 +260,38 @@ export default new Vuex.Store({
 
             // Hydrate the feedback object
             allFeedback.map(fb => {
-                // TODO - Get image from storage and add to feedback object
 
-                // console.log()
-
-                if (fb.votes) {
-                    if (fb.votes.includes(context.state.activeUser.id)) { 
-                        fb._upvote = true;
-                        fb._downvote = false;
-                     }
-                     else {
-                         fb.upvote = false;
-                         fb._downvote = true;
-                     }
+                if (fb.votes_up) {
+                    fb._votes_up_total = fb.votes_up.length;
+                    if (fb.votes_up.includes(context.state.activeUser.id)) {
+                        fb._vote_up = true;
+                        fb._vote_down = null;
+                    }
+                    else {
+                        fb._vote_up = null;
+                        fb._vote_down = null;
+                    }
+                }
+                else {
+                    fb._votes_up_total = 0;
+                }
+                if (fb.votes_down) {
+                    fb._votes_down_total = fb.votes_down.length;
+                    if (fb.votes_down.includes(context.state.activeUser.id)) {
+                        fb._vote_up = null;
+                        fb._vote_down = true;
+                    }
+                    else {
+                        fb._vote_up = null;
+                        fb._vote_down = null;
+                    }
+                }
+                else {
+                    fb._votes_down_total = 0;
                 }
                 
+                fb._votes_total = fb._votes_up_total + fb._votes_down_total;
+
                 fb._addedBy = fb.profiles.firstname + " " + fb.profiles.lastname;
                 fb._initials = fb.profiles.firstname.charAt(0) + fb.profiles.lastname.charAt(0);
                 fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");

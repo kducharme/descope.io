@@ -70,7 +70,7 @@
               type="text"
               v-model="search"
               class="search__input"
-              placeholder="Search description, label, project"
+              placeholder="Search description, category, project name"
               @keyup="searchFeedback"
             />
             <svg
@@ -98,7 +98,9 @@
             <div class="fb__top">
               <div class="fb__top--left">
                 <div class="left">
-                  <p class="initials">{{ feedback._initials }}</p>
+                  <p :class="['initials', feedback.profiles.color]">
+                    {{ feedback._initials }}
+                  </p>
                 </div>
                 <div class="right">
                   <p class="project" v-if="feedback.projects">
@@ -130,7 +132,7 @@
                   class="tag category__issue"
                   v-if="feedback.category === 'issue_technical'"
                 >
-                  Tech Issue
+                  Engineering Issue
                 </p>
                 <p
                   class="tag category__request"
@@ -169,8 +171,10 @@
                   height="18px"
                   viewBox="0 0 24 24"
                   width="18px"
-                  fill="#7B82A3"
-                  class="vote vote__up"
+                  :class="[
+                    feedback._vote_up ? 'disabled' : 'enabled',
+                    'vote vote__up',
+                  ]"
                   @click.stop="upVote(feedback)"
                 >
                   <path d="M0 0h24v24H0V0z" fill="none" />
@@ -178,14 +182,16 @@
                     d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
                   />
                 </svg>
-                <p class="count">{{ feedback.votes.length }}</p>
+                <p class="count">{{ feedback._votes_total }}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="18px"
                   viewBox="0 0 24 24"
                   width="18px"
-                  fill="#7B82A3"
-                  class="vote vote__down"
+                  :class="[
+                    feedback._vote_down ? 'disabled' : 'enabled',
+                    'vote vote__down',
+                  ]"
                   @click.stop="downVote(feedback)"
                 >
                   <path d="M0 0h24v24H0V0z" fill="none" />
@@ -401,13 +407,13 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: #c8e4f9;
-                height: 36px;
-                width: 36px;
+                height: 32px;
+                width: 32px;
                 border-radius: 6px;
                 font-size: 12px;
                 font-weight: 600;
                 letter-spacing: 1.1px;
+                padding: 0 0 0 2px;
               }
             }
             .right {
@@ -440,7 +446,7 @@ export default {
               background: #f4e4e1;
             }
             .category__request {
-              background: #E7E8EE;
+              background: #e7e8ee;
             }
           }
         }
@@ -525,14 +531,23 @@ export default {
             .vote {
               padding: 2px;
             }
-            .vote__up:hover,
-            .vote__down:hover {
-              background: #eeeff3;
-              border-radius: 3px;
-              cursor: pointer;
+            // .vote__up:hover,
+            // .vote__down:hover {
+            //   background: #eeeff3;
+            //   border-radius: 3px;
+            //   cursor: pointer;
+            // }
+            // svg:hover {
+            //   fill: #212430;
+            // }
+            .disabled {
+              fill: #3253e4;
+              // stroke: black;
+              // stroke-width: "10";
             }
-            svg:hover {
-              fill: #212430;
+
+            .enabled {
+              fill: #7b82a3;
             }
           }
         }
