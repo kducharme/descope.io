@@ -216,13 +216,13 @@ export default new Vuex.Store({
 
             // Get team id
             const team_id = window.location.pathname.split("/")[2];
-            
+
             if (team_id) {
                 const { data: teamData } = await supabase
-                .from('teams')
-                .select('*,feedback(*)')
-                .eq("id", team_id);
-                
+                    .from('teams')
+                    .select('*,feedback(*)')
+                    .eq("id", team_id);
+
                 const members = teamData[0].members
                 context.commit("SET_ACTIVE_TEAM", teamData[0]);
                 context.dispatch("setActiveTeamProjects")
@@ -254,12 +254,25 @@ export default new Vuex.Store({
                 .select('*,profiles(*),projects(id, *)')
                 .eq("team_id", context.state.teams_active.id);
 
-                console.log(allFeedback)
+            console.log(allFeedback)
 
+            // Hydrate the feedback object
             allFeedback.map(fb => {
                 // TODO - Get image from storage and add to feedback object
 
-                // Hydrate the feedback object
+                // console.log()
+
+                if (fb.votes) {
+                    if (fb.votes.includes(context.state.activeUser.id)) { 
+                        fb._upvote = true;
+                        fb._downvote = false;
+                     }
+                     else {
+                         fb.upvote = false;
+                         fb._downvote = true;
+                     }
+                }
+                
                 fb._addedBy = fb.profiles.firstname + " " + fb.profiles.lastname;
                 fb._initials = fb.profiles.firstname.charAt(0) + fb.profiles.lastname.charAt(0);
                 fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
@@ -276,6 +289,7 @@ export default new Vuex.Store({
 
             context.commit("SET_ACTIVE_TEAM_FEEDBACK", allFeedback)
         },
+
 
         async setActiveTeamMembers(context) {
 

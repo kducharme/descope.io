@@ -145,7 +145,6 @@ export default {
     const imageName = ref(null);
     const feedbackCategory = ref(null);
     const feedbackProject = ref(null);
-    const initialVote = ref(null);
 
     const errorMsg = ref(null);
     const removeImageFunction = ref(null);
@@ -185,23 +184,7 @@ export default {
       feedbackProject.value
         ? (feedbackProject.value = feedbackProject.value.id)
         : (feedbackProject.value = null);
-      await saveInitialVoteToDatabase();
-      await saveFeedbackToDatabase();
-    };
-
-    const saveInitialVoteToDatabase = async () => {
-      try {
-        const { data, error } = await supabase.from("feedback_votes").insert([
-          {
-            feedback_id: id.value,
-            created_by: store.state.activeUser.id,
-          },
-        ]);
-        if (error) throw error;
-        initialVote.value = data;
-      } catch (error) {
-        console.log(error);
-      }
+      saveFeedbackToDatabase();
     };
 
     const saveFeedbackToDatabase = async () => {
@@ -215,7 +198,7 @@ export default {
             category: feedbackCategory.value,
             image: imageName.value,
             source: "app",
-            votes: [`${initialVote.value[0].id}`],
+            votes: [`${store.state.activeUser.id}`],
 
             // Supporting data
             organization_id: store.state.organization,
