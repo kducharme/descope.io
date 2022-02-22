@@ -261,28 +261,52 @@ export default {
     };
 
     const upVote = async (feedback) => {
-
       // Check if the user has already voted for this feedback
       if (feedback.votes_up.includes(store.state.activeUser.id)) {
         const index = feedback.votes_up.indexOf(store.state.activeUser.id);
-        feedback.votes_up.splice(index, 1)
-
+        feedback.votes_up.splice(index, 1);
       } else {
         // If no, add them
         feedback.votes_up.push(store.state.activeUser.id);
       }
 
-      console.log(feedback)
+      if (feedback.votes_up) {
+        feedback._votes_up_total = feedback.votes_up.length;
+        if (feedback.votes_up.includes(store.state.activeUser.id)) {
+          feedback._vote_up = true;
+          feedback._vote_down = null;
+        } else {
+          feedback._vote_up = null;
+          feedback._vote_down = null;
+        }
+      } else {
+        feedback._votes_up_total = 0;
+      }
+      if (feedback.votes_down) {
+        feedback._votes_down_total = feedback.votes_down.length;
+        if (feedback.votes_down.includes(store.state.activeUser.id)) {
+          feedback._vote_up = null;
+          feedback._vote_down = true;
+        } else {
+          feedback._vote_up = null;
+          feedback._vote_down = null;
+        }
+      } else {
+        feedback._votes_down_total = 0;
+      }
 
-      const { data, error } = await supabase
-        .from("feedback")
-        .update({'votes_up': feedback.votes_up})
-        .eq('id', feedback.id)
-        // .select('votes_up')
-        // .match('id', feedback.id)
-
-      console.log(data)
-      console.log(error)
+      try {
+        const { error } = await supabase
+          .from("feedback")
+          .update({ votes_up: feedback.votes_up })
+          .eq("id", feedback.id);
+        if (error) throw error;
+        feedback._votes_total =
+          feedback._votes_up_total + feedback._votes_down_total;
+      } catch (error) {
+        console.log(error);
+      }
+      // store.dispatch("setActiveTeamFeedback");
     };
 
     const downVote = async () => {
