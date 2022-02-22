@@ -262,18 +262,27 @@ export default {
 
     const upVote = async (feedback) => {
 
-      console.log(store.state.activeUser.id)
+      // Check if the user has already voted for this feedback
+      if (feedback.votes_up.includes(store.state.activeUser.id)) {
+        const index = feedback.votes_up.indexOf(store.state.activeUser.id);
+        feedback.votes_up.splice(index, 1)
 
-      const { data } = await supabase
+      } else {
+        // If no, add them
+        feedback.votes_up.push(store.state.activeUser.id);
+      }
+
+      console.log(feedback)
+
+      const { data, error } = await supabase
         .from("feedback")
-        .select("*")
+        .update({'votes_up': feedback.votes_up})
         .eq('id', feedback.id)
-        .select('votes_up', store.state.activeUser.id)
-        // .select('votes')
+        // .select('votes_up')
+        // .match('id', feedback.id)
 
-        console.log(data)
-        // console.log(error)
-
+      console.log(data)
+      console.log(error)
     };
 
     const downVote = async () => {
@@ -553,15 +562,16 @@ export default {
               font-family: "avenir next";
             }
             .count__active {
-              font-weight: 700;
-              color: #212430;
+              font-weight: 600;
+              color: #424761;
             }
             .vote {
               padding: 4px;
             }
             .disabled {
-              fill: #212430;
-              stroke: #212430;
+              fill: #424761;
+              stroke: #424761;
+              stroke-width: 1px;
               border-radius: 5px;
             }
 
