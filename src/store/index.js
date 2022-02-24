@@ -269,7 +269,6 @@ export default new Vuex.Store({
                     }
                     else {
                         fb._vote_up = null;
-                        fb._vote_down = null;
                     }
                 }
                 else {
@@ -278,20 +277,19 @@ export default new Vuex.Store({
                 if (fb.votes_down) {
                     fb._votes_down_total = fb.votes_down.length;
                     if (fb.votes_down.includes(context.state.activeUser.id)) {
+                        console.log(fb.title)
                         fb._vote_up = null;
                         fb._vote_down = true;
                     }
                     else {
-                        fb._vote_up = null;
                         fb._vote_down = null;
                     }
                 }
                 else {
                     fb._votes_down_total = 0;
                 }
-                
-                fb._votes_total = fb._votes_up_total + fb._votes_down_total;
 
+                fb._votes_total = fb._votes_up_total - fb._votes_down_total;
                 fb._addedBy = fb.profiles.firstname + " " + fb.profiles.lastname;
                 fb._initials = fb.profiles.firstname.charAt(0) + fb.profiles.lastname.charAt(0);
                 fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
@@ -305,6 +303,8 @@ export default new Vuex.Store({
                 if (a._priority > b._priority) { return -1; }
                 return 0;
             })
+
+            console.log(allFeedback)
 
             context.commit("SET_ACTIVE_TEAM_FEEDBACK", allFeedback)
         },

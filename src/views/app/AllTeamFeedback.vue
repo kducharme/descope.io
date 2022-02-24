@@ -70,7 +70,7 @@
               type="text"
               v-model="search"
               class="search__input"
-              placeholder="Search description, category, project name"
+              placeholder="Search title, decription, project, category"
               @keyup="searchFeedback"
             />
             <svg
@@ -277,7 +277,6 @@ export default {
           feedback._vote_down = null;
         } else {
           feedback._vote_up = null;
-          feedback._vote_down = null;
         }
       } else {
         feedback._votes_up_total = 0;
@@ -288,12 +287,14 @@ export default {
           feedback._vote_up = null;
           feedback._vote_down = true;
         } else {
-          feedback._vote_up = null;
           feedback._vote_down = null;
         }
       } else {
         feedback._votes_down_total = 0;
       }
+
+      feedback._votes_total =
+        feedback._votes_up_total - feedback._votes_down_total;
 
       try {
         const { error } = await supabase
@@ -301,16 +302,56 @@ export default {
           .update({ votes_up: feedback.votes_up })
           .eq("id", feedback.id);
         if (error) throw error;
-        feedback._votes_total =
-          feedback._votes_up_total + feedback._votes_down_total;
       } catch (error) {
         console.log(error);
       }
-      // store.dispatch("setActiveTeamFeedback");
     };
 
-    const downVote = async () => {
-      console.log("down");
+    const downVote = async (feedback) => {
+      // // Check if the user has already voted for this feedback
+      if (feedback.votes_down.includes(store.state.activeUser.id)) {
+        const index = feedback.votes_down.indexOf(store.state.activeUser.id);
+        feedback.votes_down.splice(index, 1);
+      } else {
+        // If no, add them
+        feedback.votes_down.push(store.state.activeUser.id);
+      }
+
+      if (feedback.votes_up) {
+        feedback._votes_up_total = feedback.votes_up.length;
+        if (feedback.votes_up.includes(store.state.activeUser.id)) {
+          feedback._vote_up = true;
+          feedback._vote_down = null;
+        } else {
+          feedback._vote_up = null;
+        }
+      } else {
+        feedback._votes_up_total = 0;
+      }
+      if (feedback.votes_down) {
+        feedback._votes_down_total = feedback.votes_down.length;
+        if (feedback.votes_down.includes(store.state.activeUser.id)) {
+          feedback._vote_up = null;
+          feedback._vote_down = true;
+        } else {
+          feedback._vote_down = null;
+        }
+      } else {
+        feedback._votes_down_total = 0;
+      }
+
+      feedback._votes_total =
+        feedback._votes_up_total - feedback._votes_down_total;
+
+      try {
+        const { error } = await supabase
+          .from("feedback")
+          .update({ votes_down: feedback.votes_down })
+          .eq("id", feedback.id);
+        if (error) throw error;
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     return {

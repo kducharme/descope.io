@@ -198,7 +198,8 @@ export default {
             category: feedbackCategory.value,
             image: imageName.value,
             source: "app",
-            votes: [`${store.state.activeUser.id}`],
+            votes_up: [`${store.state.activeUser.id}`],
+            votes_down: [],
 
             // Supporting data
             organization_id: store.state.organization,
