@@ -166,48 +166,7 @@
                 </div>
               </div>
               <div class="right" id="voting">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="16px"
-                  viewBox="2 2 20 20"
-                  width="16px"
-                  :class="[
-                    feedback._vote_up ? 'disabled' : 'enabled',
-                    'vote vote__up',
-                  ]"
-                  @click.stop="upVote(feedback)"
-                >
-                  <path d="M0 0h24v24H0V0z" fill="none" />
-                  <path
-                    d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                  />
-                </svg>
-                <p
-                  :class="[
-                    feedback._vote_up || feedback._vote_down
-                      ? 'count__active'
-                      : 'count__inactive',
-                    'count',
-                  ]"
-                >
-                  {{ feedback._votes_total }}
-                </p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="16px"
-                  viewBox="2 2 20 20"
-                  width="16px"
-                  :class="[
-                    feedback._vote_down ? 'disabled' : 'enabled',
-                    'vote vote__down',
-                  ]"
-                  @click.stop="downVote(feedback)"
-                >
-                  <path d="M0 0h24v24H0V0z" fill="none" />
-                  <path
-                    d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
-                  />
-                </svg>
+                <BaseVoting :feedback="feedback" />
               </div>
             </div>
           </div>
@@ -219,9 +178,10 @@
 
 <script>
 import store from "../../store/index";
-import { supabase } from "../../supabase/init";
+// import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import BaseEmptyState from "../../components/global/BaseEmptyState.vue";
+import BaseVoting from "../../components/global/BaseVoting.vue";
 import TheDebtChart from "../../components/single/TheDebtChart.vue";
 import TheRequestsChart from "../../components/single/TheRequestsChart.vue";
 
@@ -229,6 +189,7 @@ export default {
   name: "All Team Feedback",
   components: {
     BaseEmptyState,
+    BaseVoting,
     TheDebtChart,
     TheRequestsChart,
   },
@@ -260,105 +221,10 @@ export default {
       routeToFeedbackDetails(id);
     };
 
-    const upVote = async (feedback) => {
-      // Check if the user has already voted for this feedback
-      if (feedback.votes_up.includes(store.state.activeUser.id)) {
-        const index = feedback.votes_up.indexOf(store.state.activeUser.id);
-        feedback.votes_up.splice(index, 1);
-      } else {
-        // If no, add them
-        feedback.votes_up.push(store.state.activeUser.id);
-      }
-
-      if (feedback.votes_up) {
-        feedback._votes_up_total = feedback.votes_up.length;
-        if (feedback.votes_up.includes(store.state.activeUser.id)) {
-          feedback._vote_up = true;
-          feedback._vote_down = null;
-        } else {
-          feedback._vote_up = null;
-        }
-      } else {
-        feedback._votes_up_total = 0;
-      }
-      if (feedback.votes_down) {
-        feedback._votes_down_total = feedback.votes_down.length;
-        if (feedback.votes_down.includes(store.state.activeUser.id)) {
-          feedback._vote_up = null;
-          feedback._vote_down = true;
-        } else {
-          feedback._vote_down = null;
-        }
-      } else {
-        feedback._votes_down_total = 0;
-      }
-
-      feedback._votes_total =
-        feedback._votes_up_total - feedback._votes_down_total;
-
-      try {
-        const { error } = await supabase
-          .from("feedback")
-          .update({ votes_up: feedback.votes_up })
-          .eq("id", feedback.id);
-        if (error) throw error;
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const downVote = async (feedback) => {
-      // // Check if the user has already voted for this feedback
-      if (feedback.votes_down.includes(store.state.activeUser.id)) {
-        const index = feedback.votes_down.indexOf(store.state.activeUser.id);
-        feedback.votes_down.splice(index, 1);
-      } else {
-        // If no, add them
-        feedback.votes_down.push(store.state.activeUser.id);
-      }
-
-      if (feedback.votes_up) {
-        feedback._votes_up_total = feedback.votes_up.length;
-        if (feedback.votes_up.includes(store.state.activeUser.id)) {
-          feedback._vote_up = true;
-          feedback._vote_down = null;
-        } else {
-          feedback._vote_up = null;
-        }
-      } else {
-        feedback._votes_up_total = 0;
-      }
-      if (feedback.votes_down) {
-        feedback._votes_down_total = feedback.votes_down.length;
-        if (feedback.votes_down.includes(store.state.activeUser.id)) {
-          feedback._vote_up = null;
-          feedback._vote_down = true;
-        } else {
-          feedback._vote_down = null;
-        }
-      } else {
-        feedback._votes_down_total = 0;
-      }
-
-      feedback._votes_total =
-        feedback._votes_up_total - feedback._votes_down_total;
-
-      try {
-        const { error } = await supabase
-          .from("feedback")
-          .update({ votes_down: feedback.votes_down })
-          .eq("id", feedback.id);
-        if (error) throw error;
-      } catch (error) {
-        console.log(error);
-      }
-    };
 
     return {
       store,
       setActiveFeedback,
-      upVote,
-      downVote,
     };
   },
   methods: {

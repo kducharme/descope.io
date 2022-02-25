@@ -223,8 +223,6 @@ export default new Vuex.Store({
                     .select('*,feedback(*)')
                     .eq("id", team_id);
 
-                console.log(teamData)
-
                 const members = teamData[0].members
                 context.commit("SET_ACTIVE_TEAM", teamData[0]);
                 context.dispatch("setActiveTeamProjects")
@@ -256,8 +254,6 @@ export default new Vuex.Store({
                 .select('*,profiles(*),projects(id, *)')
                 .eq("team_id", context.state.teams_active.id);
 
-            console.log(allFeedback)
-
             // Hydrate the feedback object
             allFeedback.map(fb => {
 
@@ -277,7 +273,6 @@ export default new Vuex.Store({
                 if (fb.votes_down) {
                     fb._votes_down_total = fb.votes_down.length;
                     if (fb.votes_down.includes(context.state.activeUser.id)) {
-                        console.log(fb.title)
                         fb._vote_up = null;
                         fb._vote_down = true;
                     }
@@ -303,8 +298,6 @@ export default new Vuex.Store({
                 if (a._priority > b._priority) { return -1; }
                 return 0;
             })
-
-            console.log(allFeedback)
 
             context.commit("SET_ACTIVE_TEAM_FEEDBACK", allFeedback)
         },
