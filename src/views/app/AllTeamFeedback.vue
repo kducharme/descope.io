@@ -165,7 +165,7 @@
                   {{ feedback.comments.length }}
                 </div>
               </div>
-              <div class="right" id="voting">
+              <div class="right" id="voting" @click.stop>
                 <BaseVoting :feedback="feedback" />
               </div>
             </div>

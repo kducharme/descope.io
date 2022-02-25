@@ -59,42 +59,9 @@ export default {
     return {};
   },
   setup() {
-    const upVote = async (feedback) => {
-      // Check if the user has already voted for this feedback
-      if (feedback.votes_up.includes(store.state.activeUser.id)) {
-        const index = feedback.votes_up.indexOf(store.state.activeUser.id);
-        feedback.votes_up.splice(index, 1);
-      } else {
-        // If no, add them
-        feedback.votes_up.push(store.state.activeUser.id);
-      }
-
-      if (feedback.votes_up) {
-        feedback._votes_up_total = feedback.votes_up.length;
-        if (feedback.votes_up.includes(store.state.activeUser.id)) {
-          feedback._vote_up = true;
-          feedback._vote_down = null;
-        } else {
-          feedback._vote_up = null;
-        }
-      } else {
-        feedback._votes_up_total = 0;
-      }
-      if (feedback.votes_down) {
-        feedback._votes_down_total = feedback.votes_down.length;
-        if (feedback.votes_down.includes(store.state.activeUser.id)) {
-          feedback._vote_up = null;
-          feedback._vote_down = true;
-        } else {
-          feedback._vote_down = null;
-        }
-      } else {
-        feedback._votes_down_total = 0;
-      }
-
-      feedback._votes_total =
-        feedback._votes_up_total - feedback._votes_down_total;
-
+    const saveVotesToDatabase = async (feedback) => {
+      //
+      // Update the up-vote array in the database
       try {
         const { error } = await supabase
           .from("feedback")
@@ -104,44 +71,8 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    };
-
-    const downVote = async (feedback) => {
-      // // Check if the user has already voted for this feedback
-      if (feedback.votes_down.includes(store.state.activeUser.id)) {
-        const index = feedback.votes_down.indexOf(store.state.activeUser.id);
-        feedback.votes_down.splice(index, 1);
-      } else {
-        // If no, add them
-        feedback.votes_down.push(store.state.activeUser.id);
-      }
-
-      if (feedback.votes_up) {
-        feedback._votes_up_total = feedback.votes_up.length;
-        if (feedback.votes_up.includes(store.state.activeUser.id)) {
-          feedback._vote_up = true;
-          feedback._vote_down = null;
-        } else {
-          feedback._vote_up = null;
-        }
-      } else {
-        feedback._votes_up_total = 0;
-      }
-      if (feedback.votes_down) {
-        feedback._votes_down_total = feedback.votes_down.length;
-        if (feedback.votes_down.includes(store.state.activeUser.id)) {
-          feedback._vote_up = null;
-          feedback._vote_down = true;
-        } else {
-          feedback._vote_down = null;
-        }
-      } else {
-        feedback._votes_down_total = 0;
-      }
-
-      feedback._votes_total =
-        feedback._votes_up_total - feedback._votes_down_total;
-
+      //
+      // Update the down-vote array in the database
       try {
         const { error } = await supabase
           .from("feedback")
@@ -151,6 +82,93 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    };
+    const upVote = async (feedback) => {
+      //
+      // Check if the user HAS already up-voted the feedback...
+      if (feedback.votes_up.includes(store.state.activeUser.id)) {
+        //
+        // If yes, remove them from the up-vote array
+        const index = feedback.votes_up.indexOf(store.state.activeUser.id);
+        feedback.votes_up.splice(index, 1);
+        //
+        // Update the vote property for the UI
+        feedback._vote_up = null;
+        feedback._vote_down = null;
+        //
+        //If the user HAS NOT up-voted the feedback...
+      } else {
+        //
+        // Check if the user has down-voted the feedback
+        if (feedback.votes_down.includes(store.state.activeUser.id)) {
+          //
+          // If yes, remove them from the down-vote array
+          const index = feedback.votes_down.indexOf(store.state.activeUser.id);
+          feedback.votes_down.splice(index, 1);
+
+          feedback.votes_up.push(store.state.activeUser.id);
+          feedback._vote_up = true;
+          //
+          // Update the vote property for the UI
+          feedback._vote_down = null;
+        } else {
+          //
+          // If the user HAS NOT voted at all, add them to the up-vote array
+          feedback.votes_up.push(store.state.activeUser.id);
+          feedback._vote_up = true;
+        }
+      }
+      //
+      // Calculate the total votes for this feedback
+      feedback._votes_total =
+        feedback.votes_up.length - feedback.votes_down.length;
+      //
+      // Save the votes to the database
+      saveVotesToDatabase(feedback);
+    };
+
+    const downVote = async (feedback) => {
+      //
+      // Check if the user HAS already down-voted the feedback...
+      if (feedback.votes_down.includes(store.state.activeUser.id)) {
+        //
+        // If yes, remove them from the down-vote array
+        const index = feedback.votes_down.indexOf(store.state.activeUser.id);
+        feedback.votes_down.splice(index, 1);
+        //
+        // Update the vote property for the UI
+        feedback._vote_up = null;
+        feedback._vote_down = null;
+        //
+        //If the user HAS NOT up-voted the feedback...
+      } else {
+        //
+        // Check if the user has up-voted the feedback
+        if (feedback.votes_up.includes(store.state.activeUser.id)) {
+          //
+          // If yes, remove them from the up-vote array
+          const index = feedback.votes_up.indexOf(store.state.activeUser.id);
+          feedback.votes_up.splice(index, 1);
+
+          feedback.votes_down.push(store.state.activeUser.id);
+          feedback._vote_down = true;
+          //
+          // Update the vote property for the UI
+          feedback._vote_up = null;
+        } else {
+          //
+          // If the user HAS NOT voted at all, addd them to the down-vote array
+          feedback.votes_down.push(store.state.activeUser.id);
+          feedback._vote_down = true;
+        }
+      }
+      //
+      // Calculate the total votes for this feedback
+      feedback._votes_total =
+        feedback.votes_up.length - feedback.votes_down.length;
+      //
+      // Save the votes in the database
+      saveVotesToDatabase(feedback);
     };
 
     return {
