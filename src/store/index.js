@@ -44,7 +44,7 @@ export default new Vuex.Store({
             return state.teams_active_feedback.filter(fb =>
                 fb.title.toLowerCase().includes(payload.toLowerCase()) ||
                 fb.description.toLowerCase().includes(payload.toLowerCase()) ||
-                fb.projects.name.toLowerCase().includes(payload.toLowerCase()) ||
+                // fb.projects.name.toLowerCase().includes(payload.toLowerCase()) ||
                 fb.category.toLowerCase().includes(payload.toLowerCase())
             );
         },

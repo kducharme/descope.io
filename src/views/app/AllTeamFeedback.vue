@@ -70,7 +70,7 @@
               type="text"
               v-model="search"
               class="search__input"
-              placeholder="Search title, decription, project, category"
+              placeholder="Search title, decription, category"
               @keyup="searchFeedback"
             />
             <svg
