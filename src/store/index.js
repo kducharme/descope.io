@@ -255,7 +255,8 @@ export default new Vuex.Store({
                 .eq("team_id", context.state.teams_active.id);
 
             // Hydrate the feedback object
-            allFeedback.map(fb => {
+
+            for (const fb of allFeedback) {
 
                 if (fb.votes_up) {
                     fb._votes_up_total = fb.votes_up.length;
@@ -284,12 +285,24 @@ export default new Vuex.Store({
                     fb._votes_down_total = 0;
                 }
 
+                // Get images and add it to the feedback object
+                if (fb.image) {
+                    const { data: img } = await supabase.storage
+                        .from("feedback")
+                        .download(`post/${fb.image}`)
+
+                    const url = URL.createObjectURL(img);
+                    fb._image = url;
+
+                    console.log(fb._image)
+                }
+
                 fb._votes_total = fb._votes_up_total - fb._votes_down_total;
                 fb._addedBy = fb.profiles.firstname + " " + fb.profiles.lastname;
                 fb._initials = fb.profiles.firstname.charAt(0) + fb.profiles.lastname.charAt(0);
                 fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
                 fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
-            })
+            }
 
             allFeedback.sort((a, b) => {
                 if (a._votes_total > b._votes_total) { return -1; }

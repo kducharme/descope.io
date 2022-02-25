@@ -145,6 +145,7 @@
             <div class="fb__mid">
               <p class="title">{{ feedback.title }}</p>
               <p class="description">{{ feedback.description }}</p>
+              <img v-if="feedback._image" :src="feedback._image" class="image" />
             </div>
             <div class="fb__bottom">
               <div class="left">
@@ -220,7 +221,6 @@ export default {
     const setActiveFeedback = (id) => {
       routeToFeedbackDetails(id);
     };
-
 
     return {
       store,
@@ -430,16 +430,13 @@ export default {
             color: #636c92;
           }
         }
-        .fb__image {
+        .image {
           margin: 16px 0 0 0;
-          img {
-            width: 100%;
-            height: 170px;
-            object-fit: cover;
-            object-position: 10% 20%;
-            border: 1px solid #dbdde6;
-            border-radius: 5px;
-          }
+          height: 170px;
+          object-fit: cover;
+          object-position: 10% 20%;
+          border: 1px solid #dbdde6;
+          border-radius: 12px;
         }
         .fb__bottom {
           display: flex;
