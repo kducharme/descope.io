@@ -43,6 +43,7 @@
           class="cards__item"
           v-for="project in store.getters.searchProjects(this.search)"
           :key="project.id"
+          @click="setActiveProject(project.id)"
         >
           <div class="card">
             <div class="card__content">
@@ -173,6 +174,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
+
   // justify-content: center;
   margin: 0;
   padding: 0;
@@ -194,6 +196,7 @@ export default {
 
 .card {
   background-color: white;
+  border: 2px solid white;
   border-radius: 12px;
   box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
   display: flex;
@@ -233,7 +236,7 @@ export default {
       display: flex;
       margin: 16px 0 0 0;
       .data {
-        margin: 0 32px 0 0;
+        margin: 0 40px 0 0;
         .label {
           font-size: 12px;
           color: #636c92;
@@ -247,6 +250,12 @@ export default {
         }
       }
     }
+  }
+}
+.card:hover {
+  cursor: pointer;
+  .card__name {
+    text-decoration: underline;
   }
 }
 </style>

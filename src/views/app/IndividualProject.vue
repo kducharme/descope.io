@@ -25,9 +25,6 @@
         <div class="top__right"></div>
       </div>
       <div class="bottom">
-        <router-link class="nav__link" :to="{ name: 'projectOverview' }"
-          >Overview</router-link
-        >
         <router-link class="nav__link" :to="{ name: 'projectFeedback' }"
           >Feedback</router-link
         >
@@ -149,7 +146,7 @@ export default {
       }
       .router-link-active {
         font-weight: 600;
-        border-bottom: 2px solid #ff6047;
+        border-bottom: 2px solid #3253e4;
         border-radius: 2px;
       }
     }

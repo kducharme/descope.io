@@ -77,7 +77,7 @@ const routes = [
         path: "projects/:projectId",
         name: "project",
         component: IndividualProject,
-        redirect: { name: 'projectOverview' },
+        redirect: { name: 'projectFeedback' },
         children: [
           {
             path: "overview",
