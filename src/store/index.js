@@ -48,6 +48,21 @@ export default new Vuex.Store({
                 fb.category.toLowerCase().includes(payload.toLowerCase())
             );
         },
+        searchProjects: state => (payload) => {
+            let projects = [];
+
+            if (state.teams_active_projects) {
+                state.teams_active_projects.forEach(p => {
+                    if (p.name.toLowerCase().includes(payload.toLowerCase()) || p.description.toLowerCase().includes(payload.toLowerCase())) {
+                        projects.push(p)
+                    }
+                })
+
+            }
+            return projects;
+
+
+        },
         getComments: state => () => {
             return state.comments.sort((a, b) => {
                 return a._dateAdded - b._dateAdded;
@@ -105,7 +120,6 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_TEAM_MEMBERS: (state, members) => {
             state.teams_active_members = members;
-            console.log(members)
         },
 
         // SET STATE — PROJECT DATA
@@ -342,7 +356,8 @@ export default new Vuex.Store({
 
             const { data: projects } = await supabase
                 .from("projects")
-                .select("*")
+                .select("*", "feedback(*")
+                .select('*,feedback(project_id, *)')
                 .eq("team_id", context.state.teams_active.id);
 
             context.commit("SET_ACTIVE_TEAM_PROJECTS", projects);
