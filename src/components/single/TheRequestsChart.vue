@@ -2,7 +2,7 @@
   <div v-show="loaded">
     <p class="weekly">{{ totalRequestCount }} added in the last 14 days</p>
     <div class="chartContainer">
-    <canvas id="requests-chart" class="chart"></canvas>
+      <canvas id="requests-chart" class="chart"></canvas>
     </div>
   </div>
 </template>
@@ -47,11 +47,13 @@ export default {
               pointRadius: 1,
               pointBackgroundColor: "#6D769C",
               pointHoverBackgroundColor: "#6D769C",
-              // pointBorderColor: '#FFF',
             },
           ],
         },
         options: {
+          animation: {
+            duration: 0,
+          },
           layout: {
             padding: {
               top: 5,
@@ -114,7 +116,7 @@ export default {
       const chartData = [];
 
       timePeriod.forEach((t) => {
-       let date = new Date();
+        let date = new Date();
 
         date.setDate(date.getDate() - t);
         date = moment(date).format("MMM D, YYYY");

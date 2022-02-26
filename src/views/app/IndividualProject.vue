@@ -55,7 +55,7 @@ export default {
     const navigateBack = () => {
       router.push({
         name: "projects",
-        params: { id: store.state.teams_active_data.id },
+        params: { id: store.state.teams_active.id },
       });
     };
 

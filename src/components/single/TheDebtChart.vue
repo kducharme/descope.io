@@ -53,11 +53,13 @@ export default {
               pointRadius: 1,
               pointBackgroundColor: "#EF767A",
               pointHoverBackgroundColor: "#883E30",
-              // pointBorderColor: '#FFF',
             },
           ],
         },
         options: {
+          animation: {
+            duration: 0,
+          },
           layout: {
             padding: {
               top: 5,
@@ -121,7 +123,7 @@ export default {
       const chartData = [];
 
       timePeriod.forEach((t) => {
-       let date = new Date();
+        let date = new Date();
 
         date.setDate(date.getDate() - t);
         date = moment(date).format("MMM D, YYYY");

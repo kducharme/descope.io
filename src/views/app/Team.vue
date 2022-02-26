@@ -10,11 +10,12 @@
         <div class="top__right">
           <div class="members">
             <div
-              class="members__avatar"
+              :class="['members__avatar', member.color]"
               v-for="member in store.state.teams_active_members"
               :key="member.id"
             >
               {{ member._initials }}
+              <!-- {{ member._initials }} -->
             </div>
             <div class="members__add" @click="addMember">
               <svg
@@ -52,9 +53,9 @@
         <router-link class="nav__link" :to="{ name: 'projects' }"
           >Projects</router-link
         >
-        <router-link class="nav__link" :to="{ name: 'insights' }"
+        <!-- <router-link class="nav__link" :to="{ name: 'insights' }"
           >Insights</router-link
-        >
+        > -->
         <router-link class="nav__link" :to="{ name: 'teamSettings' }"
           >Settings</router-link
         >
@@ -88,7 +89,6 @@ export default {
     };
   },
   setup() {
-    
     store.dispatch("setActiveTeamData");
 
     // TODO - ADD THIS FUNCTIONALITY
@@ -145,7 +145,18 @@ export default {
     .members {
       display: flex;
       align-items: center;
-      .members__avatar,
+      .members__avatar {
+        margin: -4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        width: 32px;
+        border-radius: 100%;
+        font-size: 11px;
+        font-weight: 600;
+        border: 2px solid white;
+      }
       .members__add {
         margin: -4px;
         display: flex;

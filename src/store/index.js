@@ -105,6 +105,7 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_TEAM_MEMBERS: (state, members) => {
             state.teams_active_members = members;
+            console.log(members)
         },
 
         // SET STATE — PROJECT DATA
@@ -293,8 +294,6 @@ export default new Vuex.Store({
 
                     const url = URL.createObjectURL(img);
                     fb._image = url;
-
-                    console.log(fb._image)
                 }
 
                 fb._votes_total = fb._votes_up_total - fb._votes_down_total;
