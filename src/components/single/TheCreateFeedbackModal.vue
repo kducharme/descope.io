@@ -1,7 +1,5 @@
 <template>
   <div class="modal">
-    <div class="modal__bg"></div>
-
     <div class="modal__content">
       <!-- Status Messages -->
       <div v-if="errorMsg" class="message">
@@ -10,7 +8,7 @@
 
       <!-- Create Launch Form -->
       <div class="header">
-        <h1 class="header__title">Add feedback</h1>
+        <p class="header__title">Add feedback</p>
         <div
           class="header__close"
           @click="
@@ -20,10 +18,10 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            height="24px"
+            height="18px"
+            width="18px"
             viewBox="0 0 24 24"
-            width="24px"
-            fill="#212430"
+            fill="#fff"
           >
             <path d="M0 0h24v24H0V0z" fill="none" />
             <path
@@ -35,31 +33,33 @@
       <form @submit.prevent="saveFeedback" class="form">
         <!-- Title input -->
         <div class="form__input">
-          <label for="feedbackTitle">Title *</label>
           <input
             type="textarea"
             required
             id="feedbackTitle"
             v-model="feedbackTitle"
+            placeholder="Title"
+            class="title"
+            autocomplete="off" 
           />
         </div>
 
         <!-- Category input -->
-        <div class="form__input">
-          <label for="feedbackCategory">Category *</label>
+        <!-- <div class="form__input">
+          <label for="feedbackCategory">Category</label>
           <select name="projects" id="project" v-model="feedbackCategory">
-            <option value="" selected id="placeholder">Select category</option>
+            <option value="" selected disabled id="placeholder">Select category</option>
             <option value="issue_design">Design issue</option>
             <option value="issue_product">Product issue</option>
             <option value="issue_technical">Engineering issue</option>
             <option value="request_feature">Feature request</option>
           </select>
-        </div>
+        </div> -->
 
         <!-- Project input -->
-        <div class="form__input">
+        <!-- <div class="form__input">
           <label for="feedbackProject"
-            >Project<span class="optional">(optional)</span></label
+            >Project</label
           >
           <select name="projects" id="project" v-model="feedbackProject">
             <option value="" selected id="placeholder">Select a team</option>
@@ -71,20 +71,11 @@
               {{ project.name }}
             </option>
           </select>
-        </div>
+        </div> -->
 
         <!-- Details input -->
-        <div class="form__input">
-          <label for="feedbackDetails"
-            >Details<span class="optional">(optional)</span></label
-          >
-          <textarea
-            type="textarea"
-            id="feedbackDetails"
-            v-model="feedbackDetails"
-            rows="3"
-            cols="50"
-          />
+        <div class="form__description">
+          <BaseWYSIWYG />
         </div>
 
         <div class="form__input">
@@ -112,6 +103,7 @@ import { supabase } from "../../supabase/init";
 import { v4 as uuidv4 } from "uuid";
 import BaseButton from "../global/BaseButton.vue";
 import BaseImageUploader from "../global/BaseImageUploader.vue";
+import BaseWYSIWYG from "../global/BaseWYSIWYG.vue";
 import store from "../../store/index";
 // import { decode } from "base64-arraybuffer";
 
@@ -120,6 +112,7 @@ export default {
   components: {
     BaseButton,
     BaseImageUploader,
+    BaseWYSIWYG,
   },
   data() {
     return {
@@ -253,155 +246,172 @@ export default {
 .modal {
   display: flex;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  bottom: 16px;
+  right: 16px;
   z-index: 99999;
-  .modal__bg {
-    width: calc(100vw - 480px);
-    background: #3d3e41;
-    opacity: 0.6;
-  }
-  .modal__content {
-    width: 480px;
-    background: #eeeff3;
-    overflow-y: auto;
-    .header {
+  background: white;
+  box-shadow: 0px 1px 8px rgba(45, 62, 80, 0.22);
+  border-radius: 12px;
+  // width: 400px;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #212430;
+    padding: 8px 16px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    .header__title {
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+    }
+    .header__close {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      background: white;
-      padding: 24px;
-      border-bottom: 1px solid #dbdde6;
-      .header__title {
+      justify-content: center;
+      height: 24px;
+      width: 24px;
+      border-radius: 100%;
+    }
+    .header__close:hover {
+      background: #393e53;
+      cursor: pointer;
+    }
+  }
+  .form {
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    option:selected {
+      color: red;
+    }
+    input,
+    textarea,
+    select {
+      border: none;
+      resize: none;
+    }
+    .form__description {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      // height: 160px;
+      width: 100%;
+    }
+    .form__input {
+      display: flex;
+      flex-direction: column;
+      .title {
         font-size: 20px;
-        font-weight: 600;
-        // margin: 0 0 8px;
+        font-weight: 500;
+        margin: 0;
+        padding: 0;
+        background: white;
+        margin: 0 0 16px 0;
       }
-      .header__close {
+      .title::placeholder {
+        color: #868FAC;
+      }
+      .title:active,
+      .title:focus {
+        border: none;
+        outline: none;
+      }
+      input[type="file"] {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+      }
+      .imgHeader {
+        display: flex;
+        justify-content: space-between;
+        .imgHeader__remove {
+          display: flex;
+          justify-content: flex-end;
+          color: #3d52d5;
+          font-weight: 600;
+          font-size: 13px;
+          margin: 0 0 2px;
+        }
+        .imgHeader__remove:hover {
+          cursor: pointer;
+          text-decoration: underline;
+          color: #3549c5;
+        }
+      }
+      .upload {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 32px;
-        width: 32px;
-        border-radius: 100%;
-      }
-      .header__close:hover {
-        background: #eeeff3;
-        cursor: pointer;
-      }
-    }
-    .form {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      .form__input {
-        display: flex;
-        flex-direction: column;
-        margin: 12px 0;
-        input[type="file"] {
-          width: 0.1px;
-          height: 0.1px;
-          opacity: 0;
-          overflow: hidden;
-          position: absolute;
-          z-index: -1;
-        }
-        .imgHeader {
-          display: flex;
-          justify-content: space-between;
-          .imgHeader__remove {
-            display: flex;
-            justify-content: flex-end;
-            color: #3d52d5;
-            font-weight: 600;
-            font-size: 13px;
-            margin: 0 0 2px;
-          }
-          .imgHeader__remove:hover {
-            cursor: pointer;
-            text-decoration: underline;
-            color: #3549c5;
-          }
-        }
-        .upload {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 56px;
-          background: #eeeff35f;
-          border: 2px solid #dbdde6;
-          border-radius: 3px;
-          border-style: dotted;
-          .upload__button {
-            font-weight: 500;
-            background: #eeeff3;
-            border: 2px solid #dbdde6;
-            padding: 8px 12px;
-            display: inline-block;
-          }
-          .upload__button:hover {
-            cursor: pointer;
-            background: #e8e9ee;
-          }
-        }
-        .upload__output {
-          padding: 8px 8px 4px 8px;
+        padding: 56px;
+        background: #eeeff35f;
+        border: 2px solid #dbdde6;
+        border-radius: 3px;
+        border-style: dotted;
+        .upload__button {
+          font-weight: 500;
           background: #eeeff3;
           border: 2px solid #dbdde6;
-          max-height: 320px;
+          padding: 8px 12px;
+          display: inline-block;
         }
-        .actions {
-          margin: 10px 10px 6px 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: fixed;
-          width: 372px;
-          // z-index: 99999!important;
-          height: 152px;
-          background: rgba(255, 255, 255, 0.707);
-        }
-        label {
-          font-size: 12px;
-          padding: 0 0 6px;
-        }
-        .optional {
-          color: #9ba1bb;
-          font-weight: 400;
-          margin-left: 4px;
-        }
-        input,
-        textarea,
-        select {
-          background: white;
-          border: 2px solid #dbdde6;
-          padding: 8px;
-          resize: none;
-        }
-        select {
-          appearance: caret;
-        }
-        .form__select {
-          background: white;
-          border: 2px solid #dbdde6;
-          padding: 8px;
-        }
-        .radio {
-          margin: 6px 0;
-          .radio__select {
-            margin: 0 8px 0 0;
-          }
-          .radio__text {
-            font-size: 14px;
-          }
+        .upload__button:hover {
+          cursor: pointer;
+          background: #e8e9ee;
         }
       }
-      .form__button {
-        margin: 8px 0 0;
-        max-width: 132px;
+      .upload__output {
+        padding: 8px 8px 4px 8px;
+        background: #eeeff3;
+        border: 2px solid #dbdde6;
+        max-height: 320px;
       }
+      .actions {
+        margin: 10px 10px 6px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        width: 372px;
+        // z-index: 99999!important;
+        height: 152px;
+        background: rgba(255, 255, 255, 0.707);
+      }
+      label {
+        font-size: 12px;
+        padding: 0 0 6px;
+      }
+      .optional {
+        color: #9ba1bb;
+        font-weight: 400;
+        margin-left: 4px;
+      }
+      select {
+        appearance: caret;
+      }
+      .form__select {
+        background: white;
+        // border: 2px solid #dbdde6;
+        padding: 8px;
+      }
+      .radio {
+        margin: 6px 0;
+        .radio__select {
+          margin: 0 8px 0 0;
+        }
+        .radio__text {
+          font-size: 14px;
+        }
+      }
+    }
+    .form__button {
+      margin: 8px 0 0;
+      max-width: 132px;
     }
   }
 }

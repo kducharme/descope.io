@@ -348,6 +348,9 @@ export default {
       }
       .fb:hover {
         cursor: pointer;
+        .title {
+          text-decoration: underline;
+        }
       }
       .fb {
         display: flex;
