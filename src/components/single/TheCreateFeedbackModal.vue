@@ -30,69 +30,10 @@
           </svg>
         </div>
       </div>
-      <form @submit.prevent="saveFeedback" class="form">
-        <!-- Title input -->
-        <div class="form__input">
-          <input
-            type="textarea"
-            required
-            id="feedbackTitle"
-            v-model="feedbackTitle"
-            placeholder="Title"
-            class="title"
-            autocomplete="off" 
-          />
-        </div>
-
-        <!-- Category input -->
-        <!-- <div class="form__input">
-          <label for="feedbackCategory">Category</label>
-          <select name="projects" id="project" v-model="feedbackCategory">
-            <option value="" selected disabled id="placeholder">Select category</option>
-            <option value="issue_design">Design issue</option>
-            <option value="issue_product">Product issue</option>
-            <option value="issue_technical">Engineering issue</option>
-            <option value="request_feature">Feature request</option>
-          </select>
-        </div> -->
-
-        <!-- Project input -->
-        <!-- <div class="form__input">
-          <label for="feedbackProject"
-            >Project</label
-          >
-          <select name="projects" id="project" v-model="feedbackProject">
-            <option value="" selected id="placeholder">Select a team</option>
-            <option
-              v-for="project in store.state.teams_active_projects"
-              :key="project.id"
-              :value="project"
-            >
-              {{ project.name }}
-            </option>
-          </select>
-        </div> -->
-
-        <!-- Details input -->
-        <div class="form__description">
-          <BaseWYSIWYG />
-        </div>
-
-        <div class="form__input">
-          <BaseImageUploader
-            :id="id"
-            ref="imageUploader"
-            v-on:updateImage="updateFeedbackImage"
-          />
-        </div>
-
-        <BaseButton
-          :type="save_type"
-          :priority="save_priority"
-          :text="save_text"
-          class="form__button"
-        />
-      </form>
+      <div class="form">
+        <BaseCommunicator />
+      </div>
+      
     </div>
   </div>
 </template>
@@ -101,32 +42,19 @@
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 import { v4 as uuidv4 } from "uuid";
-import BaseButton from "../global/BaseButton.vue";
-import BaseImageUploader from "../global/BaseImageUploader.vue";
-import BaseWYSIWYG from "../global/BaseWYSIWYG.vue";
+import BaseCommunicator from "../global/BaseCommunicator.vue";
 import store from "../../store/index";
-// import { decode } from "base64-arraybuffer";
 
 export default {
   name: "TheAddFeedbackModal",
   components: {
-    BaseButton,
-    BaseImageUploader,
-    BaseWYSIWYG,
+    BaseCommunicator,
   },
   data() {
     return {
       save_priority: "Primary",
-      save_text: "Save feedback",
+      save_text: "Save",
       save_type: "Submit",
-
-      replace_priority: "Secondary",
-      replace_text: "Replace",
-      replace_type: "Button",
-
-      remove_priority: "Secondary",
-      remove_text: "Remove",
-      remove_type: "Button",
     };
   },
   setup() {
@@ -283,7 +211,7 @@ export default {
     padding: 16px 24px;
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 420px;
     option:selected {
       color: red;
     }
@@ -300,6 +228,9 @@ export default {
       // height: 160px;
       width: 100%;
     }
+    .form__image {
+      border-bottom: 1px solid #dbdde6;
+    }
     .form__input {
       display: flex;
       flex-direction: column;
@@ -309,109 +240,26 @@ export default {
         margin: 0;
         padding: 0;
         background: white;
-        margin: 0 0 16px 0;
+        margin: 0 0 12px 0;
       }
       .title::placeholder {
-        color: #868FAC;
+        color: #868fac;
       }
       .title:active,
       .title:focus {
         border: none;
         outline: none;
       }
-      input[type="file"] {
-        width: 0.1px;
-        height: 0.1px;
-        opacity: 0;
-        overflow: hidden;
-        position: absolute;
-        z-index: -1;
-      }
-      .imgHeader {
-        display: flex;
-        justify-content: space-between;
-        .imgHeader__remove {
-          display: flex;
-          justify-content: flex-end;
-          color: #3d52d5;
-          font-weight: 600;
-          font-size: 13px;
-          margin: 0 0 2px;
-        }
-        .imgHeader__remove:hover {
-          cursor: pointer;
-          text-decoration: underline;
-          color: #3549c5;
-        }
-      }
-      .upload {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 56px;
-        background: #eeeff35f;
-        border: 2px solid #dbdde6;
-        border-radius: 3px;
-        border-style: dotted;
-        .upload__button {
-          font-weight: 500;
-          background: #eeeff3;
-          border: 2px solid #dbdde6;
-          padding: 8px 12px;
-          display: inline-block;
-        }
-        .upload__button:hover {
-          cursor: pointer;
-          background: #e8e9ee;
-        }
-      }
-      .upload__output {
-        padding: 8px 8px 4px 8px;
-        background: #eeeff3;
-        border: 2px solid #dbdde6;
-        max-height: 320px;
-      }
-      .actions {
-        margin: 10px 10px 6px 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: fixed;
-        width: 372px;
-        // z-index: 99999!important;
-        height: 152px;
-        background: rgba(255, 255, 255, 0.707);
-      }
-      label {
-        font-size: 12px;
-        padding: 0 0 6px;
-      }
-      .optional {
-        color: #9ba1bb;
-        font-weight: 400;
-        margin-left: 4px;
-      }
-      select {
-        appearance: caret;
-      }
-      .form__select {
-        background: white;
-        // border: 2px solid #dbdde6;
-        padding: 8px;
-      }
-      .radio {
-        margin: 6px 0;
-        .radio__select {
-          margin: 0 8px 0 0;
-        }
-        .radio__text {
-          font-size: 14px;
-        }
-      }
     }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
     .form__button {
       margin: 8px 0 0;
-      max-width: 132px;
+      max-width: 88px;
+    }
     }
   }
 }
