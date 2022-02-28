@@ -48,75 +48,81 @@
         v-on:updateImage="updateFeedbackImage"
         class="actions__icon"
       />
-      <button
-        @click="editor.chain().focus().toggleBold().run()"
-        class="actions__icon"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="22px"
-          viewBox="0 0 24 24"
-          width="22px"
-          fill="#7B82A3"
+      <div class="editorActions" :editor="editor" v-if="editor">
+        <button
+          @click="editor.chain().focus().toggleBold().run()"
+          :class="{ 'is-active': editor.isActive('bold') }"
+          class="actions__icon"
         >
-          <path d="M0 0h24v24H0V0z" fill="none" />
-          <path
-            d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H8c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h5.78c2.07 0 3.96-1.69 3.97-3.77.01-1.53-.85-2.84-2.15-3.44zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"
-          />
-        </svg>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="22px"
+            viewBox="0 0 24 24"
+            width="22px"
+            fill="#7B82A3"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H8c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h5.78c2.07 0 3.96-1.69 3.97-3.77.01-1.53-.85-2.84-2.15-3.44zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"
+            />
+          </svg>
+        </button>
 
-      <button
-        @click="editor.chain().focus().toggleItalic().run()"
-        class="actions__icon"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="22px"
-          viewBox="0 0 24 24"
-          width="22px"
-          fill="#7B82A3"
+        <button
+          @click="editor.chain().focus().toggleItalic().run()"
+          :class="{ 'is-active': editor.isActive('italic') }"
+          class="actions__icon"
         >
-          <path d="M0 0h24v24H0V0z" fill="none" />
-          <path
-            d="M10 5.5c0 .83.67 1.5 1.5 1.5h.71l-3.42 8H7.5c-.83 0-1.5.67-1.5 1.5S6.67 18 7.5 18h5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5h-.71l3.42-8h1.29c.83 0 1.5-.67 1.5-1.5S17.33 4 16.5 4h-5c-.83 0-1.5.67-1.5 1.5z"
-          />
-        </svg>
-      </button>
-      <button
-        @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-        class="actions__icon"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="22px"
-          viewBox="0 0 24 24"
-          width="22px"
-          fill="#7B82A3"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="22px"
+            viewBox="0 0 24 24"
+            width="22px"
+            fill="#7B82A3"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M10 5.5c0 .83.67 1.5 1.5 1.5h.71l-3.42 8H7.5c-.83 0-1.5.67-1.5 1.5S6.67 18 7.5 18h5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5h-.71l3.42-8h1.29c.83 0 1.5-.67 1.5-1.5S17.33 4 16.5 4h-5c-.83 0-1.5.67-1.5 1.5z"
+            />
+          </svg>
+        </button>
+        <button
+          @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+          :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
+          class="actions__icon"
         >
-          <path d="M0 0h24v24H0V0z" fill="none" />
-          <path
-            d="M5 5.5C5 6.33 5.67 7 6.5 7h4v10.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V7h4c.83 0 1.5-.67 1.5-1.5S18.33 4 17.5 4h-11C5.67 4 5 4.67 5 5.5z"
-          />
-        </svg>
-      </button>
-      <button
-        @click="editor.chain().focus().toggleBulletList().run()"
-        class="actions__icon"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="22px"
-          viewBox="0 0 24 24"
-          width="22px"
-          fill="#7B82A3"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="22px"
+            viewBox="0 0 24 24"
+            width="22px"
+            fill="#7B82A3"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M5 5.5C5 6.33 5.67 7 6.5 7h4v10.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V7h4c.83 0 1.5-.67 1.5-1.5S18.33 4 17.5 4h-11C5.67 4 5 4.67 5 5.5z"
+            />
+          </svg>
+        </button>
+        <button
+          @click="editor.chain().focus().toggleBulletList().run()"
+          :class="{ 'is-active': editor.isActive('bulletList') }"
+          class="actions__icon"
         >
-          <path d="M0 0h24v24H0V0z" fill="none" />
-          <path
-            d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM8 19h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0-6h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 6c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1z"
-          />
-        </svg>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="22px"
+            viewBox="0 0 24 24"
+            width="22px"
+            fill="#7B82A3"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM8 19h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zm0-6h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1zM7 6c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1z"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
     <!-- <div class="comment__actions">
       <button
@@ -172,7 +178,7 @@ export default {
       save_class: "disabled",
       save_text: "Save",
       save_type: "Submit",
-      save_tooltip: "A title and description are required to save.",
+      save_tooltip: "A title and description are required.",
 
       cancel_priority: "Secondary",
       cancel_text: "Cancel",
@@ -184,7 +190,7 @@ export default {
     const comment = ref(null);
     const initialVote = ref(null);
     const id = ref(null);
-    const tooltipStatus = ref(null)
+    const tooltipStatus = ref(null);
 
     const editor = useEditor({
       extensions: [
@@ -288,7 +294,15 @@ export default {
       }
     };
 
-    return { props, editor, comment, store, saveToDatabase, checkContent, tooltipStatus };
+    return {
+      props,
+      editor,
+      comment,
+      store,
+      saveToDatabase,
+      checkContent,
+      tooltipStatus,
+    };
   },
   methods: {
     hideCreateFeedbackModal() {
@@ -354,6 +368,25 @@ x
     .cancel__button {
       margin: 0 16px 0 0;
     }
+    .editorActions {
+      display: flex;
+      .actions__icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 28px;
+        width: 28px;
+        border-radius: 3px;
+        border: none;
+        background: none;
+        margin: 0 8px 0 0;
+        padding: 0;
+      }
+      .actions__icon:hover {
+        cursor: pointer;
+        background: #e9e6e6;
+      }
+    }
   }
 }
 
@@ -361,9 +394,22 @@ x
   height: 240px;
   max-height: 320px;
   overflow-y: auto;
+  h1 {
+    font-size: 18px;
+    margin: 4px 0 4px 0;
+  }
 }
 
 ::v-deep .ProseMirror p.is-editor-empty:first-child::before {
   color: #aab0c5;
+}
+
+::v-deep .is-active {
+  svg {
+    fill: #212430;
+    padding: 2px;
+    background: #d5d9e7;
+    border-radius: 3px;
+  }
 }
 </style>

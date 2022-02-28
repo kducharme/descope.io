@@ -131,6 +131,7 @@ export default {
   background: #e9e6e6;
   color: #979ebe;
   border: none;
+  border: 2px solid #e9e6e6;
 }
 .disabled:hover {
   cursor: not-allowed;
