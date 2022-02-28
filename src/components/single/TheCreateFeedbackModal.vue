@@ -1,11 +1,6 @@
 <template>
   <div class="modal" id="createFeedback">
     <div class="modal__content">
-      <!-- Status Messages -->
-      <div v-if="errorMsg" class="message">
-        <p v-if="errorMsg" class="message__error">{{ errorMsg }}</p>
-      </div>
-
       <!-- Create Launch Form -->
       <div class="header" id="createFeedbackHeader">
         <p class="header__title">Add feedback</p>
@@ -38,11 +33,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { supabase } from "../../supabase/init";
-import { v4 as uuidv4 } from "uuid";
 import BaseCommunicator from "../global/BaseCommunicator.vue";
-import store from "../../store/index";
 
 export default {
   name: "TheAddFeedbackModal",
@@ -51,104 +42,11 @@ export default {
   },
   data() {
     return {
-      save_priority: "Primary",
-      save_text: "Save",
-      save_type: "Submit",
     };
   },
   setup() {
-    // Create data
-    const id = ref(null);
-    const feedbackTitle = ref(null);
-    const feedbackDetails = ref(null);
-    const feedbackImage = ref(null);
-    const imageName = ref(null);
-    const feedbackCategory = ref(null);
-    const feedbackProject = ref(null);
-
-    const errorMsg = ref(null);
-    const removeImageFunction = ref(null);
-
-    // Generates a unique ID for the feedback
-
-    const generateFeedbackId = () => {
-      id.value = uuidv4();
-    };
-
-    // Generate unique id for feedback
-    generateFeedbackId();
-
-    // When a user submits the form, this function is called
-    const saveFeedback = async () => {
-      // Generate unqiue name for image
-      generateImageName(id);
-
-      // Adds feedback object to supabase
-      addToDatabase();
-    };
-
-    const generateImageName = (id) => {
-      return (imageName.value = id.value + ".jpeg");
-    };
-
-    const addToDatabase = async () => {
-      feedbackImage.value ? imageName.value : (imageName.value = null);
-      feedbackProject.value
-        ? (feedbackProject.value = feedbackProject.value.id)
-        : (feedbackProject.value = null);
-      saveFeedbackToDatabase();
-    };
-
-    const saveFeedbackToDatabase = async () => {
-      try {
-        const { error } = await supabase.from("feedback").insert([
-          {
-            // Core feedback data
-            id: id.value,
-            title: feedbackTitle.value,
-            description: feedbackDetails.value,
-            category: feedbackCategory.value,
-            image: imageName.value,
-            source: "app",
-            votes_up: [`${store.state.activeUser.id}`],
-            votes_down: [],
-
-            // Supporting data
-            organization_id: store.state.organization,
-            team_id: store.state.teams_active.id,
-            project_id: feedbackProject.value,
-            created_by: store.state.activeUser.id,
-          },
-        ]);
-
-        store.dispatch("setActiveTeamData");
-        closeModal();
-
-        if (error) throw error;
-      } catch (error) {
-        console.log(error);
-        errorMsg.value = `Error: ${error.message}`;
-        setTimeout(() => {
-          errorMsg.value = null;
-        }, 5000);
-      }
-    };
-    // Closes modal when the background or "x" button  is clicked
-    const closeModal = () => {
-      store.dispatch("hideCreateFeedbackModal");
-    };
+    
     return {
-      store,
-      id,
-      saveFeedback,
-      feedbackTitle,
-      feedbackDetails,
-      feedbackCategory,
-      feedbackProject,
-      feedbackImage,
-      errorMsg,
-      closeModal,
-      removeImageFunction,
     };
   },
   mounted() {
@@ -236,11 +134,6 @@ export default {
     };
     draggable();
   },
-  methods: {
-    updateFeedbackImage(payload) {
-      this.feedbackImage = payload;
-    },
-  },
 };
 </script>
 
@@ -255,6 +148,7 @@ export default {
   box-shadow: 0px 1px 8px rgba(45, 62, 80, 0.22);
   border-radius: 12px;
   max-width: 460px;
+  min-width: 460px;
   max-height: calc(361px + 40px);
   .header {
     display: flex;

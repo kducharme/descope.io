@@ -1,10 +1,12 @@
 <template>
   <div class="content">
+    <div v-if="errorMsg" class="message">
+      <p v-if="errorMsg" class="message__error">{{ errorMsg }}</p>
+    </div>
     <form @submit.prevent="saveFeedback" class="form">
       <!-- Title input -->
       <div class="inputs">
         <input
-          autofocus
           type="textarea"
           required
           id="feedbackTitle"
@@ -14,12 +16,7 @@
           autocomplete="off"
           @keyup="checkContent()"
         />
-        <editor-content
-          :editor="editor"
-          v-model="comment"
-          class="inputs__description"
-          @change="checkComment"
-        />
+        <editor-content :editor="editor" class="inputs__description" />
       </div>
     </form>
     <div class="footer">
@@ -40,7 +37,6 @@
           :priority="cancel_priority"
           :text="cancel_text"
           :action="hideCreateFeedbackModal"
-          :tooltip="cancel_tooltip"
         />
       </div>
       <BaseImageUploaderIcon
@@ -178,10 +174,19 @@ export default {
   },
   setup(props) {
     // Setup data
-    const comment = ref(null);
-    const initialVote = ref(null);
     const id = ref(null);
+    const feedbackTitle = ref(null);
+    const feedbackDetails = ref(null);
+    const feedbackImage = ref(null);
+    const imageName = ref(null);
+    const feedbackCategory = ref(null);
+    const feedbackProject = ref(null);
+
+    const errorMsg = ref(null);
+    const removeImageFunction = ref(null);
     const tooltipStatus = ref(null);
+
+    tooltipStatus.value = true;
 
     const editor = useEditor({
       extensions: [
@@ -199,7 +204,6 @@ export default {
           placeholder: "Description",
         }),
       ],
-      autofocus: false,
       editable: true,
       injectCSS: false,
       onUpdate({ editor }) {
@@ -216,8 +220,6 @@ export default {
       },
     });
 
-    tooltipStatus.value = true;
-
     const checkContent = () => {
       const title = document.querySelector("#feedbackTitle").value;
 
@@ -231,73 +233,113 @@ export default {
       }
     };
 
+    // Generates a unique ID for the feedback
+
+    const generateFeedbackId = () => {
+      id.value = uuidv4();
+    };
+
+    // Generate unique id for feedback
+    generateFeedbackId();
+
+    const saveFeedback = async () => {
+      // Generate unqiue name for image
+      generateImageName(id);
+
+      // Adds feedback object to supabase
+      saveToDatabase();
+    };
+
+    const generateImageName = (id) => {
+      return (imageName.value = id.value + ".jpeg");
+    };
+
+    // const saveToDatabase = async () => {
+    //   const comment = editor.value.getJSON();
+
+    //   if (comment.content[0].content) {
+    //     document.querySelector("#commentButton").classList.add("disabled");
+    //     id.value = uuidv4();
+    //     // await saveInitialVoteToDatabase();
+    //     // await saveCommentToDatabase();
+    //     editor.value.commands.clearContent();
+    //     editor.value.commands.setContent();
+    //   }
+    // };
+
     const saveToDatabase = async () => {
-      const comment = editor.value.getJSON();
-
-      if (comment.content[0].content) {
-        document.querySelector("#commentButton").classList.add("disabled");
-        id.value = uuidv4();
-        await saveInitialVoteToDatabase();
-        await saveCommentToDatabase();
-        editor.value.commands.clearContent();
-        editor.value.commands.setContent();
-      }
+      feedbackImage.value ? imageName.value : (imageName.value = null);
+      feedbackProject.value
+        ? (feedbackProject.value = feedbackProject.value.id)
+        : (feedbackProject.value = null);
+      saveFeedbackToDatabase();
     };
 
-    const saveInitialVoteToDatabase = async () => {
+    const saveFeedbackToDatabase = async () => {
       try {
-        const { data, error } = await supabase
-          .from("feedback_comments_votes")
-          .insert([
-            {
-              comment_id: id.value,
-              feedback_id: store.state.feedback_active.id,
-              created_by: store.state.activeUser.id,
-            },
-          ]);
-        if (error) throw error;
-        initialVote.value = data;
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const saveCommentToDatabase = async () => {
-      const feedback_id = store.state.feedback_active.id;
-      try {
-        const { error } = await supabase.from("feedback_comments").insert([
+        const { error } = await supabase.from("feedback").insert([
           {
+            // Core feedback data
             id: id.value,
-            comment: editor.value.getJSON(),
-            votes: [`${initialVote.value[0].id}`],
-            created_by: store.state.activeUser.id,
-            feedback_id: store.state.feedback_active.id,
-            project_id: store.state.feedback_active._project.id,
+            title: feedbackTitle.value,
+            description: editor.value.getJSON(),
+            category: feedbackCategory.value,
+            image: imageName.value,
+            source: "app",
+            votes_up: [`${store.state.activeUser.id}`],
+            votes_down: [],
+
+            // Supporting data
             organization_id: store.state.organization,
+            team_id: store.state.teams_active.id,
+            project_id: feedbackProject.value,
+            created_by: store.state.activeUser.id,
           },
         ]);
+
+        store.dispatch("setActiveTeamData");
+        closeModal();
+
         if (error) throw error;
-        store.dispatch("getComments", {
-          feedback_id,
-        });
       } catch (error) {
         console.log(error);
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
       }
+    };
+    const closeModal = () => {
+      store.dispatch("hideCreateFeedbackModal");
     };
 
     return {
       props,
       editor,
-      comment,
       store,
-      saveToDatabase,
+      id,
+      saveFeedback,
+      feedbackTitle,
+      feedbackDetails,
+      feedbackCategory,
+      feedbackProject,
+      feedbackImage,
+      errorMsg,
+      closeModal,
+      removeImageFunction,
       checkContent,
       tooltipStatus,
     };
   },
+  mounted() {
+    document.querySelector("#feedbackTitle").focus();
+  },
   methods: {
     hideCreateFeedbackModal() {
       store.dispatch("hideCreateFeedbackModal");
+    },
+    updateFeedbackImage(payload) {
+      this.feedbackImage = payload;
     },
   },
 };
