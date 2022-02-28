@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="modal" id="createFeedback">
     <div class="modal__content">
       <!-- Status Messages -->
       <div v-if="errorMsg" class="message">
@@ -7,7 +7,7 @@
       </div>
 
       <!-- Create Launch Form -->
-      <div class="header">
+      <div class="header" id="createFeedbackHeader">
         <p class="header__title">Add feedback</p>
         <div
           class="header__close"
@@ -33,7 +33,6 @@
       <div class="form">
         <BaseCommunicator />
       </div>
-      
     </div>
   </div>
 </template>
@@ -79,15 +78,7 @@ export default {
     // Generate unique id for feedback
     generateFeedbackId();
 
-    // Prevent background scrolling
-    const preventBackgroundScroll = () => {
-      document.body.classList.add("noScroll");
-    };
-
-    preventBackgroundScroll();
-
     // When a user submits the form, this function is called
-
     const saveFeedback = async () => {
       // Generate unqiue name for image
       generateImageName(id);
@@ -142,11 +133,9 @@ export default {
         }, 5000);
       }
     };
-
     // Closes modal when the background or "x" button  is clicked
     const closeModal = () => {
       store.dispatch("hideCreateFeedbackModal");
-      document.body.classList.remove("noScroll");
     };
     return {
       store,
@@ -162,6 +151,62 @@ export default {
       removeImageFunction,
     };
   },
+  mounted() {
+    const draggable = () => {
+      // Make the DIV element draggable:
+      const element = document.querySelector("#createFeedback");
+
+      console.log(element);
+
+      function dragElement(elmnt) {
+        console.log(elmnt);
+        var pos1 = 0,
+          pos2 = 0,
+          pos3 = 0,
+          pos4 = 0;
+        if (document.getElementById(elmnt.id + "Header")) {
+          // if present, the header is where you move the DIV from:
+          document.getElementById(elmnt.id + "Header").onmousedown =
+            dragMouseDown;
+        } else {
+          // otherwise, move the DIV from anywhere inside the DIV:
+          elmnt.onmousedown = dragMouseDown;
+        }
+
+        function dragMouseDown(e) {
+          e = e || window.event;
+          e.preventDefault();
+          // get the mouse cursor position at startup:
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          document.onmouseup = closeDragElement;
+          // call a function whenever the cursor moves:
+          document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+          e = e || window.event;
+          e.preventDefault();
+          // calculate the new cursor position:
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          // set the element's new position:
+          elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+          elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+        }
+
+        function closeDragElement() {
+          // stop moving when mouse button is released:
+          document.onmouseup = null;
+          document.onmousemove = null;
+        }
+      }
+      dragElement(element);
+    };
+    draggable();
+  },
   methods: {
     updateFeedbackImage(payload) {
       this.feedbackImage = payload;
@@ -173,22 +218,23 @@ export default {
 <style lang="scss" scoped>
 .modal {
   display: flex;
-  position: fixed;
+  position: absolute;
   bottom: 16px;
   right: 16px;
   z-index: 99999;
   background: white;
   box-shadow: 0px 1px 8px rgba(45, 62, 80, 0.22);
   border-radius: 12px;
-  // width: 400px;
+  max-width: 460px;
+  max-height: calc(361px + 40px);
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: #212430;
     padding: 8px 16px;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     .header__title {
       font-size: 14px;
       font-weight: 600;
@@ -206,6 +252,9 @@ export default {
       background: #393e53;
       cursor: pointer;
     }
+  }
+  .header:hover {
+    cursor: move;
   }
   .form {
     padding: 16px 24px;
@@ -256,10 +305,10 @@ export default {
       justify-content: space-between;
       align-items: center;
 
-    .form__button {
-      margin: 8px 0 0;
-      max-width: 88px;
-    }
+      .form__button {
+        margin: 8px 0 0;
+        max-width: 88px;
+      }
     }
   }
 }

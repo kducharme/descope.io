@@ -4,6 +4,7 @@
       <!-- Title input -->
       <div class="inputs">
         <input
+          autofocus
           type="textarea"
           required
           id="feedbackTitle"
@@ -124,16 +125,6 @@
         </button>
       </div>
     </div>
-    <!-- <div class="comment__actions">
-      <button
-        type="submit"
-        @click="saveToDatabase"
-        class="btn btn__small disabled"
-        id="commentButton"
-      >
-        Comment
-      </button>
-    </div> -->
   </div>
 </template>
 
@@ -208,7 +199,7 @@ export default {
           placeholder: "Description",
         }),
       ],
-      autofocus: true,
+      autofocus: false,
       editable: true,
       injectCSS: false,
       onUpdate({ editor }) {
@@ -311,7 +302,7 @@ export default {
   },
 };
 </script>
-x
+
 <style lang="scss" scoped>
 .content {
   display: flex;
