@@ -29,6 +29,7 @@
           :text="save_text"
           :id="save_id"
           :class="save_class"
+          :tooltip="save_tooltip"
         />
       </div>
       <div class="cancel__button">
@@ -37,6 +38,7 @@
           :priority="cancel_priority"
           :text="cancel_text"
           :action="hideCreateFeedbackModal"
+          :tooltip="cancel_tooltip"
         />
       </div>
       <BaseImageUploaderIcon
@@ -169,6 +171,7 @@ export default {
       save_class: "disabled",
       save_text: "Save",
       save_type: "Submit",
+      save_tooltip: "A title and description are required to save.",
 
       cancel_priority: "Secondary",
       cancel_text: "Cancel",

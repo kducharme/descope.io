@@ -1,25 +1,32 @@
 <template>
   <div>
-    <button
-      :id="props.id"
-      :type="props.type"
-      :class="[
-        props.priority === 'Primary'
-          ? `btn btn__primary btn__full ${props.class}`
-          : `btn btn__secondary ${props.class}`,
-      ]"
-      @click="props.action"
-    >
-      {{ props.text }}
-    </button>
+    <VueCustomTooltip :label="props.tooltip" position="is-top" class="tooltip">
+      <button
+        :id="props.id"
+        :type="props.type"
+        :class="[
+          props.priority === 'Primary'
+            ? `btn btn__primary btn__full ${props.class}`
+            : `btn btn__secondary ${props.class}`,
+        ]"
+        @click="props.action"
+      >
+        {{ props.text }}
+      </button>
+    </VueCustomTooltip>
   </div>
 </template>
 
 <script>
+import VueCustomTooltip from "@adamdehaven/vue-custom-tooltip";
+
 import { ref } from "vue";
 
 export default {
   name: "BaseButton",
+  components: {
+    VueCustomTooltip,
+  },
   props: {
     text: {
       type: String,
@@ -42,6 +49,9 @@ export default {
     type: {
       type: String,
     },
+    tooltip: {
+      type: String,
+    },
   },
   setup(props) {
     // Create data
@@ -52,12 +62,26 @@ export default {
       emptyName.value = true;
     }
 
-    return { props };
+    const showTooltip = () => {
+      console.log(props.class);
+      if (props.tooltip) {
+        document.querySelector("#tooltip").classList.remove("hide");
+      }
+    };
+
+    const hideTooltip = () => {
+      document.querySelector("#tooltip").classList.add("hide");
+    };
+
+    return { props, showTooltip, hideTooltip };
   },
 };
 </script>
 
 <style lang="scss" scoped>
+button {
+}
+
 .btn {
   height: 36px;
   border: none;
@@ -95,6 +119,7 @@ export default {
 .btn__full {
   background: #3253e4;
   width: 100%;
+  position: relative;
 }
 
 .disabled {
@@ -105,5 +130,22 @@ export default {
 .disabled:hover {
   cursor: not-allowed;
   background: #e9e6e6;
+}
+
+.tooltip {
+  position: absolute;
+  top: 300px;
+  background: black;
+  margin: 0 0 16px 0;
+  color: white;
+  padding: 8px;
+}
+
+::v-deep .vue-custom-tooltip:after {
+  background: #212430;
+  border-radius: 3px;
+  font-family: 'Avenir Next';
+  font-weight: 500;
+  font-size: 12px;
 }
 </style>
