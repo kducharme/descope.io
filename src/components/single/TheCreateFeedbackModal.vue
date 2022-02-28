@@ -211,7 +211,7 @@ export default {
     padding: 16px 24px;
     display: flex;
     flex-direction: column;
-    width: 420px;
+    width: 460px;
     option:selected {
       color: red;
     }

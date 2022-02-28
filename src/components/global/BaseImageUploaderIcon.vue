@@ -181,9 +181,12 @@ export default {
     max-height: 320px;
   }
   .upload {
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    width: 28px;
+    border-radius: 3px;
     // padding: 40px;
     // background: rgba(255, 255, 255, 0.473);
     // border: 2px solid #dbdde6;
@@ -198,8 +201,8 @@ export default {
       // display: inline-block;
     }
     .upload__button:hover {
-      // cursor: pointer;
-      // background: #dbdde6;
+      cursor: pointer;
+      background: #e9e6e6;
     }
   }
 }

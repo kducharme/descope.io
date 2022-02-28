@@ -1,11 +1,12 @@
 <template>
   <div>
     <button
+      :id="props.id"
       :type="props.type"
       :class="[
         props.priority === 'Primary'
-          ? 'btn btn__primary btn__full'
-          : 'btn btn__secondary',
+          ? `btn btn__primary btn__full ${props.class}`
+          : `btn btn__secondary ${props.class}`,
       ]"
       @click="props.action"
     >
@@ -21,6 +22,12 @@ export default {
   name: "BaseButton",
   props: {
     text: {
+      type: String,
+    },
+    id: {
+      type: String,
+    },
+    class: {
       type: String,
     },
     priority: {
@@ -54,7 +61,7 @@ export default {
 .btn {
   height: 36px;
   border: none;
-  border-radius: 3px;
+  border-radius: 0px;
   font-weight: 600;
   font-size: 13px;
   font-family: "Avenir next";
@@ -79,7 +86,6 @@ export default {
   background: white;
   border: 2px solid #3253e4;
   color: #3253e4;
-  
 }
 .btn__secondary:hover {
   cursor: pointer;
@@ -89,5 +95,15 @@ export default {
 .btn__full {
   background: #3253e4;
   width: 100%;
+}
+
+.disabled {
+  background: #e9e6e6;
+  color: #979ebe;
+  border: none;
+}
+.disabled:hover {
+  cursor: not-allowed;
+  background: #e9e6e6;
 }
 </style>

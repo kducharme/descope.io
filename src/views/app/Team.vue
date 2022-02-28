@@ -30,20 +30,22 @@
               </svg>
             </div>
           </div>
-          <BaseButton
-            type="submit"
-            :priority="secondary_priority"
-            :text="secondary_text"
-            :action="showCreateProjectModal"
-            class="subnav__button--secondary"
-          />
-          <BaseButton
-            type="submit"
-            :priority="primary_priority"
-            :text="primary_text"
-            :action="showCreateFeedbackModal"
-            class="subnav__button--primary"
-          />
+          <div class="subnav__button--secondary">
+            <BaseButton
+              type="submit"
+              :priority="secondary_priority"
+              :text="secondary_text"
+              :action="showCreateProjectModal"
+            />
+          </div>
+          <div class="subnav__button--primary">
+            <BaseButton
+              type="submit"
+              :priority="primary_priority"
+              :text="primary_text"
+              :action="showCreateFeedbackModal"
+            />
+          </div>
         </div>
       </div>
       <div class="bottom">
