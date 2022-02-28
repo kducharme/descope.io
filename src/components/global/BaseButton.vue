@@ -1,6 +1,10 @@
 <template>
   <div>
-    <VueCustomTooltip :label="props.tooltip" position="is-top" class="tooltip">
+    <VueCustomTooltip
+      :label="props.tooltip"
+      :active="props.tooltip_status"
+      position="is-top"
+    >
       <button
         :id="props.id"
         :type="props.type"
@@ -52,6 +56,9 @@ export default {
     tooltip: {
       type: String,
     },
+    tooltip_status: {
+      type: Boolean,
+    },
   },
   setup(props) {
     // Create data
@@ -79,8 +86,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-button {
-}
 
 .btn {
   height: 36px;
@@ -133,19 +138,19 @@ button {
 }
 
 .tooltip {
-  position: absolute;
-  top: 300px;
-  background: black;
-  margin: 0 0 16px 0;
-  color: white;
-  padding: 8px;
+  display: none !important;
 }
 
 ::v-deep .vue-custom-tooltip:after {
   background: #212430;
   border-radius: 3px;
-  font-family: 'Avenir Next';
+  font-family: "Avenir Next";
   font-weight: 500;
   font-size: 12px;
 }
+
+.hideTooltip {
+  display: none!important;
+}
+
 </style>

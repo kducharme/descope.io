@@ -11,7 +11,7 @@
           placeholder="Title"
           class="inputs__title"
           autocomplete="off"
-          @keyup="checkContent"
+          @keyup="checkContent()"
         />
         <editor-content
           :editor="editor"
@@ -30,6 +30,7 @@
           :id="save_id"
           :class="save_class"
           :tooltip="save_tooltip"
+          :tooltip_status="tooltipStatus"
         />
       </div>
       <div class="cancel__button">
@@ -183,6 +184,7 @@ export default {
     const comment = ref(null);
     const initialVote = ref(null);
     const id = ref(null);
+    const tooltipStatus = ref(null)
 
     const editor = useEditor({
       extensions: [
@@ -208,23 +210,27 @@ export default {
 
         if (editor.getText() === "" || title === "") {
           document.querySelector("#saveButton").classList.add("disabled");
+          tooltipStatus.value = true;
         }
         if (editor.getText() !== "" && title !== "") {
           document.querySelector("#saveButton").classList.remove("disabled");
+          tooltipStatus.value = false;
         }
       },
     });
 
+    tooltipStatus.value = true;
+
     const checkContent = () => {
       const title = document.querySelector("#feedbackTitle").value;
 
-      console.log(title)
-
       if (editor.value.getText() === "" || title === "") {
         document.querySelector("#saveButton").classList.add("disabled");
+        tooltipStatus.value = true;
       }
       if (editor.value.getText() !== "" && title !== "") {
         document.querySelector("#saveButton").classList.remove("disabled");
+        tooltipStatus.value = false;
       }
     };
 
@@ -282,7 +288,7 @@ export default {
       }
     };
 
-    return { props, editor, comment, store, saveToDatabase, checkContent };
+    return { props, editor, comment, store, saveToDatabase, checkContent, tooltipStatus };
   },
   methods: {
     hideCreateFeedbackModal() {
