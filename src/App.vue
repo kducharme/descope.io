@@ -157,8 +157,47 @@ body {
 }
 
 .noScroll {
-  // height: 100%;
-  overflow: hidden !important;
+  position: static;
+  overflow-y: auto !important;
+}
+
+::-webkit-scrollbar {
+  position: relative;
+  height: 16px;
+  // overflow: visible;
+  // width: 0px;
+  // box-shadow: none;
+  // margin: 0 4px;
+  // position: fixed;
+}
+
+::-webkit-scrollbar-button {
+  height: 0;
+  width: 0;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  position: absolute;
+  right: 0;
+  border-style: solid;
+  border-color: transparent;
+  border-width: 4px;
+  background-color: #dbdbdb;
+  border-radius: 8px;
+  box-shadow: none;
+  background: red;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  background-clip: padding-box;
+  border: solid transparent;
+  min-height: 28px;
+  padding: 100px 0 0;
 }
 
 // Avatar colors

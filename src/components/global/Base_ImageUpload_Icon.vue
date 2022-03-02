@@ -1,18 +1,28 @@
 <template>
   <div class="imgUploader">
-    <div class="header">
-      <p
-        class="header__remove"
-        v-if="image"
-        @click="
-          removeImageFromDatabase();
-          updatedParentFeedbackImage(false);
-        "
-      >
-        Remove
-      </p>
-    </div>
+    <div class="header"></div>
     <div class="output" id="output" v-show="image"></div>
+    <p
+      class="remove"
+      v-if="image"
+      @click="
+        removeImageFromDatabase();
+        updatedParentFeedbackImage(false);
+      "
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="18px"
+        width="18px"
+        viewBox="0 0 24 24"
+        fill="#cd1231"
+      >
+        <path d="M0 0h24v24H0V0z" fill="none" />
+        <path
+          d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+        />
+      </svg>
+    </p>
     <div class="upload" id="upload" v-show="!image">
       <label for="upload_file" class="upload__button"
         ><svg
@@ -82,11 +92,12 @@ export default {
       const img = new Image();
 
       img.src = URL.createObjectURL(file);
-      img.style.width = "100%";
-      img.style.height = "120px";
-      img.style.maxHeight = "120px";
+      img.style.width = "200px";
+      img.style.height = "48px";
+      img.style.maxHeight = "48px";
       img.style.objectFit = "cover";
       img.style.objectPosition = "25% 25%";
+      img.style.borderRadius = "6px";
       img.setAttribute("id", "imagePreview");
 
       document.querySelector("#output").appendChild(img);
@@ -140,6 +151,7 @@ export default {
 
 <style lang="scss" scoped>
 .imgUploader {
+  padding: relative;
   input[type="file"] {
     width: 0.1px;
     height: 0.1px;
@@ -160,32 +172,42 @@ export default {
       font-weight: 400;
       margin-left: 4px;
     }
-    .header__remove {
-      display: flex;
-      justify-content: flex-end;
-      color: #3d52d5;
-      font-weight: 600;
-      font-size: 13px;
-      margin: 0 0 2px;
-    }
-    .header__remove:hover {
-      cursor: pointer;
-      text-decoration: underline;
-      color: #3549c5;
-    }
   }
   .output {
-    padding: 8px 8px 4px 8px;
-    background: #eeeff3;
+    height: 52px;
+    // background: #eeeff3;
     border: 2px solid #dbdde6;
-    max-height: 320px;
+    border-radius: 8px;
+    // max-height: 320px;
+    position: absolute;
+    bottom: 64px;
+    left: 24px;
+  }
+  .remove {
+    position: absolute;
+    bottom: 100px;
+    left: 214px;
+    display: flex;
+    justify-content: flex-end;
+    color: #3d52d5;
+    font-weight: 600;
+    font-size: 13px;
+    margin: 0 0 2px;
+    background: white;
+    border: 2px solid #dbdde6;
+    border-radius: 100%;
+  }
+  .remove:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #3549c5;
   }
   .upload {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 28px;
-    width: 28px;
+    // height: 24px;
+    // width: 28px;
     border-radius: 3px;
     // padding: 40px;
     // background: rgba(255, 255, 255, 0.473);

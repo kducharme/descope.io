@@ -9,16 +9,13 @@
 
 <script>
 import Chart from "chart.js";
-import chartData from "../global/chart-data.js";
+// import chartData from "../global/chart-data.js";
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 
 export default {
   name: "TheDebtChart",
   data() {
-    return {
-      chartData: chartData,
-    };
   },
   setup() {
     // Setup variables and data

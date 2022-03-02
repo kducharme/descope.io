@@ -56,7 +56,7 @@
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
-import BaseButton from "../global/BaseButton.vue";
+import BaseButton from "../global/Base_Button_Text.vue";
 import store from "../../store/index";
 
 export default {

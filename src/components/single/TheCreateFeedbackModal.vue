@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import BaseCommunicator from "../global/BaseCommunicator.vue";
+import BaseCommunicator from "../global/Base_Communicator.vue";
 
 export default {
   name: "TheAddFeedbackModal",
@@ -149,6 +149,7 @@ export default {
   border-radius: 12px;
   max-width: 460px;
   min-width: 460px;
+  min-height: calc(361px + 40px);
   max-height: calc(361px + 40px);
   .header {
     display: flex;

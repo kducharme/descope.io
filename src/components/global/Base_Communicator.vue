@@ -39,12 +39,6 @@
           :action="hideCreateFeedbackModal"
         />
       </div>
-      <BaseImageUploaderIcon
-        :id="id"
-        ref="imageUploader"
-        v-on:updateImage="updateFeedbackImage"
-        class="actions__icon"
-      />
       <div class="editorActions" :editor="editor" v-if="editor">
         <button
           @click="editor.chain().focus().toggleBold().run()"
@@ -119,6 +113,12 @@
             />
           </svg>
         </button>
+        <BaseImageUploaderIcon
+          :id="id"
+          ref="imageUploader"
+          v-on:updateImage="updateFeedbackImage"
+          class="actions__icon"
+        />
       </div>
     </div>
   </div>
@@ -141,8 +141,8 @@ import Text from "@tiptap/extension-text";
 import Heading from "@tiptap/extension-heading";
 import Italic from "@tiptap/extension-italic";
 import Bold from "@tiptap/extension-bold";
-import BaseImageUploaderIcon from "./BaseImageUploaderIcon.vue";
-import BaseButton from "./BaseButton.vue";
+import BaseImageUploaderIcon from "./Base_ImageUpload_Icon.vue";
+import BaseButton from "./Base_Button_Text.vue";
 
 export default {
   name: "BaseCommentInput",

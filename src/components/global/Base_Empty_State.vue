@@ -152,7 +152,7 @@
 
 <script>
 import { ref } from "vue";
-import BaseButton from "./BaseButton.vue";
+import BaseButton from "./Base_Button_Text.vue";
 import store from "../../store/index";
 
 export default {

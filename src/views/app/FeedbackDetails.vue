@@ -90,8 +90,8 @@
 <script>
 import store from "../../store/index";
 import { useRouter } from "vue-router";
-import BaseCommentInput from "../../components/global/BaseCommentInput.vue";
-import BaseCommentList from "../../components/global/BaseCommentList.vue";
+import BaseCommentInput from "../../components/global/Base_Comment_Input.vue";
+import BaseCommentList from "../../components/global/Base_Comment_List.vue";
 
 export default {
   name: "Feedback Details",

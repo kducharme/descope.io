@@ -17,29 +17,17 @@
               {{ member._initials }}
               <!-- {{ member._initials }} -->
             </div>
-            <div class="members__add" @click="addMember">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="22px"
-                viewBox="0 0 24 24"
-                width="22px"
-                fill="#ffffff"
-              >
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-              </svg>
-            </div>
           </div>
           <div class="subnav__button--secondary">
-            <BaseButton
+            <BaseButtonText
               type="submit"
               :priority="secondary_priority"
               :text="secondary_text"
-              :action="showCreateProjectModal"
+              :action="addMember"
             />
           </div>
           <div class="subnav__button--primary">
-            <BaseButton
+            <BaseButtonIcon
               type="submit"
               :priority="primary_priority"
               :text="primary_text"
@@ -71,14 +59,16 @@
 // import { ref } from "vue";
 // import { useRouter } from "vue-router";
 import store from "../../store/index";
-import BaseButton from "../../components/global/BaseButton.vue";
+import BaseButtonText from "../../components/global/Base_Button_Text.vue";
+import BaseButtonIcon from "../../components/global/Base_Button_Add.vue";
 import TheCreateProjectModal from "../../components/single/TheCreateProjectModal.vue";
 import TheCreateFeedbackModal from "../../components/single/TheCreateFeedbackModal.vue";
 
 export default {
   name: "Team",
   components: {
-    BaseButton,
+    BaseButtonText,
+    BaseButtonIcon,
     TheCreateProjectModal,
     TheCreateFeedbackModal,
   },
@@ -87,7 +77,7 @@ export default {
       primary_priority: "Primary",
       primary_text: "Add feedback",
       secondary_priority: "Secondary",
-      secondary_text: "Create project",
+      secondary_text: "Invite member",
     };
   },
   setup() {

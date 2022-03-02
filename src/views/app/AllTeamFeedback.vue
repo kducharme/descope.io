@@ -181,8 +181,8 @@
 import store from "../../store/index";
 // import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
-import BaseEmptyState from "../../components/global/BaseEmptyState.vue";
-import BaseVoting from "../../components/global/BaseVoting.vue";
+import BaseEmptyState from "../../components/global/Base_Empty_State.vue";
+import BaseVoting from "../../components/global/Base_Voting.vue";
 import TheDebtChart from "../../components/single/TheDebtChart.vue";
 import TheRequestsChart from "../../components/single/TheRequestsChart.vue";
 
