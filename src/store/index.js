@@ -37,7 +37,9 @@ export default new Vuex.Store({
         // UI Elements
         createTeamModal: false,
         createProjectModal: false,
-        createFeedbackModal: false,
+        createIssueModal: false,
+        createRequestModal: false,
+        createQuestionModal: false,
     },
     getters: {
         searchFeedback: state => (payload) => {
@@ -147,6 +149,7 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_FEEDBACK: (state, feedback) => {
             state.feedback_active = feedback;
+            console.log(state.feedback_active)
         },
         SET_ACTIVE_COMMENTS: (state, comments) => {
             state.comments = comments;
@@ -159,17 +162,29 @@ export default new Vuex.Store({
         HIDE_CREATE_PROJECT_MODAL: (state) => {
             state.createProjectModal = false;
         },
-        SHOW_ADD_FEEDBACK_MODAL: (state) => {
-            state.createFeedbackModal = true;
+        SHOW_ADD_ISSUE_MODAL: (state) => {
+            state.createIssueModal = true;
         },
-        HIDE_ADD_FEEDBACK_MODAL: (state) => {
-            state.createFeedbackModal = false;
+        HIDE_ADD_ISSUE_MODAL: (state) => {
+            state.createIssueModal = false;
         },
         SHOW_CREATE_TEAM_MODAL: (state) => {
             state.createTeamModal = true;
         },
         HIDE_CREATE_TEAM_MODAL: (state) => {
             state.createTeamModal = false;
+        },
+        SHOW_CREATE_REQUEST_MODAL: (state) => {
+            state.createRequestModal = true;
+        },
+        HIDE_CREATE_REQUEST_MODAL: (state) => {
+            state.createRequestModal = false;
+        },
+        SHOW_CREATE_QUESTION_MODAL: (state) => {
+            state.createQuestionModal = true;
+        },
+        HIDE_CREATE_QUESTION_MODAL: (state) => {
+            state.createQuestionModal = false;
         },
     },
     actions: {
@@ -401,9 +416,15 @@ export default new Vuex.Store({
         async setActiveFeedback(context, payload) {
             const moment = require('moment');
 
+            // const { data: fb } = await supabase
+            //     .from("feedback")
+            //     .select("*", 'profiles(*)')
+            //     .eq("id", payload.feedback_id);
+
+
             const { data: fb } = await supabase
-                .from("feedback")
-                .select("*")
+                .from('feedback')
+                .select('*,profiles(*),projects(id, *)')
                 .eq("id", payload.feedback_id);
 
             const activeFeedback = fb[0];
@@ -463,18 +484,29 @@ export default new Vuex.Store({
         hideCreateProjectModal(context) {
             context.commit("HIDE_CREATE_PROJECT_MODAL")
         },
-        showCreateFeedbackModal(context) {
-            context.commit("SHOW_ADD_FEEDBACK_MODAL")
+        showCreateIssueModal(context) {
+            context.commit("SHOW_ADD_ISSUE_MODAL")
         },
-        hideCreateFeedbackModal(context) {
-            context.commit("HIDE_ADD_FEEDBACK_MODAL")
+        hideCreateIssueModal(context) {
+            context.commit("HIDE_ADD_ISSUE_MODAL")
         },
         showCreateTeamModal(context) {
             context.commit("SHOW_CREATE_TEAM_MODAL")
         },
-
         hideCreateTeamModal(context) {
             context.commit("HIDE_CREATE_TEAM_MODAL")
+        },
+        showCreateRequestModal(context) {
+            context.commit("SHOW_CREATE_REQUEST_MODAL")
+        },
+        hideCreateRequestModal(context) {
+            context.commit("HIDE_CREATE_REQUEST_MODAL")
+        },
+        showCreateQuestionModal(context) {
+            context.commit("SHOW_CREATE_QUESTION_MODAL")
+        },
+        hideCreateQuestionModal(context) {
+            context.commit("HIDE_CREATE_QUESTION_MODAL")
         },
     }
 });

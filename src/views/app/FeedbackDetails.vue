@@ -23,7 +23,7 @@
         <div class="feedbackDetails" v-if="store.state.feedback_active">
           <div class="about">
             <div class="about__left">
-              <p class="initials">
+              <p :class="['initials', store.state.feedback_active.profiles.color]">
                 {{ store.state.feedback_active._initials }}
               </p>
             </div>
@@ -215,7 +215,7 @@ export default {
               display: flex;
               align-items: center;
               justify-content: center;
-              background: #c8e4f9;
+              // background: #c8e4f9;
               height: 40px;
               width: 40px;
               border-radius: 6px;

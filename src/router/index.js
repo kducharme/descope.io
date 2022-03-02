@@ -8,7 +8,7 @@ import ConfirmEmail from "../views/marketing/ConfirmEmail.vue";
 
 // App pages
 import Home from "../views/app/Home.vue";
-import AllCompanyFeedback from "../views/app/AllCompanyFeedback.vue";
+import TrendingFeedback from "../views/app/TrendingFeedback.vue";
 import Team from "../views/app/Team.vue";
 import Insights from "../views/app/Insights.vue";
 import Projects from "../views/app/Projects.vue";
@@ -51,9 +51,9 @@ const routes = [
     component: Home,
   },
   {
-    path: "/feedback",
-    name: "allCompanyFeedback",
-    component: AllCompanyFeedback,
+    path: "/trending",
+    name: "trendingFeedback",
+    component: TrendingFeedback,
   },
   {
     path: "/team/:id",

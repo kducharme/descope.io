@@ -129,7 +129,6 @@ export default {
   setup(props) {
     // Setup data
     const comment = ref(null);
-    const initialVote = ref(null);
     const id = ref(null);
 
     const editor = useEditor({
@@ -153,9 +152,9 @@ export default {
       injectCSS: false,
       onUpdate({ editor }) {
         if (editor.getText() === "") {
-          document.querySelector('#commentButton').classList.add('disabled')
+          document.querySelector("#commentButton").classList.add("disabled");
         } else {
-          document.querySelector('#commentButton').classList.remove('disabled')
+          document.querySelector("#commentButton").classList.remove("disabled");
         }
       },
     });
@@ -164,30 +163,12 @@ export default {
       const comment = editor.value.getJSON();
 
       if (comment.content[0].content) {
-        document.querySelector('#commentButton').classList.add('disabled');
+        document.querySelector("#commentButton").classList.add("disabled");
         id.value = uuidv4();
-        await saveInitialVoteToDatabase();
+        // await saveInitialVoteToDatabase();
         await saveCommentToDatabase();
         editor.value.commands.clearContent();
         editor.value.commands.setContent();
-      }
-    };
-
-    const saveInitialVoteToDatabase = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("feedback_comments_votes")
-          .insert([
-            {
-              comment_id: id.value,
-              feedback_id: store.state.feedback_active.id,
-              created_by: store.state.activeUser.id,
-            },
-          ]);
-        if (error) throw error;
-        initialVote.value = data;
-      } catch (error) {
-        console.log(error);
       }
     };
 
@@ -198,7 +179,6 @@ export default {
           {
             id: id.value,
             comment: editor.value.getJSON(),
-            votes: [`${initialVote.value[0].id}`],
             created_by: store.state.activeUser.id,
             feedback_id: store.state.feedback_active.id,
             project_id: store.state.feedback_active._project.id,

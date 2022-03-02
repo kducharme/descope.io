@@ -74,6 +74,16 @@
                     }}
                   </p>
                 </div>
+                <div class="data">
+                  <p class="label">Questions</p>
+                  <p class="metric">
+                    {{
+                      project.feedback.filter((f) =>
+                        f.category.includes("question")
+                      ).length
+                    }}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -236,9 +246,9 @@ export default {
       display: flex;
       margin: 16px 0 0 0;
       .data {
-        margin: 0 40px 0 0;
+        margin: 0 22px 0 0;
         .label {
-          font-size: 12px;
+          font-size: 11px;
           color: #636c92;
           font-weight: 600;
           margin: 0 0 8px;

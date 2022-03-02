@@ -1,7 +1,9 @@
 <template>
   <div class="team" v-if="store.state.teams_active">
-    <TheCreateFeedbackModal v-if="store.state.createFeedbackModal" />
+    <TheCreateFeedbackModal v-if="store.state.createIssueModal" />
     <TheCreateProjectModal v-if="store.state.createProjectModal" />
+    <TheCreateRequestModal v-if="store.state.createRequestModal" />
+    <TheCreateQuestionModal v-if="store.state.createQuestionModal" />
     <nav class="subnav">
       <div class="top">
         <div class="top__left">
@@ -75,8 +77,10 @@
 import store from "../../store/index";
 // import BaseButtonText from "../../components/global/Base_Button_Text.vue";
 import BaseButtonIcon from "../../components/global/Base_Button_Add.vue";
-import TheCreateProjectModal from "../../components/single/TheCreateProjectModal.vue";
-import TheCreateFeedbackModal from "../../components/single/TheCreateFeedbackModal.vue";
+import TheCreateProjectModal from "../../components/single/The_Create_Project.vue";
+import TheCreateFeedbackModal from "../../components/single/The_Create_Issue.vue";
+import TheCreateRequestModal from "../../components/single/The_Create_Request.vue";
+import TheCreateQuestionModal from "../../components/single/The_Create_Question.vue";
 
 export default {
   name: "Team",
@@ -85,6 +89,8 @@ export default {
     BaseButtonIcon,
     TheCreateProjectModal,
     TheCreateFeedbackModal,
+    TheCreateRequestModal,
+    TheCreateQuestionModal,
   },
   data() {
     return {

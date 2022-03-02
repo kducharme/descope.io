@@ -27,7 +27,7 @@
       </button>
     </VueCustomTooltip>
     <div class="dropdown" v-if="dropdown">
-      <div class="option">
+      <div class="option" @click="showCreateIssueModal">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="20px"
@@ -43,7 +43,7 @@
         </svg>
         <p class="option__text">Issue</p>
       </div>
-      <div class="option">
+      <div class="option" @click="showCreateRequestModal">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="20px"
@@ -59,7 +59,7 @@
         </svg>
         <p class="option__text">Request</p>
       </div>
-      <div class="option">
+      <div class="option" @click="showCreateQuestionModal">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           enable-background="new 0 0 24 24"
@@ -78,6 +78,23 @@
         </svg>
         <p class="option__text">Question</p>
       </div>
+      <div class="divider"></div>
+      <div class="option option__project" @click="showCreateProjectModal">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          fill="#878DAB"
+          class="option__icon"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M14 6V4h-4v2h4zM4 8v11h16V8H4zm16-2c1.11 0 2 .89 2 2v11c0 1.11-.89 2-2 2H4c-1.11 0-2-.89-2-2l.01-11c0-1.11.88-2 1.99-2h4V4c0-1.11.89-2 2-2h4c1.11 0 2 .89 2 2v2h4z"
+          />
+        </svg>
+        <p class="option__text">Project</p>
+      </div>
     </div>
   </div>
 </template>
@@ -85,6 +102,7 @@
 <script>
 import VueCustomTooltip from "@adamdehaven/vue-custom-tooltip";
 import { ref } from "vue";
+import store from "../../store/index";
 
 export default {
   name: "BaseButtonAdd",
@@ -126,7 +144,36 @@ export default {
       dropdown.value = !dropdown.value;
     };
 
-    return { props, toggleDropdown, dropdown };
+    // Button actions
+
+    const showCreateIssueModal = () => {
+      store.dispatch("showCreateIssueModal");
+      dropdown.value = !dropdown.value;
+    };
+
+    const showCreateRequestModal = () => {
+      store.dispatch("showCreateRequestModal");
+      dropdown.value = !dropdown.value;
+    };
+
+    const showCreateQuestionModal = () => {
+      store.dispatch("showCreateQuestionModal");
+      dropdown.value = !dropdown.value;
+    };
+    const showCreateProjectModal = () => {
+      store.dispatch("showCreateProjectModal");
+      dropdown.value = !dropdown.value;
+    };
+
+    return {
+      props,
+      toggleDropdown,
+      dropdown,
+      showCreateProjectModal,
+      showCreateIssueModal,
+      showCreateRequestModal,
+      showCreateQuestionModal,
+    };
   },
 };
 </script>
@@ -175,11 +222,22 @@ export default {
     .option__icon {
       margin: 0 12px 0 0;
     }
+    .option__bottom {
+      margin: 4px 0 0 0;
+    }
   }
   .option:hover {
     cursor: pointer;
-    background: #E7E8EE;
+    background: #e7e8ee;
   }
+  .divider {
+    border-top: 1px solid #dbdbdb;
+    margin: 8px 0;
+  }
+  // .option__project {
+  //   margin: 8px 0 0 0;
+  //   padding: 12px 16px;
+  // }
 }
 
 ::v-deep .vue-custom-tooltip:after {

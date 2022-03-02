@@ -1,16 +1,10 @@
 <template>
-  <div class="modal" id="createFeedback">
+  <div class="modal" id="createRequest">
     <div class="modal__content">
       <!-- Create Launch Form -->
-      <div class="header" id="createFeedbackHeader">
-        <p class="header__title">Add feedback</p>
-        <div
-          class="header__close"
-          @click="
-            closeModal();
-            $refs.imageUploader.deleteImageFromDatabase();
-          "
-        >
+      <div class="header" id="createRequestHeader">
+        <p class="header__title">Add question</p>
+        <div class="header__close" @click="closeModal">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="18px"
@@ -26,33 +20,34 @@
         </div>
       </div>
       <div class="form">
-        <BaseCommunicator />
+        <TheCreateQuestionForm />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import BaseCommunicator from "../global/Base_Communicator.vue";
+import TheCreateQuestionForm from "./The_Create_Question_Form.vue";
+import store from "../../store/index";
 
 export default {
   name: "TheAddFeedbackModal",
   components: {
-    BaseCommunicator,
+    TheCreateQuestionForm,
   },
   data() {
-    return {
-    };
+    return {};
   },
   setup() {
-    
-    return {
+    const closeModal = () => {
+      store.dispatch("hideCreateQuestionModal");
     };
+    return { closeModal };
   },
   mounted() {
     const draggable = () => {
       // Make the DIV element draggable:
-      const element = document.querySelector("#createFeedback");
+      const element = document.querySelector("#createRequest");
 
       var PADDING = 8;
 
@@ -97,7 +92,7 @@ export default {
         }
 
         function elementDrag(e) {
-          document.querySelector('body').classList.add('noScroll');
+          document.querySelector("body").classList.add("noScroll");
           e = e || window.event;
           // calculate the new cursor position:
           pos1 = pos3 - e.clientX;
@@ -124,7 +119,7 @@ export default {
         }
 
         function closeDragElement() {
-          document.querySelector('body').classList.remove('noScroll');
+          document.querySelector("body").classList.remove("noScroll");
           /* stop moving when mouse button is released:*/
           document.onmouseup = null;
           document.onmousemove = null;

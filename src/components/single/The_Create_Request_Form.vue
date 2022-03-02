@@ -37,7 +37,7 @@
           :type="cancel_type"
           :priority="cancel_priority"
           :text="cancel_text"
-          :action="hideCreateFeedbackModal"
+          :action="hideModal"
         />
       </div>
       <div class="editorActions" :editor="editor" v-if="editor">
@@ -142,8 +142,8 @@ import Text from "@tiptap/extension-text";
 import Heading from "@tiptap/extension-heading";
 import Italic from "@tiptap/extension-italic";
 import Bold from "@tiptap/extension-bold";
-import BaseImageUploaderIcon from "./Base_ImageUpload_Icon.vue";
-import BaseButton from "./Base_Button_Text.vue";
+import BaseImageUploaderIcon from "../global/Base_ImageUpload_Icon.vue";
+import BaseButton from "../global/Base_Button_Text.vue";
 
 export default {
   name: "BaseCommentInput",
@@ -312,7 +312,7 @@ export default {
       }
     };
     const closeModal = () => {
-      store.dispatch("hideCreateFeedbackModal");
+      store.dispatch("hideCreateRequestModal");
     };
 
     return {
@@ -337,8 +337,8 @@ export default {
     document.querySelector("#feedbackTitle").focus();
   },
   methods: {
-    hideCreateFeedbackModal() {
-      store.dispatch("hideCreateFeedbackModal");
+    hideModal() {
+      store.dispatch("hideCreateRequestModal");
     },
     updateFeedbackImage(payload) {
       this.feedbackImage = payload;
