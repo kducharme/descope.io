@@ -22,7 +22,7 @@
             <p class="title">Summary</p>
             <div class="analytics">
               <div class="data">
-                <p class="label">Total issues</p>
+                <p class="label">Issues</p>
                 <p class="metric">
                   {{
                     store.state.teams_active_feedback.filter((f) =>
@@ -35,7 +35,7 @@
                 </div>
               </div>
               <div class="data">
-                <p class="label">Feature requests</p>
+                <p class="label">Requests</p>
                 <p class="metric">
                   {{
                     store.state.teams_active_feedback.filter((f) =>
@@ -44,7 +44,20 @@
                   }}
                 </p>
                 <div class="chart">
-                  <TheRequestsChart />
+                  <TheRequestChart />
+                </div>
+              </div>
+              <div class="data">
+                <p class="label">Questions</p>
+                <p class="metric">
+                  {{
+                    store.state.teams_active_feedback.filter((f) =>
+                      f.category.includes("question")
+                    ).length
+                  }}
+                </p>
+                <div class="chart">
+                  <TheQuestionChart />
                 </div>
               </div>
             </div>
@@ -118,34 +131,32 @@
               <div class="fb__top--right">
                 <p
                   class="tag category__issue"
-                  v-if="feedback.category === 'issue_design'"
+                  v-if="feedback.category.includes('issue')"
                 >
-                  Design Issue
-                </p>
-                <p
-                  class="tag category__issue"
-                  v-if="feedback.category === 'issue_product'"
-                >
-                  Product Issue
-                </p>
-                <p
-                  class="tag category__issue"
-                  v-if="feedback.category === 'issue_technical'"
-                >
-                  Engineering Issue
+                  Issue
                 </p>
                 <p
                   class="tag category__request"
-                  v-if="feedback.category === 'request_feature'"
+                  v-if="feedback.category.includes('request')"
                 >
-                  Feature Request
+                  Request
+                </p>
+                <p
+                  class="tag category__question"
+                  v-if="feedback.category.includes('question')"
+                >
+                  Question
                 </p>
               </div>
             </div>
             <div class="fb__mid">
               <p class="title">{{ feedback.title }}</p>
               <p class="description">{{ feedback.description }}</p>
-              <img v-if="feedback._image" :src="feedback._image" class="image" />
+              <img
+                v-if="feedback._image"
+                :src="feedback._image"
+                class="image"
+              />
             </div>
             <div class="fb__bottom">
               <div class="left">
@@ -184,7 +195,8 @@ import { useRouter } from "vue-router";
 import BaseEmptyState from "../../components/global/Base_Empty_State.vue";
 import BaseVoting from "../../components/global/Base_Voting.vue";
 import TheDebtChart from "../../components/single/TheDebtChart.vue";
-import TheRequestsChart from "../../components/single/TheRequestsChart.vue";
+import TheRequestChart from "../../components/single/TheRequestChart.vue";
+import TheQuestionChart from "../../components/single/TheQuestionChart.vue";
 
 export default {
   name: "All Team Feedback",
@@ -192,7 +204,8 @@ export default {
     BaseEmptyState,
     BaseVoting,
     TheDebtChart,
-    TheRequestsChart,
+    TheRequestChart,
+    TheQuestionChart
   },
 
   data() {
@@ -412,6 +425,9 @@ export default {
             }
             .category__request {
               background: #e7e8ee;
+            }
+            .category__question{
+              background: #DEF7F3;
             }
           }
         }
