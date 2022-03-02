@@ -29,6 +29,7 @@
           :class="save_class"
           :tooltip="save_tooltip"
           :tooltip_status="tooltipStatus"
+          :tooltip_position="save_tooltip_position"
         />
       </div>
       <div class="cancel__button">
@@ -166,6 +167,7 @@ export default {
       save_text: "Save",
       save_type: "Submit",
       save_tooltip: "A title and description are required.",
+      save_tooltip_position: "is-top",
 
       cancel_priority: "Secondary",
       cancel_text: "Cancel",

@@ -15,8 +15,6 @@ import { supabase } from "../../supabase/init";
 
 export default {
   name: "TheDebtChart",
-  data() {
-  },
   setup() {
     // Setup variables and data
     const debtChartData = ref(null);
@@ -171,7 +169,7 @@ export default {
 }
 
 .chart {
-  height: 64px;
+  // height: 64px;
   width: 200px;
   margin-left: -4px;
   margin-bottom: 8px;

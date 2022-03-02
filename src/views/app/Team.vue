@@ -15,23 +15,37 @@
               :key="member.id"
             >
               {{ member._initials }}
-              <!-- {{ member._initials }} -->
+            </div>
+            <div class="members__add" @click="addMember">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="22px"
+                viewBox="0 0 24 24"
+                width="22px"
+                fill="#fff"
+              >
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+              </svg>
             </div>
           </div>
-          <div class="subnav__button--secondary">
+          <!-- <div class="subnav__button--secondary">
             <BaseButtonText
               type="submit"
               :priority="secondary_priority"
               :text="secondary_text"
               :action="addMember"
             />
-          </div>
+          </div> -->
           <div class="subnav__button--primary">
             <BaseButtonIcon
               type="submit"
               :priority="primary_priority"
               :text="primary_text"
               :action="showCreateFeedbackModal"
+              :tooltip="primary_tooltip"
+              :tooltip_status="true"
+              :tooltip_position="primary_tooltip_position"
             />
           </div>
         </div>
@@ -59,7 +73,7 @@
 // import { ref } from "vue";
 // import { useRouter } from "vue-router";
 import store from "../../store/index";
-import BaseButtonText from "../../components/global/Base_Button_Text.vue";
+// import BaseButtonText from "../../components/global/Base_Button_Text.vue";
 import BaseButtonIcon from "../../components/global/Base_Button_Add.vue";
 import TheCreateProjectModal from "../../components/single/TheCreateProjectModal.vue";
 import TheCreateFeedbackModal from "../../components/single/TheCreateFeedbackModal.vue";
@@ -67,7 +81,7 @@ import TheCreateFeedbackModal from "../../components/single/TheCreateFeedbackMod
 export default {
   name: "Team",
   components: {
-    BaseButtonText,
+    // BaseButtonText,
     BaseButtonIcon,
     TheCreateProjectModal,
     TheCreateFeedbackModal,
@@ -76,8 +90,8 @@ export default {
     return {
       primary_priority: "Primary",
       primary_text: "Add feedback",
-      secondary_priority: "Secondary",
-      secondary_text: "Invite member",
+      // primary_tooltip: "Add new project, feedback, etc.",
+      // primary_tooltip_position: "is-left",
     };
   },
   setup() {
@@ -120,52 +134,56 @@ export default {
     justify-content: space-between;
     margin: 0 0 12px;
     padding: 8px 0;
-    .title {
-      font-size: 20px;
-      font-weight: 600;
+    .top__left {
+      display: flex;
+      .title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-right: 16px;
+      }
     }
     .top__right {
       display: flex;
       flex-direction: row;
+      .members {
+        display: flex;
+        align-items: center;
+        .members__avatar {
+          margin: -4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 32px;
+          width: 32px;
+          border-radius: 100%;
+          font-size: 11px;
+          font-weight: 600;
+          border: 2px solid white;
+        }
+        .members__add {
+          margin: -4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          height: 32px;
+          width: 32px;
+          border-radius: 100%;
+          font-size: 11px;
+          font-weight: 600;
+          border: 2px solid white;
+          background: #9da5c4;
+        }
+        .members__add:hover {
+          cursor: pointer;
+          background: #9097b6;
+        }
+      }
       .subnav__button--primary {
-        margin-left: 16px;
+        margin-left: 20px;
       }
       .subnav__button--secondary {
         margin-left: 20px;
-      }
-    }
-    .members {
-      display: flex;
-      align-items: center;
-      .members__avatar {
-        margin: -4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 32px;
-        width: 32px;
-        border-radius: 100%;
-        font-size: 11px;
-        font-weight: 600;
-        border: 2px solid white;
-      }
-      .members__add {
-        margin: -4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        height: 32px;
-        width: 32px;
-        border-radius: 100%;
-        font-size: 11px;
-        font-weight: 600;
-        border: 2px solid white;
-        background: #9da5c4;
-      }
-      .members__add:hover {
-        cursor: pointer;
-        background: #9097b6;
       }
     }
   }

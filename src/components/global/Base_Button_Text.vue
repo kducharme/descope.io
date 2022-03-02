@@ -3,7 +3,7 @@
     <VueCustomTooltip
       :label="props.tooltip"
       :active="props.tooltip_status"
-      position="is-top"
+      :position="props.tooltip_position"
     >
       <button
         :id="props.id"
@@ -59,6 +59,9 @@ export default {
     tooltip_status: {
       type: Boolean,
     },
+    tooltip_position: {
+      type: String,
+    },
   },
   setup(props) {
     // Create data
@@ -86,7 +89,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .btn {
   height: 36px;
   border: none;
@@ -116,6 +118,7 @@ export default {
   border: 2px solid #3253e4;
   color: #3253e4;
 }
+
 .btn__secondary:hover {
   cursor: pointer;
   background: #f1f3fc;
@@ -151,7 +154,6 @@ export default {
 }
 
 .hideTooltip {
-  display: none!important;
+  display: none !important;
 }
-
 </style>
