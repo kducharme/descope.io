@@ -3,7 +3,7 @@
     <div class="modal__content">
       <!-- Create Launch Form -->
       <div class="header" id="createRequestHeader">
-        <p class="header__title">Add request</p>
+        <p class="header__title">Add idea</p>
         <div class="header__close" @click="closeModal">
           <svg
             xmlns="http://www.w3.org/2000/svg"

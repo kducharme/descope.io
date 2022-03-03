@@ -41,10 +41,10 @@ export default {
                 yAxisKey: "y",
                 xAxisKey: "x",
               },
-              backgroundColor: "#EEFBF9",
-              borderColor: "#23967F",
+              backgroundColor: "#F3F4F7",
+              borderColor: "#5B6386",
               borderWidth: 3,
-              pointRadius: 1,
+              pointRadius: 0,
               pointBackgroundColor: "#23967F",
               pointHoverBackgroundColor: "#23967F",
             },
@@ -169,6 +169,7 @@ export default {
 .chart {
   // height: 64px;
   width: 200px;
+  max-height: 80px;
   margin-left: -4px;
   margin-bottom: 8px;
 }

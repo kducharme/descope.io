@@ -35,7 +35,7 @@
                 </div>
               </div>
               <div class="data">
-                <p class="label">Requests</p>
+                <p class="label">Ideas</p>
                 <p class="metric">
                   {{
                     store.state.teams_active_feedback.filter((f) =>
@@ -139,7 +139,7 @@
                   class="tag category__request"
                   v-if="feedback.category.includes('request')"
                 >
-                  Request
+                  Idea
                 </p>
                 <p
                   class="tag category__question"
@@ -293,7 +293,7 @@ export default {
             display: flex;
             flex-direction: column;
             border-top: 1px solid #dbdde6;
-            padding: 20px 0 20px 0;
+            padding: 20px 0 8px 0;
             .label {
               font-size: 12px;
               color: #636c92;
@@ -306,8 +306,9 @@ export default {
               // margin: 0 0 12px 0;
             }
             .chart {
-              height: 132px;
-              min-height: 132px;
+              height: 88px;
+              min-height: 124px;
+              // max-height: 72px;
             }
           }
           .data:first-child {
@@ -421,13 +422,13 @@ export default {
               font-weight: 500;
             }
             .category__issue {
-              background: #f4e4e1;
+              background: #E7E9EF;
             }
             .category__request {
-              background: #e7e8ee;
+              background: #E7E9EF;
             }
             .category__question{
-              background: #DEF7F3;
+              background: #E7E9EF;
             }
           }
         }

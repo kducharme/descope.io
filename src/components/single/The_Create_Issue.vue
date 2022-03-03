@@ -1,8 +1,8 @@
 <template>
-  <div class="modal" id="createFeedback">
+  <div class="modal" id="createIssue">
     <div class="modal__content">
       <!-- Create Launch Form -->
-      <div class="header" id="createFeedbackHeader">
+      <div class="header" id="createIssueHeader">
         <p class="header__title">Add issue</p>
         <div
           class="header__close"
@@ -54,7 +54,7 @@ export default {
   mounted() {
     const draggable = () => {
       // Make the DIV element draggable:
-      const element = document.querySelector("#createFeedback");
+      const element = document.querySelector("#createIssue");
 
       var PADDING = 8;
 

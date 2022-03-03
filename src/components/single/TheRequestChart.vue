@@ -41,12 +41,13 @@ export default {
                 yAxisKey: "y",
                 xAxisKey: "x",
               },
-              backgroundColor: "#E7E8EE",
-              borderColor: "#6D769C",
+              backgroundColor: "#F2F8F6",
+              borderColor: "#539987",
               borderWidth: 3,
-              pointRadius: 1,
-              pointBackgroundColor: "#6D769C",
-              pointHoverBackgroundColor: "#6D769C",
+              pointRadius: 0,
+              pointBackgroundColor: "#fff",
+              pointBorderColor: '#6D769C',
+              pointHoverBackgroundColor: "#006D769C",
             },
           ],
         },
@@ -65,7 +66,7 @@ export default {
             display: false,
             position: "bottom",
           },
-          maintainAspectRatio: false,
+          maintainAspectRatio: true,
           responsive: false,
           elements: {
             point: {
@@ -161,14 +162,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chartContainer {
-  height: 64px;
-  width: 200px;
-}
+// .chartContainer {
+//   height: 64px;
+//   width: 200px;
+// }
 
 .chart {
-  // height: 64px;
+  // height: 72px;
   width: 200px;
+  max-height: 80px;
   margin-left: -4px;
   margin-bottom: 8px;
 }
