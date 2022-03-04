@@ -1,4 +1,4 @@
-<template>
+\<template>
   <header>
     <nav class="nav">
       <TheCreateTeamModal v-if="store.state.createTeamModal" />
@@ -109,8 +109,9 @@ export default {
   justify-content: space-between;
   height: 100vh;
   padding: 16px;
-  width: 220px;
-  background: #212430;
+  width: 200px;
+  background: #fff;
+  border-right: 1px solid #dbdde6;
   .nav__top {
     width: 100%;
     .logo {
@@ -121,7 +122,7 @@ export default {
         font-weight: 600;
         font-size: 17px;
         letter-spacing: 0.3px;
-        color: white;
+        color: #212430;
       }
     }
     .actions {
@@ -162,22 +163,25 @@ export default {
         }
       }
       .nav__link {
-        color: white;
+        color: #212430;
         margin: 0 0 0 -16px;
         padding: 10px 8px 10px 24px;
       }
       .router-link-active,
       .router-link-exact-active {
         font-weight: 500;
-        background: #313649;
+        background: #3253e423;
+        border-left: 4px solid #3253e4;
+        border-top-right-radius: 100px;
+        border-bottom-right-radius: 100px;
       }
     }
   }
   .nav__bottom {
-    border-top: 1px solid #778ea7;
+    border-top: 1px solid #dbdde6;
     width: 100%;
     padding: 16px 0 8px;
-    color: white;
+    color: #212430;
     .nav__link--logout:hover {
       cursor: pointer;
     }

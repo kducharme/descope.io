@@ -4,6 +4,7 @@
     <TheCreateProjectModal v-if="store.state.createProjectModal" />
     <TheCreateRequestModal v-if="store.state.createRequestModal" />
     <TheCreateQuestionModal v-if="store.state.createQuestionModal" />
+    <TheCreateLaunchModal v-if="store.state.createLaunchModal" />
     <nav class="subnav">
       <div class="top">
         <div class="top__left">
@@ -59,9 +60,9 @@
         <router-link class="nav__link" :to="{ name: 'projects' }"
           >Projects</router-link
         >
-        <!-- <router-link class="nav__link" :to="{ name: 'insights' }"
-          >Insights</router-link
-        > -->
+        <router-link class="nav__link" :to="{ name: 'launches' }"
+          >Launches</router-link
+        >
         <router-link class="nav__link" :to="{ name: 'teamSettings' }"
           >Settings</router-link
         >
@@ -81,6 +82,7 @@ import TheCreateProjectModal from "../../components/single/The_Create_Project.vu
 import TheCreateFeedbackModal from "../../components/single/The_Create_Issue.vue";
 import TheCreateRequestModal from "../../components/single/The_Create_Request.vue";
 import TheCreateQuestionModal from "../../components/single/The_Create_Question.vue";
+import TheCreateLaunchModal from "../../components/single/The_Create_Launch.vue";
 
 export default {
   name: "Team",
@@ -91,6 +93,7 @@ export default {
     TheCreateFeedbackModal,
     TheCreateRequestModal,
     TheCreateQuestionModal,
+    TheCreateLaunchModal,
   },
   data() {
     return {
@@ -123,7 +126,7 @@ export default {
 
 <style lang="scss" scoped>
 .team {
-  margin: 0 0 0 220px;
+  margin: 0 0 0 200px;
   width: 100%;
   overflow-x: hidden;
 }
@@ -131,9 +134,10 @@ export default {
 .subnav {
   display: flex;
   flex-direction: column;
-  width: calc(100vw - 220px);
+  width: calc(100vw - 200px);
   padding: 8px 32px 0 24px;
   border-bottom: 1px solid #dbdde6;
+  // margin: 0 24px;
   .top {
     display: flex;
     align-items: center;

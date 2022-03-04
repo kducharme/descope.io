@@ -1,7 +1,7 @@
 <template>
   <div class="overview">
     <span>
-      I am the insights page
+      I am the launches page
     </span>
   </div>
 </template>
@@ -18,7 +18,7 @@ export default {
 
 <style lang="scss" scoped>
 .overview {
-  background: #eeeff3;
+  background: #f1f3f7;
   height: calc(100vh - 102px);
   padding: 24px;
 }

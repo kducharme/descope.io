@@ -40,6 +40,7 @@ export default new Vuex.Store({
         createIssueModal: false,
         createRequestModal: false,
         createQuestionModal: false,
+        createLaunchModal: false,
     },
     getters: {
         searchFeedback: state => (payload) => {
@@ -185,6 +186,12 @@ export default new Vuex.Store({
         },
         HIDE_CREATE_QUESTION_MODAL: (state) => {
             state.createQuestionModal = false;
+        },
+        SHOW_CREATE_LAUNCH_MODAL: (state) => {
+            state.createLaunchModal = true;
+        },
+        HIDE_CREATE_LAUNCH_MODAL: (state) => {
+            state.createLaunchModal = false;
         },
     },
     actions: {
@@ -507,6 +514,12 @@ export default new Vuex.Store({
         },
         hideCreateQuestionModal(context) {
             context.commit("HIDE_CREATE_QUESTION_MODAL")
+        },
+        showCreateLaunchModal(context) {
+            context.commit("SHOW_CREATE_LAUNCH_MODAL")
+        },
+        hideCreateLaunchModal(context) {
+            context.commit("HIDE_CREATE_LAUNCH_MODAL")
         },
     }
 });

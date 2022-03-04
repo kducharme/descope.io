@@ -125,7 +125,7 @@ a {
 }
 
 input {
-  border: 2px solid #dbdde6;
+  border: 1px solid #dbdde6;
   background: white;
   padding: 8px;
 }

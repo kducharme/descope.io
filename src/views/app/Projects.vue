@@ -135,7 +135,7 @@ export default {
   flex-direction: column;
   align-items: center;
   // justify-content: center;
-  background: #f3f4f7;
+  background: #f1f3f7;
   min-height: calc(100vh - 102px);
   width: 100%;
 }

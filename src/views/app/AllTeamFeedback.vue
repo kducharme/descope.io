@@ -254,7 +254,7 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  background: #f3f4f7;
+  background: #f1f3f7;
   min-height: calc(100vh - 102px);
   width: 100%;
 }
@@ -272,11 +272,12 @@ export default {
     flex-direction: row;
 
     .content__bottom--left {
-      width: 240px;
-      margin: 0 16px 0 0;
+      width: 220px;
+      margin: 0 12px 0 0;
       height: 100%;
       .card {
-        box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
+        // box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
+        border: 1px solid #dbdde6;
         background: white;
         border-radius: 12px;
       }
@@ -294,21 +295,24 @@ export default {
             flex-direction: column;
             border-top: 1px solid #dbdde6;
             padding: 20px 0 8px 0;
+            // background: #f4f5f7;
+            // margin: 12px 0px;
+            // border-radius: 12px;
             .label {
+              // padding: 0 16px;
               font-size: 12px;
-              color: #636c92;
-              font-weight: 600;
+              color: #a1a7c4;
+              font-weight: 500;
               margin: 0 0 8px;
             }
             .metric {
+              // padding: 0 16px;
               font-size: 30px;
               font-weight: 500;
               // margin: 0 0 12px 0;
             }
             .chart {
-              height: 88px;
-              min-height: 124px;
-              // max-height: 72px;
+              // padding: 0 16px;
             }
           }
           .data:first-child {
@@ -321,11 +325,12 @@ export default {
       }
     }
     .content__bottom--right {
-      width: 580px;
-      max-width: 580px;
-      margin: 0 0 0 16px;
+      width: 600px;
+      max-width: 600px;
+      margin: 0 0 0 12px;
       .card {
-        box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
+        // box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
+        border: 1px solid #dbdde6;
         background: white;
         border-radius: 12px;
       }
@@ -333,8 +338,8 @@ export default {
         margin: 0 0 16px 0;
         position: relative;
         width: 100%;
-        width: 580px;
-        max-width: 580px;
+        width: 600px;
+        max-width: 600px;
         input {
           width: 100%;
           padding: 10px 10px 10px 36px;

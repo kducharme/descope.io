@@ -1,14 +1,14 @@
 <template>
   <div v-show="loaded">
-    <p class="weekly">{{ totalDebtCount }} added in the last 14 days</p>
-    <div class="chartContainer">
+    <p class="weekly">{{ totalDebtCount }} added in the last week</p>
+    <!-- <div class="chartContainer">
       <canvas id="debt-chart" class="chart"></canvas>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-import Chart from "chart.js";
+// import Chart from "chart.js";
 // import chartData from "../global/chart-data.js";
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
@@ -27,94 +27,95 @@ export default {
         total += d.y;
       });
       totalDebtCount.value = total;
-    };
-
-    const renderChart = () => {
-      const ctx = document.getElementById("debt-chart");
-      new Chart(ctx, {
-        type: "line",
-        data: {
-          datasets: [
-            {
-              label: false,
-              data: debtChartData.value,
-              parsing: {
-                yAxisKey: "y",
-                xAxisKey: "x",
-              },
-              backgroundColor: "#F8F1F2",
-              borderColor: "#B4656F",
-              borderWidth: 3,
-              pointRadius: 0,
-              pointBackgroundColor: "#EF767A",
-              pointHoverBackgroundColor: "#883E30",
-            },
-          ],
-        },
-        options: {
-          animation: {
-            duration: 0,
-          },
-          layout: {
-            padding: {
-              top: 5,
-              right: 3,
-              left: 3,
-            },
-          },
-          legend: {
-            display: false,
-            position: "bottom",
-          },
-          maintainAspectRatio: false,
-          responsive: false,
-          elements: {
-            point: {
-              radius: 1,
-              backgroundColor: "#3253e4",
-            },
-          },
-          scales: {
-            xAxes: [
-              {
-                gridLines: {
-                  display: false,
-                },
-                ticks: {
-                  display: false,
-                  beginAtZero: true,
-                  padding: 0,
-                },
-                type: "time",
-                time: {
-                  unit: "day",
-                },
-              },
-            ],
-            yAxes: [
-              {
-                gridLines: {
-                  display: false,
-                },
-                ticks: {
-                  display: false,
-                  beginAtZero: true,
-                  padding: 0,
-                },
-              },
-            ],
-          },
-        },
-      });
       loaded.value = true;
     };
+
+    // const renderChart = () => {
+    //   const ctx = document.getElementById("debt-chart");
+    //   new Chart(ctx, {
+    //     type: "line",
+    //     data: {
+    //       datasets: [
+    //         {
+    //           label: false,
+    //           data: debtChartData.value,
+    //           parsing: {
+    //             yAxisKey: "y",
+    //             xAxisKey: "x",
+    //           },
+    //           backgroundColor: "#F8F1F2",
+    //           borderColor: "#B4656F",
+    //           borderWidth: 3,
+    //           pointRadius: 0,
+    //           pointBackgroundColor: "#EF767A",
+    //           pointHoverBackgroundColor: "#883E30",
+    //         },
+    //       ],
+    //     },
+    //     options: {
+    //       animation: {
+    //         duration: 0,
+    //       },
+    //       layout: {
+    //         padding: {
+    //           top: 5,
+    //           right: 3,
+    //           left: 3,
+    //         },
+    //       },
+    //       legend: {
+    //         display: false,
+    //         position: "bottom",
+    //       },
+    //       maintainAspectRatio: false,
+    //       responsive: false,
+    //       elements: {
+    //         point: {
+    //           radius: 1,
+    //           backgroundColor: "#3253e4",
+    //         },
+    //       },
+    //       scales: {
+    //         xAxes: [
+    //           {
+    //             gridLines: {
+    //               display: false,
+    //             },
+    //             ticks: {
+    //               display: false,
+    //               beginAtZero: true,
+    //               padding: 0,
+    //             },
+    //             type: "time",
+    //             time: {
+    //               unit: "day",
+    //             },
+    //           },
+    //         ],
+    //         yAxes: [
+    //           {
+    //             gridLines: {
+    //               display: false,
+    //             },
+    //             ticks: {
+    //               display: false,
+    //               beginAtZero: true,
+    //               padding: 0,
+    //             },
+    //           },
+    //         ],
+    //       },
+    //     },
+    //   });
+    //   loaded.value = true;
+    // };
 
     const getChartData = async () => {
       // const arrDebt = [];
       const moment = require("moment");
       moment.suppressDeprecationWarnings = true;
 
-      const timePeriod = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+      const timePeriod = [0, 1, 2, 3, 4, 5, 6];
       const chartData = [];
 
       timePeriod.forEach((t) => {
@@ -151,7 +152,7 @@ export default {
         }
       });
 
-      renderChart();
+      // renderChart();
       countTotal();
     };
     getChartData();
@@ -171,8 +172,8 @@ export default {
 
 .chart {
   // height: 64px;
-  width: 200px;
-  max-height: 80px;
+  // width: 200px;
+  // max-height: 80px;
   margin-left: -4px;
   margin-bottom: 8px;
 }

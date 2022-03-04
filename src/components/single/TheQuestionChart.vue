@@ -1,14 +1,14 @@
 <template>
   <div v-show="loaded">
     <p class="weekly">{{ totalQuestionCount }} added in the last 14 days</p>
-    <div class="chartContainer">
+    <!-- <div class="chartContainer">
       <canvas id="question-chart" class="chart"></canvas>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-import Chart from "chart.js";
+// import Chart from "chart.js";
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 
@@ -26,87 +26,88 @@ export default {
         total += d.y;
       });
       totalQuestionCount.value = total;
-    };
-
-    const renderChart = () => {
-      const ctx = document.getElementById("question-chart");
-      new Chart(ctx, {
-        type: "line",
-        data: {
-          datasets: [
-            {
-              label: false,
-              data: questionChartData.value,
-              parsing: {
-                yAxisKey: "y",
-                xAxisKey: "x",
-              },
-              backgroundColor: "#F3F4F7",
-              borderColor: "#5B6386",
-              borderWidth: 3,
-              pointRadius: 0,
-              pointBackgroundColor: "#23967F",
-              pointHoverBackgroundColor: "#23967F",
-            },
-          ],
-        },
-        options: {
-          animation: {
-            duration: 0,
-          },
-          layout: {
-            padding: {
-              top: 5,
-              right: 3,
-              left: 3,
-            },
-          },
-          legend: {
-            display: false,
-            position: "bottom",
-          },
-          maintainAspectRatio: false,
-          responsive: false,
-          elements: {
-            point: {
-              radius: 1,
-              backgroundColor: "#3253e4",
-            },
-          },
-          scales: {
-            xAxes: [
-              {
-                gridLines: {
-                  display: false,
-                },
-                ticks: {
-                  display: false,
-                  beginAtZero: true,
-                  padding: 0,
-                },
-                type: "time",
-                time: {
-                  unit: "day",
-                },
-              },
-            ],
-            yAxes: [
-              {
-                gridLines: {
-                  display: false,
-                },
-                ticks: {
-                  display: false,
-                  beginAtZero: true,
-                  padding: 0,
-                },
-              },
-            ],
-          },
-        },
-      });
       loaded.value = true;
     };
+
+    // const renderChart = () => {
+    //   const ctx = document.getElementById("question-chart");
+    //   new Chart(ctx, {
+    //     type: "line",
+    //     data: {
+    //       datasets: [
+    //         {
+    //           label: false,
+    //           data: questionChartData.value,
+    //           parsing: {
+    //             yAxisKey: "y",
+    //             xAxisKey: "x",
+    //           },
+    //           backgroundColor: "#F3F4F7",
+    //           borderColor: "#5B6386",
+    //           borderWidth: 3,
+    //           pointRadius: 0,
+    //           pointBackgroundColor: "#23967F",
+    //           pointHoverBackgroundColor: "#23967F",
+    //         },
+    //       ],
+    //     },
+    //     options: {
+    //       animation: {
+    //         duration: 0,
+    //       },
+    //       layout: {
+    //         padding: {
+    //           top: 5,
+    //           right: 3,
+    //           left: 3,
+    //         },
+    //       },
+    //       legend: {
+    //         display: false,
+    //         position: "bottom",
+    //       },
+    //       maintainAspectRatio: false,
+    //       responsive: false,
+    //       elements: {
+    //         point: {
+    //           radius: 1,
+    //           backgroundColor: "#3253e4",
+    //         },
+    //       },
+    //       scales: {
+    //         xAxes: [
+    //           {
+    //             gridLines: {
+    //               display: false,
+    //             },
+    //             ticks: {
+    //               display: false,
+    //               beginAtZero: true,
+    //               padding: 0,
+    //             },
+    //             type: "time",
+    //             time: {
+    //               unit: "day",
+    //             },
+    //           },
+    //         ],
+    //         yAxes: [
+    //           {
+    //             gridLines: {
+    //               display: false,
+    //             },
+    //             ticks: {
+    //               display: false,
+    //               beginAtZero: true,
+    //               padding: 0,
+    //             },
+    //           },
+    //         ],
+    //       },
+    //     },
+    //   });
+    //   loaded.value = true;
+    // };
 
     const getChartData = async () => {
       const moment = require("moment");
@@ -149,7 +150,7 @@ export default {
         }
       });
 
-      renderChart();
+      // renderChart();
       countTotal();
     };
     getChartData();

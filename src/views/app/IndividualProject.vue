@@ -72,7 +72,7 @@ export default {
   .subnav {
     display: flex;
     flex-direction: column;
-    width: calc(100vw - 220px);
+    width: calc(100vw - 200px);
     padding: 8px 24px 0;
     border-bottom: 1px solid #dbdde6;
     background: white;

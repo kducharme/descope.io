@@ -46,7 +46,7 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       margin: 0;
-      color: white;
+      color: #212430;
     }
     .launch__img {
       width: 18px;
@@ -61,6 +61,9 @@ export default {
 }
 .router-link-active {
   font-weight: 500;
-  background: #313649;
+  background: #3253e423;
+  border-left: 4px solid #3253e4;
+  border-top-right-radius: 100px;
+  border-bottom-right-radius: 100px;
 }
 </style>

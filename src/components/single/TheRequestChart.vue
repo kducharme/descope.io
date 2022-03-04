@@ -1,14 +1,14 @@
 <template>
   <div v-show="loaded">
     <p class="weekly">{{ totalRequestCount }} added in the last 14 days</p>
-    <div class="chartContainer">
+    <!-- <div class="chartContainer">
       <canvas id="requests-chart" class="chart"></canvas>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-import Chart from "chart.js";
+// import Chart from "chart.js";
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 
@@ -26,88 +26,89 @@ export default {
         total += d.y;
       });
       totalRequestCount.value = total;
-    };
-
-    const renderChart = () => {
-      const ctx = document.getElementById("requests-chart");
-      new Chart(ctx, {
-        type: "line",
-        data: {
-          datasets: [
-            {
-              label: false,
-              data: requestsChartData.value,
-              parsing: {
-                yAxisKey: "y",
-                xAxisKey: "x",
-              },
-              backgroundColor: "#F2F8F6",
-              borderColor: "#539987",
-              borderWidth: 3,
-              pointRadius: 0,
-              pointBackgroundColor: "#fff",
-              pointBorderColor: '#6D769C',
-              pointHoverBackgroundColor: "#006D769C",
-            },
-          ],
-        },
-        options: {
-          animation: {
-            duration: 0,
-          },
-          layout: {
-            padding: {
-              top: 5,
-              right: 3,
-              left: 3,
-            },
-          },
-          legend: {
-            display: false,
-            position: "bottom",
-          },
-          maintainAspectRatio: true,
-          responsive: false,
-          elements: {
-            point: {
-              radius: 1,
-              backgroundColor: "#3253e4",
-            },
-          },
-          scales: {
-            xAxes: [
-              {
-                gridLines: {
-                  display: false,
-                },
-                ticks: {
-                  display: false,
-                  beginAtZero: true,
-                  padding: 0,
-                },
-                type: "time",
-                time: {
-                  unit: "day",
-                },
-              },
-            ],
-            yAxes: [
-              {
-                gridLines: {
-                  display: false,
-                },
-                ticks: {
-                  display: false,
-                  beginAtZero: true,
-                  padding: 0,
-                },
-              },
-            ],
-          },
-        },
-      });
       loaded.value = true;
     };
+
+    // const renderChart = () => {
+    //   const ctx = document.getElementById("requests-chart");
+    //   new Chart(ctx, {
+    //     type: "line",
+    //     data: {
+    //       datasets: [
+    //         {
+    //           label: false,
+    //           data: requestsChartData.value,
+    //           parsing: {
+    //             yAxisKey: "y",
+    //             xAxisKey: "x",
+    //           },
+    //           backgroundColor: "#F2F8F6",
+    //           borderColor: "#539987",
+    //           borderWidth: 3,
+    //           pointRadius: 0,
+    //           pointBackgroundColor: "#fff",
+    //           pointBorderColor: '#6D769C',
+    //           pointHoverBackgroundColor: "#006D769C",
+    //         },
+    //       ],
+    //     },
+    //     options: {
+    //       animation: {
+    //         duration: 0,
+    //       },
+    //       layout: {
+    //         padding: {
+    //           top: 5,
+    //           right: 3,
+    //           left: 3,
+    //         },
+    //       },
+    //       legend: {
+    //         display: false,
+    //         position: "bottom",
+    //       },
+    //       maintainAspectRatio: true,
+    //       responsive: false,
+    //       elements: {
+    //         point: {
+    //           radius: 1,
+    //           backgroundColor: "#3253e4",
+    //         },
+    //       },
+    //       scales: {
+    //         xAxes: [
+    //           {
+    //             gridLines: {
+    //               display: false,
+    //             },
+    //             ticks: {
+    //               display: false,
+    //               beginAtZero: true,
+    //               padding: 0,
+    //             },
+    //             type: "time",
+    //             time: {
+    //               unit: "day",
+    //             },
+    //           },
+    //         ],
+    //         yAxes: [
+    //           {
+    //             gridLines: {
+    //               display: false,
+    //             },
+    //             ticks: {
+    //               display: false,
+    //               beginAtZero: true,
+    //               padding: 0,
+    //             },
+    //           },
+    //         ],
+    //       },
+    //     },
+    //   });
+    //   loaded.value = true;
+    // };
 
     const getChartData = async () => {
       const moment = require("moment");
@@ -150,7 +151,7 @@ export default {
         }
       });
 
-      renderChart();
+      // renderChart();
       countTotal();
     };
     getChartData();
