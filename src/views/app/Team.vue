@@ -41,15 +41,7 @@
             />
           </div> -->
           <div class="subnav__button--primary">
-            <BaseButtonIcon
-              type="submit"
-              :priority="primary_priority"
-              :text="primary_text"
-              :action="showCreateFeedbackModal"
-              :tooltip="primary_tooltip"
-              :tooltip_status="true"
-              :tooltip_position="primary_tooltip_position"
-            />
+            <BaseButtonIcon />
           </div>
         </div>
       </div>
@@ -97,10 +89,6 @@ export default {
   },
   data() {
     return {
-      primary_priority: "Primary",
-      primary_text: "Add feedback",
-      // primary_tooltip: "Add new project, feedback, etc.",
-      // primary_tooltip_position: "is-left",
     };
   },
   setup() {
@@ -169,6 +157,7 @@ export default {
           font-size: 11px;
           font-weight: 600;
           border: 2px solid white;
+          // background: #e5e8ee;
         }
         .members__add {
           margin: -4px;
@@ -182,7 +171,7 @@ export default {
           font-size: 11px;
           font-weight: 600;
           border: 2px solid white;
-          background: #9da5c4;
+          background: #aeb6c4;
         }
         .members__add:hover {
           cursor: pointer;

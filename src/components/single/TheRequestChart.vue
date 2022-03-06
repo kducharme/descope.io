@@ -1,6 +1,6 @@
 <template>
   <div v-show="loaded">
-    <p class="weekly">{{ totalRequestCount }} added in the last 14 days</p>
+    <p class="weekly">{{ totalRequestCount }} added in the last week</p>
     <!-- <div class="chartContainer">
       <canvas id="requests-chart" class="chart"></canvas>
     </div> -->
@@ -114,7 +114,7 @@ export default {
       const moment = require("moment");
       moment.suppressDeprecationWarnings = true;
 
-      const timePeriod = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+      const timePeriod = [0, 1, 2, 3, 4, 5, 6];
       const chartData = [];
 
       timePeriod.forEach((t) => {

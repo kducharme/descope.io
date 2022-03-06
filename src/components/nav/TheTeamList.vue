@@ -61,7 +61,7 @@ export default {
 }
 .router-link-active {
   font-weight: 500;
-  background: #3253e423;
+  background: #f1f3f7;
   border-left: 4px solid #3253e4;
   border-top-right-radius: 100px;
   border-bottom-right-radius: 100px;

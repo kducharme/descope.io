@@ -145,7 +145,7 @@ export default {
         margin: 16px 0 8px -16px;
         padding: 8px 8px 0px 24px;
         .title__text {
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 500;
           color: #9aa3ac;
         }
@@ -170,7 +170,7 @@ export default {
       .router-link-active,
       .router-link-exact-active {
         font-weight: 500;
-        background: #3253e423;
+        background: #f1f3f7;
         border-left: 4px solid #3253e4;
         border-top-right-radius: 100px;
         border-bottom-right-radius: 100px;

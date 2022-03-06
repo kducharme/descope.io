@@ -126,6 +126,7 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_TEAM_FEEDBACK: (state, feedback) => {
             state.teams_active_feedback = feedback;
+            console.log(state.teams_active_feedback)
         },
         SET_ACTIVE_TEAM_MEMBERS: (state, members) => {
             state.teams_active_members = members;

@@ -17,34 +17,48 @@
         class="content__bottom"
         v-if="store.state.teams_active_feedback.length > 0"
       >
-        <!-- Left column -->
         <div class="content__bottom--left">
           <div class="card summary">
             <p class="title">Summary</p>
-
-            <!-- Categories -->
-            <div class="categories">
-              <div
-                :class="[cat.id === 'all' ? 'cat cat__active' : 'cat']"
-                v-for="cat in categories"
-                :key="cat.id"
-                :id="`cat__${cat.id}`"
-                @click="setActiveFilter(cat.id)"
-              >
-                <div class="left">
-                  <span :class="['dot', cat.style]"></span>
-                  <p class="cat__title">{{ cat.title }}</p>
-                </div>
-                <p class="cat__count" v-if="cat.id !== 'all'">
+            <div class="analytics">
+              <div class="data">
+                <p class="label">Issues</p>
+                <p class="metric">
                   {{
                     store.state.teams_active_feedback.filter((f) =>
-                      f.category.includes(`${cat.id}`)
+                      f.category.includes("issue")
                     ).length
                   }}
                 </p>
-                <p class="cat__count" v-if="cat.id === 'all'">
-                  {{ store.state.teams_active_feedback.length }}
+                <div class="chart">
+                  <TheDebtChart />
+                </div>
+              </div>
+              <div class="data">
+                <p class="label">Ideas</p>
+                <p class="metric">
+                  {{
+                    store.state.teams_active_feedback.filter((f) =>
+                      f.category.includes("request")
+                    ).length
+                  }}
                 </p>
+                <div class="chart">
+                  <TheRequestChart />
+                </div>
+              </div>
+              <div class="data">
+                <p class="label">Questions</p>
+                <p class="metric">
+                  {{
+                    store.state.teams_active_feedback.filter((f) =>
+                      f.category.includes("question")
+                    ).length
+                  }}
+                </p>
+                <div class="chart">
+                  <TheQuestionChart />
+                </div>
               </div>
             </div>
           </div>
@@ -184,27 +198,31 @@
 
 <script>
 import store from "../../store/index";
-import { ref } from "vue";
 // import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import BaseEmptyState from "../../components/global/Base_Empty_State.vue";
 import BaseVoting from "../../components/global/Base_Voting.vue";
 import BaseFilter from "../../components/global/Base_Filter.vue";
-// import FeedbackChart from "../../components/single/TheFeedbackChart.vue";
+import TheDebtChart from "../../components/single/TheDebtChart.vue";
+import TheRequestChart from "../../components/single/TheRequestChart.vue";
+import TheQuestionChart from "../../components/single/TheQuestionChart.vue";
 
 export default {
   name: "All Team Feedback",
   components: {
     BaseEmptyState,
     BaseVoting,
+    TheDebtChart,
+    TheRequestChart,
+    TheQuestionChart,
     BaseFilter,
-    // FeedbackChart,
   },
 
   data() {
     return {
       loading: false,
       search: "",
+      feedback: [],
       empty_title: "Add your feedback",
       empty_body:
         "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
@@ -217,28 +235,6 @@ export default {
   setup() {
     // Set variables
     const router = useRouter();
-    const activeFilter = ref(null);
-    const categories = ref(null);
-
-    const setActiveFilter = (id) => {
-      //
-      // Remove any active filters
-      categories.value.forEach((cat) => {
-        document
-          .querySelector(`#cat__${cat.id}`)
-          .classList.remove("cat__active");
-      });
-
-      //
-      // Add active filter to selection
-      document.querySelector(`#cat__${id}`).classList.add("cat__active");
-
-      activeFilter.value = id;
-
-      // console.log(activeFilter.value);
-
-      // .classList.add("cat__active");
-    };
 
     const routeToFeedbackDetails = (id) => {
       router.push({ name: "feedbackDetails", params: { feedbackId: id } });
@@ -249,43 +245,9 @@ export default {
       routeToFeedbackDetails(id);
     };
 
-    const setCategories = () => {
-      categories.value = [
-        {
-          id: "all",
-          title: "All feedback",
-          style: "cat__all",
-        },
-        {
-          id: "idea",
-          title: "Ideas",
-          style: "dot__idea",
-        },
-        {
-          id: "question",
-          title: "Questions",
-          style: "dot__question",
-        },
-        {
-          id: "issue",
-          title: "Issues",
-          style: "dot__issue",
-        },
-        {
-          id: "resolved",
-          title: "Resolved",
-          style: "dot__resolved",
-        },
-      ];
-    };
-
-    setCategories();
-
     return {
       store,
       setActiveFeedback,
-      setActiveFilter,
-      categories,
     };
   },
   methods: {
@@ -320,8 +282,8 @@ export default {
     flex-direction: row;
 
     .content__bottom--left {
-      width: 220px;
-      margin: 0 16px 0 0;
+      width: 240px;
+      margin: 0 12px 0 0;
       height: 100%;
       .card {
         // box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
@@ -332,62 +294,43 @@ export default {
       .summary {
         display: flex;
         flex-direction: column;
-        padding: 24px 20px 12px;
+        padding: 24px 20px;
         .title {
           font-size: 16px;
           font-weight: 600;
         }
-      }
-      .categories {
-        display: flex;
-        flex-direction: column;
-        margin: 16px -4px 0 -4px;
-
-        .cat {
-          display: flex;
-          justify-content: space-between;
-          padding: 12px 0;
-          margin: 0 -8px;
-          .cat__all {
-            display: none;
-          }
-          .left {
+        .analytics {
+          .data {
             display: flex;
-            align-items: center;
-            padding: 0 0 0 16px;
-            .dot {
-              width: 8px;
-              height: 8px;
-              margin-right: 10px;
-              border-radius: 100%;
+            flex-direction: column;
+            border-top: 1px solid #dbdde6;
+            padding: 20px 0 8px 0;
+            // background: #f4f5f7;
+            // margin: 12px 0px;
+            // border-radius: 12px;
+            .label {
+              // padding: 0 16px;
+              font-size: 12px;
+              color: #a1a7c4;
+              font-weight: 500;
+              margin: 0 0 8px;
             }
-            .dot__issue {
-              background: #eb5c6a;
+            .metric {
+              // padding: 0 16px;
+              font-size: 30px;
+              font-weight: 500;
+              // margin: 0 0 12px 0;
             }
-            .dot__idea {
-              background: #0fa394;
-            }
-            .dot__question {
-              background: #7172d8;
-            }
-            .dot__resolved {
-              background: #cbcfe0;
+            .chart {
+              // padding: 0 16px;
             }
           }
-          .cat__count {
-            padding: 0 20px 0 0;
+          .data:first-child {
+            border: none;
           }
-        }
-
-        .cat__active {
-          background: #f1f3f7;
-          font-weight: 600;
-          border-radius: 6px;
-        }
-        .cat:hover {
-          cursor: pointer;
-          background: #f1f3f7;
-          border-radius: 6px;
+          .data:last-child {
+            padding: 24px 0 0 0;
+          }
         }
       }
     }

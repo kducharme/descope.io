@@ -208,7 +208,8 @@ export default {
   background-color: white;
   border: 2px solid white;
   border-radius: 12px;
-  box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
+  // box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
+  border: 1px solid #dbdde6;
   display: flex;
   flex-direction: column;
   overflow: hidden;
