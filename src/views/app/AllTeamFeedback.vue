@@ -19,10 +19,10 @@
       >
         <!-- Left column -->
         <div class="content__bottom--left">
+          <!-- Categories -->
           <div class="card summary">
-            <p class="title">Summary</p>
+            <p class="title">Categories</p>
 
-            <!-- Categories -->
             <div class="categories">
               <div
                 :class="[cat.id === 'all' ? 'cat cat__active' : 'cat']"
@@ -46,6 +46,14 @@
                   {{ store.state.teams_active_feedback.length }}
                 </p>
               </div>
+            </div>
+          </div>
+
+          <!-- Feedback Summary -->
+          <div class="card weekly">
+            <p class="title">Summary</p>
+            <div class="chart">
+              <FeedbackChart />
             </div>
           </div>
         </div>
@@ -190,7 +198,7 @@ import { useRouter } from "vue-router";
 import BaseEmptyState from "../../components/global/Base_Empty_State.vue";
 import BaseVoting from "../../components/global/Base_Voting.vue";
 import BaseFilter from "../../components/global/Base_Filter.vue";
-// import FeedbackChart from "../../components/single/TheFeedbackChart.vue";
+import FeedbackChart from "../../components/single/TheFeedbackChart.vue";
 
 export default {
   name: "All Team Feedback",
@@ -198,7 +206,7 @@ export default {
     BaseEmptyState,
     BaseVoting,
     BaseFilter,
-    // FeedbackChart,
+    FeedbackChart,
   },
 
   data() {
@@ -215,7 +223,8 @@ export default {
     };
   },
   setup() {
-    // Set variables
+    //
+    // Set initial data
     const router = useRouter();
     const activeFilter = ref(null);
     const categories = ref(null);
@@ -230,14 +239,9 @@ export default {
       });
 
       //
-      // Add active filter to selection
+      // Set active filter value & styling
       document.querySelector(`#cat__${id}`).classList.add("cat__active");
-
       activeFilter.value = id;
-
-      // console.log(activeFilter.value);
-
-      // .classList.add("cat__active");
     };
 
     const routeToFeedbackDetails = (id) => {
@@ -324,19 +328,24 @@ export default {
       margin: 0 16px 0 0;
       height: 100%;
       .card {
-        // box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
         border: 1px solid #dbdde6;
         background: white;
         border-radius: 12px;
+      }
+      .title {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .weekly {
+        display: flex;
+        flex-direction: column;
+        padding: 24px 20px 40px;
       }
       .summary {
         display: flex;
         flex-direction: column;
         padding: 24px 20px 12px;
-        .title {
-          font-size: 16px;
-          font-weight: 600;
-        }
+        margin: 0 0 16px;
       }
       .categories {
         display: flex;
@@ -381,7 +390,7 @@ export default {
 
         .cat__active {
           background: #f1f3f7;
-          font-weight: 600;
+          font-weight: 500;
           border-radius: 6px;
         }
         .cat:hover {

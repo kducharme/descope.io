@@ -1,7 +1,6 @@
 <template>
   <div v-show="loaded">
-    <p class="title">This week</p>
-    <p class="weekly">{{ totalDebtCount }} feedback added this week</p>
+    <p class="weekly">{{ totalDebtCount }} added in the last two weeks</p>
     <div class="chartContainer">
       <canvas id="feedback-chart" class="chart"></canvas>
     </div>
@@ -18,7 +17,7 @@ export default {
   setup() {
     // Setup variables and data
     const issueData = ref(null);
-    const questionData = ref(null);
+    // const questionData = ref(null);
     const totalDebtCount = ref(null);
     const loaded = ref(null);
 
@@ -28,7 +27,6 @@ export default {
         total += d.y;
       });
       totalDebtCount.value = total;
-      console.log(totalDebtCount.value);
       loaded.value = true;
     };
 
@@ -45,26 +43,12 @@ export default {
                 yAxisKey: "y",
                 xAxisKey: "x",
               },
-              backgroundColor: "#f1f3fc",
-              borderColor: "#3253e4",
+              backgroundColor: "#EFF4FB",
+              borderColor: "#8DB2E2",
               borderWidth: 3,
-              pointRadius: 0,
-              pointBackgroundColor: "#EF767A",
-              pointHoverBackgroundColor: "#883E30",
-            },
-            {
-              label: false,
-              data: questionData.value,
-              parsing: {
-                yAxisKey: "y",
-                xAxisKey: "x",
-              },
-              backgroundColor: "#f1f3fc",
-              borderColor: "#cd1231",
-              borderWidth: 3,
-              pointRadius: 0,
-              pointBackgroundColor: "#EF767A",
-              pointHoverBackgroundColor: "#883E30",
+              pointRadius: 1.75,
+              pointBackgroundColor: "#8DB2E2",
+              pointHoverBackgroundColor: "#8DB2E2",
             },
           ],
         },
@@ -131,7 +115,7 @@ export default {
       const moment = require("moment");
       moment.suppressDeprecationWarnings = true;
 
-      const timePeriod = [0, 1, 2, 3, 4, 5, 6];
+      const timePeriod = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
       const chartData = [];
 
       timePeriod.forEach((t) => {
@@ -202,9 +186,10 @@ export default {
 .chart {
   height: 64px;
   width: 178px;
+  min-width:178px;
   max-width: 178px;
-  max-height: 80px;
-  margin-left: -4px;
+  // max-height: 80px;
+  margin-left: -6px;
   margin-bottom: 24px;
 }
 
