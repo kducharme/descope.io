@@ -43,12 +43,13 @@ export default new Vuex.Store({
         createLaunchModal: false,
     },
     getters: {
-        searchFeedback: state => (payload) => {
+        filterFeedback: state => (payload) => {
+            console.log('hi')
             return state.teams_active_feedback.filter(fb =>
-                fb.title.toLowerCase().includes(payload.toLowerCase()) ||
-                fb.description.toLowerCase().includes(payload.toLowerCase()) ||
-                // fb.projects.name.toLowerCase().includes(payload.toLowerCase()) ||
-                fb.category.toLowerCase().includes(payload.toLowerCase())
+                // fb.category.toLowerCase().includes(payload.search.toLowerCase()) ||
+                (fb.title.toLowerCase().includes(payload.search.toLowerCase()) ||
+                    fb.description.toLowerCase().includes(payload.search.toLowerCase()) ||
+                    fb.category.toLowerCase().includes(payload.search.toLowerCase()))
             );
         },
         searchProjects: state => (payload) => {

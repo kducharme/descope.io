@@ -29,7 +29,7 @@
                 v-for="cat in categories"
                 :key="cat.id"
                 :id="`cat__${cat.id}`"
-                @click="setActiveFilter(cat.id)"
+                @click="setFilter(cat.id)"
               >
                 <div class="left">
                   <span :class="['dot', cat.style]"></span>
@@ -76,10 +76,9 @@
               </svg>
               <input
                 type="text"
-                v-model="search"
+                v-model="filter.search"
                 class="search__input"
                 placeholder="Search title, decription, category"
-                @keyup="searchFeedback"
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +88,7 @@
                 fill="#7B82A3"
                 class="search__input--reset"
                 @click="resetSearch()"
-                v-if="this.search"
+                v-if="this.filter.search"
               >
                 <path d="M0 0h24v24H0V0z" fill="none" />
                 <path
@@ -101,88 +100,87 @@
               <BaseFilter />
             </div> -->
           </div>
-          <div v-if="activeFilter === 'all'">
-            <div
-              class="card fb"
-              v-for="feedback in store.getters.searchFeedback(this.search)"
-              :key="feedback.id"
-              @click="setActiveFeedback(feedback.id)"
-            >
-              <div class="fb__top">
-                <div class="fb__top--left">
-                  <div class="left">
-                    <p :class="['initials', feedback.profiles.color]">
-                      {{ feedback._initials }}
-                    </p>
-                  </div>
-                  <div class="right">
-                    <p class="project" v-if="feedback.projects">
-                      {{ feedback.projects.name }}
-                    </p>
-                    <p class="project" v-show="!feedback.projects">
-                      {{ store.state.teams_active.name }} Team
-                      <span class="team">(no project)</span>
-                    </p>
-                    <p class="details">
-                      Added by {{ feedback._addedBy }} {{ feedback._dateAdded }}
-                    </p>
-                  </div>
-                </div>
-                <div class="fb__top--right">
-                  <div
-                    class="tag tag__issue"
-                    v-if="feedback.category.includes('issue')"
-                  >
-                    <span class="dot dot__issue"></span>
-                    <p>Issue</p>
-                  </div>
-                  <div
-                    class="tag tag__idea"
-                    v-if="feedback.category.includes('idea')"
-                  >
-                    <span class="dot dot__idea"></span>
-                    <p>Idea</p>
-                  </div>
-                  <div
-                    class="tag tag__question"
-                    v-if="feedback.category.includes('question')"
-                  >
-                    <span class="dot dot__question"></span>
-                    <p>Question</p>
-                  </div>
-                </div>
-              </div>
-              <div class="fb__mid">
-                <p class="title">{{ feedback.title }}</p>
-                <p class="description">{{ feedback.description }}</p>
-                <img
-                  v-if="feedback._image"
-                  :src="feedback._image"
-                  class="image"
-                />
-              </div>
-              <div class="fb__bottom">
+          <div
+            class="card fb"
+            v-for="feedback in store.getters.filterFeedback(this.filter)"
+            :key="feedback.id"
+            @click="setActiveFeedback(feedback.id)"
+            v-show="feedback.category === this.filter.category || this.filter.category === 'all'"
+          >
+            <div class="fb__top">
+              <div class="fb__top--left">
                 <div class="left">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="16px"
-                    viewBox="0 0 24 24"
-                    width="16px"
-                    fill="#7B82A3"
-                    class="comment"
-                  >
-                    <path d="M0 0h24v24H0V0z" fill="none" />
-                    <path
-                      d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"
-                    />
-                  </svg>
-                  <div class="comment__count" v-if="feedback.comments">
-                    {{ feedback.comments.length }}
-                  </div>
+                  <p :class="['initials', feedback.profiles.color]">
+                    {{ feedback._initials }}
+                  </p>
                 </div>
-                <div class="right" id="voting" @click.stop>
-                  <BaseVoting :feedback="feedback" />
+                <div class="right">
+                  <p class="project" v-if="feedback.projects">
+                    {{ feedback.projects.name }}
+                  </p>
+                  <p class="project" v-show="!feedback.projects">
+                    {{ store.state.teams_active.name }} Team
+                    <span class="team">(no project)</span>
+                  </p>
+                  <p class="details">
+                    Added by {{ feedback._addedBy }} {{ feedback._dateAdded }}
+                  </p>
                 </div>
+              </div>
+              <div class="fb__top--right">
+                <div
+                  class="tag tag__issue"
+                  v-if="feedback.category.includes('issue')"
+                >
+                  <span class="dot dot__issue"></span>
+                  <p>Issue</p>
+                </div>
+                <div
+                  class="tag tag__idea"
+                  v-if="feedback.category.includes('idea')"
+                >
+                  <span class="dot dot__idea"></span>
+                  <p>Idea</p>
+                </div>
+                <div
+                  class="tag tag__question"
+                  v-if="feedback.category.includes('question')"
+                >
+                  <span class="dot dot__question"></span>
+                  <p>Question</p>
+                </div>
+              </div>
+            </div>
+            <div class="fb__mid">
+              <p class="title">{{ feedback.title }}</p>
+              <p class="description">{{ feedback.description }}</p>
+              <img
+                v-if="feedback._image"
+                :src="feedback._image"
+                class="image"
+              />
+            </div>
+            <div class="fb__bottom">
+              <div class="left">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="16px"
+                  viewBox="0 0 24 24"
+                  width="16px"
+                  fill="#7B82A3"
+                  class="comment"
+                >
+                  <path d="M0 0h24v24H0V0z" fill="none" />
+                  <path
+                    d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"
+                  />
+                </svg>
+                <div class="comment__count" v-if="feedback.comments">
+                  {{ feedback.comments.length }}
+                </div>
+              </div>
+              <div class="right" id="voting" @click.stop>
+                <BaseVoting :feedback="feedback" />
               </div>
             </div>
           </div>
@@ -194,7 +192,7 @@
 
 <script>
 import store from "../../store/index";
-import { ref } from "vue";
+// import { ref } from "vue";
 // import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import BaseEmptyState from "../../components/global/Base_Empty_State.vue";
@@ -214,49 +212,11 @@ export default {
   data() {
     return {
       loading: false,
-      search: "",
-      empty_title: "Add your feedback",
-      empty_body:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-      empty_button_type: "submit",
-      empty_button_priority: "Primary",
-      empty_button_text: "Add feedback",
-      empty_button_action: "showCreateFeedbackModal",
-    };
-  },
-  setup() {
-    //
-    // Set initial data
-    const router = useRouter();
-    const activeFilter = ref(null);
-    const categories = ref(null);
-
-    const setActiveFilter = (id) => {
-      //
-      // Remove any active filters
-      categories.value.forEach((cat) => {
-        document
-          .querySelector(`#cat__${cat.id}`)
-          .classList.remove("cat__active");
-      });
-
-      //
-      // Set active filter value & styling
-      document.querySelector(`#cat__${id}`).classList.add("cat__active");
-      activeFilter.value = id;
-    };
-
-    const routeToFeedbackDetails = (id) => {
-      router.push({ name: "feedbackDetails", params: { feedbackId: id } });
-    };
-
-    // When a project is clicked, store the active project in Vuex
-    const setActiveFeedback = (id) => {
-      routeToFeedbackDetails(id);
-    };
-
-    const setCategories = () => {
-      categories.value = [
+      filter: {
+        search: "",
+        category: "all",
+      },
+      categories: [
         {
           id: "all",
           title: "All feedback",
@@ -282,18 +242,86 @@ export default {
           title: "Resolved",
           style: "dot__resolved",
         },
-      ];
-      activeFilter.value = 'all';
+      ],
+      empty_title: "Add your feedback",
+      empty_body:
+        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+      empty_button_type: "submit",
+      empty_button_priority: "Primary",
+      empty_button_text: "Add feedback",
+      empty_button_action: "showCreateFeedbackModal",
+    };
+  },
+  setup() {
+    //
+    // Set initial data
+    const router = useRouter();
+    // const activeFilter = ref(null);
+    // const categories = ref(null);
+
+    // const setActiveFilter = (id) => {
+    //   //
+    //   // Remove any active filters
+    //   categories.value.forEach((cat) => {
+    //     document
+    //       .querySelector(`#cat__${cat.id}`)
+    //       .classList.remove("cat__active");
+    //   });
+
+    //   //
+    //   // Set active filter value & styling
+    //   document.querySelector(`#cat__${id}`).classList.add("cat__active");
+    //   activeFilter.value = id;
+    // };
+
+    const routeToFeedbackDetails = (id) => {
+      router.push({ name: "feedbackDetails", params: { feedbackId: id } });
     };
 
-    setCategories();
+    // When a project is clicked, store the active project in Vuex
+    const setActiveFeedback = (id) => {
+      routeToFeedbackDetails(id);
+    };
+
+    // const setCategories = () => {
+    //   categories.value = [
+    //     {
+    //       id: "all",
+    //       title: "All feedback",
+    //       style: "cat__all",
+    //     },
+    //     {
+    //       id: "idea",
+    //       title: "Ideas",
+    //       style: "dot__idea",
+    //     },
+    //     {
+    //       id: "question",
+    //       title: "Questions",
+    //       style: "dot__question",
+    //     },
+    //     {
+    //       id: "issue",
+    //       title: "Issues",
+    //       style: "dot__issue",
+    //     },
+    //     {
+    //       id: "resolved",
+    //       title: "Resolved",
+    //       style: "dot__resolved",
+    //     },
+    //   ];
+    //   activeFilter.value = "all";
+    // };
+
+    // setCategories();
 
     return {
       store,
       setActiveFeedback,
-      setActiveFilter,
-      categories,
-      activeFilter,
+      // setActiveFilter,
+      // categories,
+      // activeFilter,
     };
   },
   methods: {
@@ -302,6 +330,20 @@ export default {
     },
     resetSearch() {
       this.search = "";
+    },
+    setFilter(id) {
+      //
+      // Remove any active filters
+      this.categories.forEach((cat) => {
+        document
+          .querySelector(`#cat__${cat.id}`)
+          .classList.remove("cat__active");
+      });
+
+      //
+      // Set active filter value & styling
+      document.querySelector(`#cat__${id}`).classList.add("cat__active");
+      this.filter.category = id;
     },
   },
   mounted() {},
