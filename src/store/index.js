@@ -295,10 +295,12 @@ export default new Vuex.Store({
 
             const { data: allFeedback } = await supabase
                 .from('feedback')
-                .select('*,profiles(*),projects(id, *)')
+                .select('*,profiles(id,*),projects(*)')
                 .eq("team_id", context.state.teams_active.id);
 
             // Hydrate the feedback object
+
+            console.log(allFeedback)
 
             for (const fb of allFeedback) {
 

@@ -97,9 +97,9 @@
                 />
               </svg>
             </div>
-            <div class="filter">
+            <!-- <div class="filter">
               <BaseFilter />
-            </div>
+            </div> -->
           </div>
           <div
             class="card fb"
@@ -137,7 +137,7 @@
                 </div>
                 <div
                   class="tag tag__idea"
-                  v-if="feedback.category.includes('request')"
+                  v-if="feedback.category.includes('idea')"
                 >
                   <span class="dot dot__idea"></span>
                   <p>Idea</p>
@@ -197,7 +197,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import BaseEmptyState from "../../components/global/Base_Empty_State.vue";
 import BaseVoting from "../../components/global/Base_Voting.vue";
-import BaseFilter from "../../components/global/Base_Filter.vue";
+// import BaseFilter from "../../components/global/Base_Filter.vue";
 import FeedbackChart from "../../components/single/TheFeedbackChart.vue";
 
 export default {
@@ -205,7 +205,7 @@ export default {
   components: {
     BaseEmptyState,
     BaseVoting,
-    BaseFilter,
+    // BaseFilter,
     FeedbackChart,
   },
 
@@ -339,7 +339,7 @@ export default {
       .weekly {
         display: flex;
         flex-direction: column;
-        padding: 24px 20px 40px;
+        padding: 24px 20px 24px;
       }
       .summary {
         display: flex;
@@ -421,12 +421,12 @@ export default {
           margin: 0 0 16px 0;
           position: relative;
           width: 100%;
-          width: calc(640px - 88px - 16px);
-          max-width: calc(640px - 88px - 16px);
+          width: 640px;
+          max-width: 640px;
           input {
             width: 100%;
             padding: 10px 10px 10px 36px;
-            border-radius: 3px;
+            border-radius: 12px;
           }
           .search__input--icon {
             position: absolute;

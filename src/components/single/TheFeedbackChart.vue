@@ -136,7 +136,7 @@ export default {
 
       const { data: allFeedback } = await supabase
         .from("feedback")
-        .select("*,profiles(*),projects(id, *)")
+        .select("*,profiles(id, *),projects(*)")
         .eq("team_id", window.location.pathname.split("/")[2]);
 
       allFeedback.forEach((fb) => {
@@ -173,9 +173,9 @@ export default {
 
 <style lang="scss" scoped>
 .chartContainer {
-  height: 64px;
-  width: 200px;
-  // max-height: 88px;
+  // height: 64px;
+  // width: 200px;
+  // // max-height: 88px;
 }
 
 .title {
@@ -184,13 +184,13 @@ export default {
 }
 
 .chart {
-  height: 64px;
+  // height: 64px;
   width: 178px;
   min-width:178px;
   max-width: 178px;
   // max-height: 80px;
   margin-left: -6px;
-  margin-bottom: 24px;
+  // margin-bottom: 24px;
 }
 
 .weekly {
