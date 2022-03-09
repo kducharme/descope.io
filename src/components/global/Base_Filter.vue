@@ -101,9 +101,8 @@ export default {
   height: 36px;
   border: none;
   border-radius: 0px;
-  font-weight: 600;
+  font-weight: 800;
   font-size: 13px;
-  font-family: "Avenir next" ;
   display: flex;
   align-items: center;
   justify-content: center;

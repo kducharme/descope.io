@@ -190,7 +190,7 @@ export default {
     display: flex;
     justify-content: flex-end;
     color: #3d52d5;
-    font-weight: 600;
+    font-weight: 800;
     font-size: 13px;
     margin: 0 0 2px;
     background: white;

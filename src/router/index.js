@@ -13,9 +13,6 @@ import Team from "../views/app/Team.vue";
 import Launches from "../views/app/Launches.vue";
 import Projects from "../views/app/Projects.vue";
 import AllTeamFeedback from "../views/app/AllTeamFeedback.vue";
-import AllTeamIdeas from "../views/app/AllTeamIdeas.vue";
-import AllTeamIssues from "../views/app/AllTeamIssues.vue";
-import AllTeamQuestions from "../views/app/AllTeamQuestions.vue";
 import TeamSettings from "../views/app/TeamSettings.vue";
 import IndividualProject from "../views/app/IndividualProject.vue";
 import IndividualProjectFeedback from "../views/app/IndividualProjectFeedback.vue";
@@ -103,21 +100,6 @@ const routes = [
         path: "feedback",
         name: "feedback",
         component: AllTeamFeedback,
-      },
-      {
-        path: "ideas",
-        name: "ideas",
-        component: AllTeamIdeas,
-      },
-      {
-        path: "issues",
-        name: "issues",
-        component: AllTeamIssues,
-      },
-      {
-        path: "questions",
-        name: "questions",
-        component: AllTeamQuestions,
       },
       {
         path: "settings",

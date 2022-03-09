@@ -111,11 +111,13 @@ p,
 a,
 div,
 input,
+span,
 textarea,
 select,
+button,
 select option {
   color: #212430;
-  font-family: "Avenir Next";
+  font-family: "Quicksand";
   font-size: 14px;
   margin: 0;
 }

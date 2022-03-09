@@ -229,7 +229,7 @@ export default {
       flex-direction: column;
       .card__name {
         font-size: 15px;
-        font-weight: 600;
+        font-weight: 800;
         margin: 0 0 12px 0;
       }
       .card__description {
@@ -251,7 +251,7 @@ export default {
         .label {
           font-size: 11px;
           color: #636c92;
-          font-weight: 600;
+          font-weight: 800;
           margin: 0 0 8px;
         }
         .metric {

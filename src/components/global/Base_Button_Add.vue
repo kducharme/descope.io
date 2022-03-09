@@ -209,7 +209,6 @@ export default {
   height: 36px;
   border: none;
   border-radius: 3px;
-  font-family: "Avenir next";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,7 +217,7 @@ export default {
   p {
     margin: 0 0 0 8px;
     color: white;
-    font-weight: 600;
+    font-weight: 800;
   }
 }
 

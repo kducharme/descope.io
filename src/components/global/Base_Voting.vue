@@ -214,7 +214,7 @@ export default {
         padding: 24px 20px;
         .title {
           font-size: 16px;
-          font-weight: 600;
+          font-weight: 800;
         }
         .analytics {
           .data {
@@ -225,7 +225,7 @@ export default {
             .label {
               font-size: 12px;
               color: #636c92;
-              font-weight: 600;
+              font-weight: 800;
               margin: 0 0 8px;
             }
             .metric {
@@ -314,7 +314,7 @@ export default {
                 width: 32px;
                 border-radius: 6px;
                 font-size: 12px;
-                font-weight: 600;
+                font-weight: 800;
                 letter-spacing: 1.1px;
                 padding: 0 0 0 2px;
               }
@@ -323,7 +323,7 @@ export default {
               display: flex;
               flex-direction: column;
               .project {
-                font-weight: 600;
+                font-weight: 800;
                 font-size: 12px;
                 margin: 0 0 2px;
               }
@@ -359,7 +359,7 @@ export default {
           overflow: hidden;
           .title {
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 800;
             margin: 0 0 6px 0;
           }
           .description {
@@ -419,7 +419,7 @@ export default {
             height: 16px;
             width: 16px;
             font-size: 11.5px;
-            font-weight: 600;
+            font-weight: 800;
           }
 
           .right {
@@ -431,10 +431,9 @@ export default {
               font-weight: 500;
               margin: 0 4px;
               color: #7b82a3;
-              font-family: "avenir next";
             }
             .count__active {
-              font-weight: 600;
+              font-weight: 800;
               color: #424761;
             }
             .vote {

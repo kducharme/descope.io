@@ -37,7 +37,7 @@ export default {
     .title {
       height: 24px;
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 800;
     }
   }
 }

@@ -136,7 +136,7 @@ export default {
       display: flex;
       .title {
         font-size: 20px;
-        font-weight: 600;
+        font-weight: 800;
         margin-right: 16px;
       }
     }
@@ -155,7 +155,7 @@ export default {
           width: 32px;
           border-radius: 100%;
           font-size: 11px;
-          font-weight: 600;
+          font-weight: 800;
           border: 2px solid white;
           // background: #e5e8ee;
         }
@@ -169,7 +169,7 @@ export default {
           width: 32px;
           border-radius: 100%;
           font-size: 11px;
-          font-weight: 600;
+          font-weight: 800;
           border: 2px solid white;
           background: #aeb6c4;
         }
@@ -197,7 +197,7 @@ export default {
       margin: 0 12px 0 0;
     }
     .router-link-active {
-      font-weight: 600;
+      font-weight: 800;
       border-bottom: 2px solid #3253e4;
       border-radius: 2px;
     }

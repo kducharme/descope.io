@@ -156,7 +156,7 @@ export default {
       flex-direction: column;
       .form__title {
         font-size: 18px;
-        font-weight: 600;
+        font-weight: 800;
         margin: 0 0 8px;
       }
       .form__description {

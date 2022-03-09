@@ -180,7 +180,7 @@ export default {
 
 .title {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .chart {

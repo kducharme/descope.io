@@ -119,7 +119,7 @@ export default {
       align-items: center;
       .logo__text {
         margin-left: 6px;
-        font-weight: 600;
+        font-weight: 800;
         font-size: 17px;
         letter-spacing: 0.3px;
         color: #212430;

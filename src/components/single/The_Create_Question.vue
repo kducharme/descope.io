@@ -156,7 +156,7 @@ export default {
     border-top-right-radius: 10px;
     .header__title {
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 800;
       color: white;
     }
     .header__close {

@@ -93,7 +93,7 @@ export default {
         .back__text {
           display: flex;
           align-items: center;
-          font-weight: 600;
+          font-weight: 800;
           color: #3d52d5;
         }
       }
@@ -103,7 +103,7 @@ export default {
       }
       .title {
         font-size: 20px;
-        font-weight: 600;
+        font-weight: 800;
       }
       .top__right {
         display: flex;
@@ -129,7 +129,7 @@ export default {
           width: 36px;
           border-radius: 100%;
           font-size: 11px;
-          font-weight: 600;
+          font-weight: 800;
           border: 2px solid white;
         }
       }
@@ -145,7 +145,7 @@ export default {
         margin: 0 12px 0 0;
       }
       .router-link-active {
-        font-weight: 600;
+        font-weight: 800;
         border-bottom: 2px solid #3253e4;
         border-radius: 2px;
       }

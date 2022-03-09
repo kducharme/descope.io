@@ -380,7 +380,7 @@ export default {
       }
       .title {
         font-size: 16px;
-        font-weight: 600;
+        font-weight: 800;
       }
       .weekly {
         display: flex;
@@ -525,7 +525,7 @@ export default {
                 width: 32px;
                 border-radius: 6px;
                 font-size: 12px;
-                font-weight: 600;
+                font-weight: 800;
                 letter-spacing: 1.1px;
                 padding: 0 0 0 2px;
                 // background: #e5e8ee;
@@ -535,7 +535,7 @@ export default {
               display: flex;
               flex-direction: column;
               .project {
-                font-weight: 600;
+                font-weight: 800;
                 font-size: 12px;
                 margin: 0 0 2px;
               }
@@ -589,7 +589,7 @@ export default {
           overflow: hidden;
           .title {
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 800;
             margin: 0 0 6px 0;
           }
           .description {
@@ -646,7 +646,7 @@ export default {
             height: 16px;
             width: 16px;
             font-size: 11.5px;
-            font-weight: 600;
+            font-weight: 800;
           }
 
           .right {
@@ -658,10 +658,9 @@ export default {
               font-weight: 500;
               margin: 0 4px;
               color: #7b82a3;
-              font-family: "avenir next";
             }
             .count__active {
-              font-weight: 600;
+              font-weight: 800;
               color: #424761;
             }
             .vote {

@@ -70,7 +70,7 @@ export default {
       width: 40px;
       border-radius: 6px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 800;
       letter-spacing: 1.1px;
       padding: 0 0 0 2px;
     }
@@ -84,7 +84,7 @@ export default {
       margin: 0 0 4px 0;
       .name {
         font-size: 13px;
-        font-weight: 600;
+        font-weight: 800;
         margin: 0 4px 0 0;
       }
       .time {

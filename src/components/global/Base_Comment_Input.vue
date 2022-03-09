@@ -254,7 +254,7 @@ x
       background: #3253e4;
       color: white;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 800;
       padding: 8px 12px;
       border-radius: 3px;
     }

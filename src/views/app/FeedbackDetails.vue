@@ -131,7 +131,7 @@ export default {
   },
   mounted() {
     // console.log(document.querySelector("#comments").childElementCount)
-    // document.querySelector("#comments").scrollTo(0,600)
+    // document.querySelector("#comments").scrollTo(0,800)
     // console.log(commentArea.scrollHeight);
     // commentArea.scrollTo(0, 699);
   },
@@ -197,7 +197,7 @@ export default {
       .feedbackDetails {
         .title {
           font-size: 18px;
-          font-weight: 600;
+          font-weight: 800;
           margin: 0 0 8px;
         }
         .description {
@@ -220,7 +220,7 @@ export default {
               width: 40px;
               border-radius: 6px;
               font-size: 12px;
-              font-weight: 600;
+              font-weight: 800;
               letter-spacing: 1.1px;
             }
           }
@@ -228,7 +228,7 @@ export default {
             display: flex;
             flex-direction: column;
             .project {
-              font-weight: 600;
+              font-weight: 800;
               font-size: 12px;
               margin: 0 0 2px;
             }

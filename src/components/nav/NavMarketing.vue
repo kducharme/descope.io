@@ -104,7 +104,7 @@ export default {
 }
 
 .router-link-active {
-  font-weight: 600;
+  font-weight: 800;
   color: #646ECB;
   
 }

@@ -213,7 +213,7 @@ export default {
     margin: 0 24px 0 0;
     .content__title {
       font-size: 22px;
-      font-weight: 600;
+      font-weight: 800;
       margin: 0 0 12px 0;
     }
     .content__body {
