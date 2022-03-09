@@ -101,86 +101,88 @@
               <BaseFilter />
             </div> -->
           </div>
-          <div
-            class="card fb"
-            v-for="feedback in store.getters.searchFeedback(this.search)"
-            :key="feedback.id"
-            @click="setActiveFeedback(feedback.id)"
-          >
-            <div class="fb__top">
-              <div class="fb__top--left">
+          <div v-if="activeFilter === 'all'">
+            <div
+              class="card fb"
+              v-for="feedback in store.getters.searchFeedback(this.search)"
+              :key="feedback.id"
+              @click="setActiveFeedback(feedback.id)"
+            >
+              <div class="fb__top">
+                <div class="fb__top--left">
+                  <div class="left">
+                    <p :class="['initials', feedback.profiles.color]">
+                      {{ feedback._initials }}
+                    </p>
+                  </div>
+                  <div class="right">
+                    <p class="project" v-if="feedback.projects">
+                      {{ feedback.projects.name }}
+                    </p>
+                    <p class="project" v-show="!feedback.projects">
+                      {{ store.state.teams_active.name }} Team
+                      <span class="team">(no project)</span>
+                    </p>
+                    <p class="details">
+                      Added by {{ feedback._addedBy }} {{ feedback._dateAdded }}
+                    </p>
+                  </div>
+                </div>
+                <div class="fb__top--right">
+                  <div
+                    class="tag tag__issue"
+                    v-if="feedback.category.includes('issue')"
+                  >
+                    <span class="dot dot__issue"></span>
+                    <p>Issue</p>
+                  </div>
+                  <div
+                    class="tag tag__idea"
+                    v-if="feedback.category.includes('idea')"
+                  >
+                    <span class="dot dot__idea"></span>
+                    <p>Idea</p>
+                  </div>
+                  <div
+                    class="tag tag__question"
+                    v-if="feedback.category.includes('question')"
+                  >
+                    <span class="dot dot__question"></span>
+                    <p>Question</p>
+                  </div>
+                </div>
+              </div>
+              <div class="fb__mid">
+                <p class="title">{{ feedback.title }}</p>
+                <p class="description">{{ feedback.description }}</p>
+                <img
+                  v-if="feedback._image"
+                  :src="feedback._image"
+                  class="image"
+                />
+              </div>
+              <div class="fb__bottom">
                 <div class="left">
-                  <p :class="['initials', feedback.profiles.color]">
-                    {{ feedback._initials }}
-                  </p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="16px"
+                    viewBox="0 0 24 24"
+                    width="16px"
+                    fill="#7B82A3"
+                    class="comment"
+                  >
+                    <path d="M0 0h24v24H0V0z" fill="none" />
+                    <path
+                      d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"
+                    />
+                  </svg>
+                  <div class="comment__count" v-if="feedback.comments">
+                    {{ feedback.comments.length }}
+                  </div>
                 </div>
-                <div class="right">
-                  <p class="project" v-if="feedback.projects">
-                    {{ feedback.projects.name }}
-                  </p>
-                  <p class="project" v-show="!feedback.projects">
-                    {{ store.state.teams_active.name }} Team
-                    <span class="team">(no project)</span>
-                  </p>
-                  <p class="details">
-                    Added by {{ feedback._addedBy }} {{ feedback._dateAdded }}
-                  </p>
+                <div class="right" id="voting" @click.stop>
+                  <BaseVoting :feedback="feedback" />
                 </div>
-              </div>
-              <div class="fb__top--right">
-                <div
-                  class="tag tag__issue"
-                  v-if="feedback.category.includes('issue')"
-                >
-                  <span class="dot dot__issue"></span>
-                  <p>Issue</p>
-                </div>
-                <div
-                  class="tag tag__idea"
-                  v-if="feedback.category.includes('idea')"
-                >
-                  <span class="dot dot__idea"></span>
-                  <p>Idea</p>
-                </div>
-                <div
-                  class="tag tag__question"
-                  v-if="feedback.category.includes('question')"
-                >
-                  <span class="dot dot__question"></span>
-                  <p>Question</p>
-                </div>
-              </div>
-            </div>
-            <div class="fb__mid">
-              <p class="title">{{ feedback.title }}</p>
-              <p class="description">{{ feedback.description }}</p>
-              <img
-                v-if="feedback._image"
-                :src="feedback._image"
-                class="image"
-              />
-            </div>
-            <div class="fb__bottom">
-              <div class="left">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="16px"
-                  viewBox="0 0 24 24"
-                  width="16px"
-                  fill="#7B82A3"
-                  class="comment"
-                >
-                  <path d="M0 0h24v24H0V0z" fill="none" />
-                  <path
-                    d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"
-                  />
-                </svg>
-                <div class="comment__count" v-if="feedback.comments">
-                  {{ feedback.comments.length }}
-                </div>
-              </div>
-              <div class="right" id="voting" @click.stop>
-                <BaseVoting :feedback="feedback" />
               </div>
             </div>
           </div>
@@ -281,6 +283,7 @@ export default {
           style: "dot__resolved",
         },
       ];
+      activeFilter.value = 'all';
     };
 
     setCategories();
@@ -290,6 +293,7 @@ export default {
       setActiveFeedback,
       setActiveFilter,
       categories,
+      activeFilter,
     };
   },
   methods: {

@@ -126,7 +126,6 @@ export default new Vuex.Store({
         },
         SET_ACTIVE_TEAM_FEEDBACK: (state, feedback) => {
             state.teams_active_feedback = feedback;
-            console.log(state.teams_active_feedback)
         },
         SET_ACTIVE_TEAM_MEMBERS: (state, members) => {
             state.teams_active_members = members;
@@ -299,8 +298,6 @@ export default new Vuex.Store({
                 .eq("team_id", context.state.teams_active.id);
 
             // Hydrate the feedback object
-
-            console.log(allFeedback)
 
             for (const fb of allFeedback) {
 
