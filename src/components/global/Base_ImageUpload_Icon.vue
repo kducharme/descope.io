@@ -15,7 +15,7 @@
         height="18px"
         width="18px"
         viewBox="0 0 24 24"
-        fill="#cd1231"
+        fill="#868fac"
       >
         <path d="M0 0h24v24H0V0z" fill="none" />
         <path
@@ -92,21 +92,27 @@ export default {
       const img = new Image();
 
       img.src = URL.createObjectURL(file);
-      img.style.width = "200px";
-      img.style.height = "48px";
+      img.style.width = "280px";
+      img.style.height = "56px";
       img.style.maxHeight = "48px";
       img.style.objectFit = "cover";
       img.style.objectPosition = "25% 25%";
       img.style.borderRadius = "6px";
+      img.style.border = "1px solid #dbdde6"
       img.setAttribute("id", "imagePreview");
 
-      document.querySelector("#output").appendChild(img);
+      document.querySelector("#imageOutput").appendChild(img);
+      // document.querySelector(".modal").classList.remove("modal");
+      document.querySelector(".modal").style.maxHeight = "480px";
+      document.querySelector(".modal").style.height = "480px";
     };
 
     // Removes the image preview from the UI
     const removeImageFromDatabase = async () => {
       if (!image.value) return;
       document.querySelector("#imagePreview").remove();
+      document.querySelector(".modal").style.maxHeight = "401px";
+      document.querySelector(".modal").style.height = "401px";
 
       deleteImageFromDatabase();
     };
@@ -173,28 +179,27 @@ export default {
       margin-left: 4px;
     }
   }
-  .output {
-    height: 52px;
-    // background: #eeeff3;
-    border: 2px solid #dbdde6;
-    border-radius: 8px;
-    // max-height: 320px;
-    position: absolute;
-    bottom: 64px;
-    left: 24px;
-  }
+  // .output {
+  //   height: 52px;
+  //   border: 2px solid #dbdde6;
+  //   border-radius: 8px;
+  //   position: absolute;
+  //   bottom: 64px;
+  //   left: 24px;
+  // }
   .remove {
     position: absolute;
-    bottom: 100px;
-    left: 214px;
+    bottom: 42px;
+    left: 275px;
     display: flex;
     justify-content: flex-end;
     color: #3d52d5;
     font-weight: 800;
     font-size: 13px;
+    padding: 3px;
     margin: 0 0 2px;
     background: white;
-    border: 2px solid #dbdde6;
+    border: 1px solid #dbdde6;
     border-radius: 100%;
   }
   .remove:hover {
@@ -206,21 +211,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    // height: 24px;
-    // width: 28px;
     border-radius: 3px;
-    // padding: 40px;
-    // background: rgba(255, 255, 255, 0.473);
-    // border: 2px solid #dbdde6;
-    // border-radius: 3px;
-    // border-style: dashed;
     .upload__button {
       height: 24px;
-      // font-weight: 500;
-      // background: #eeeff3;
-      // border: 2px solid #dbdde6;
-      // padding: 8px 12px;
-      // display: inline-block;
     }
     .upload__button:hover {
       cursor: pointer;

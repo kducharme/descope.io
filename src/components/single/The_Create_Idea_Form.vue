@@ -122,6 +122,7 @@
         />
       </div>
     </div>
+    <div id="imageOutput" class="imageOutput"></div>
   </div>
 </template>
 
@@ -378,10 +379,12 @@ export default {
   .footer {
     display: flex;
     align-items: center;
+    flex-direction: row;
     // border-top: 1px solid #dbdde6;
     padding: 16px 0 0 0;
     .actions__icon {
       display: flex;
+      flex-direction: row;
       justify-content: center;
       align-items: center;
       height: 28px;
@@ -422,6 +425,9 @@ export default {
         background: #e9e6e6;
       }
     }
+  }
+  .imageOutput {
+    margin: 16px 0 0 0;
   }
 }
 
