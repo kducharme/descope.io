@@ -1,8 +1,8 @@
 <template>
-  <div class="modal" id="createRequest">
+  <div class="modal" id="createIdea">
     <div class="modal__content">
       <!-- Create Launch Form -->
-      <div class="header" id="createRequestHeader">
+      <div class="header" id="createIdeaHeader">
         <p class="header__title">Add idea</p>
         <div class="header__close" @click="closeModal">
           <svg
@@ -20,20 +20,20 @@
         </div>
       </div>
       <div class="form">
-        <TheCreateRequestForm />
+        <TheCreateIdeaForm />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import TheCreateRequestForm from "./The_Create_Request_Form.vue";
+import TheCreateIdeaForm from "./The_Create_Idea_Form.vue";
 import store from "../../store/index";
 
 export default {
   name: "TheAddFeedbackModal",
   components: {
-    TheCreateRequestForm,
+    TheCreateIdeaForm,
   },
   data() {
     return {};
@@ -47,7 +47,7 @@ export default {
   mounted() {
     const draggable = () => {
       // Make the DIV element draggable:
-      const element = document.querySelector("#createRequest");
+      const element = document.querySelector("#createIdea");
 
       var PADDING = 8;
 

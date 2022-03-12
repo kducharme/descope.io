@@ -117,7 +117,7 @@ select,
 button,
 select option {
   color: #212430;
-  font-family: "Quicksand";
+  font-family: "Avenir";
   font-size: 14px;
   margin: 0;
 }

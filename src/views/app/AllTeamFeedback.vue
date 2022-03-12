@@ -329,7 +329,7 @@ export default {
       store.dispatch("showCreateFeedbackModal");
     },
     resetSearch() {
-      this.search = "";
+      this.filter.search = "";
     },
     setFilter(id) {
       //

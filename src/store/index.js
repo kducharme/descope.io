@@ -44,12 +44,10 @@ export default new Vuex.Store({
     },
     getters: {
         filterFeedback: state => (payload) => {
-            console.log('hi')
             return state.teams_active_feedback.filter(fb =>
-                // fb.category.toLowerCase().includes(payload.search.toLowerCase()) ||
-                (fb.title.toLowerCase().includes(payload.search.toLowerCase()) ||
-                    fb.description.toLowerCase().includes(payload.search.toLowerCase()) ||
-                    fb.category.toLowerCase().includes(payload.search.toLowerCase()))
+            (fb.title.toLowerCase().includes(payload.search.toLowerCase()) ||
+                fb.description.toLowerCase().includes(payload.search.toLowerCase()) ||
+                fb.category.toLowerCase().includes(payload.search.toLowerCase()))
             );
         },
         searchProjects: state => (payload) => {

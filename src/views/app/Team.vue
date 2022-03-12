@@ -72,7 +72,7 @@ import store from "../../store/index";
 import BaseButtonIcon from "../../components/global/Base_Button_Add.vue";
 import TheCreateProjectModal from "../../components/single/The_Create_Project.vue";
 import TheCreateFeedbackModal from "../../components/single/The_Create_Issue.vue";
-import TheCreateRequestModal from "../../components/single/The_Create_Request.vue";
+import TheCreateRequestModal from "../../components/single/The_Create_Idea.vue";
 import TheCreateQuestionModal from "../../components/single/The_Create_Question.vue";
 import TheCreateLaunchModal from "../../components/single/The_Create_Launch.vue";
 
