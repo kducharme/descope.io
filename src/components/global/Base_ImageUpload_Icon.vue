@@ -1,29 +1,6 @@
 <template>
-  <div class="imgUploader">
-    <div class="header"></div>
-    <div class="output" id="output" v-show="image"></div>
-    <p
-      class="remove"
-      v-if="image"
-      @click="
-        removeImageFromDatabase();
-        updatedParentFeedbackImage(false);
-      "
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="18px"
-        width="18px"
-        viewBox="0 0 24 24"
-        fill="#868fac"
-      >
-        <path d="M0 0h24v24H0V0z" fill="none" />
-        <path
-          d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
-        />
-      </svg>
-    </p>
-    <div class="upload" id="upload" v-show="!image">
+  <div class="img">
+    <div class="upload" id="upload">
       <label for="upload_file" class="upload__button"
         ><svg
           xmlns="http://www.w3.org/2000/svg"
@@ -48,6 +25,30 @@
         />
       </label>
     </div>
+    <div id="output" class="output">
+      <p id="output_name">{{ fileName }}</p>
+      <p
+        class="remove"
+        v-if="image"
+        @click="
+          removeImageFromDatabase();
+          updatedParentFeedbackImage(false);
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          width="18px"
+          viewBox="0 0 24 24"
+          fill="#868fac"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+          />
+        </svg>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -67,6 +68,7 @@ export default {
     const image = ref(null);
     const errorMsg = ref(null);
     const loading = ref(null);
+    const fileName = ref(null);
 
     // When a user selects an image, this function is called
     const uploadImageToDatabase = async () => {
@@ -89,30 +91,15 @@ export default {
 
     // Displays a preview of the image in the component
     const displayImage = (file) => {
-      const img = new Image();
+      fileName.value = file.name;
 
-      img.src = URL.createObjectURL(file);
-      img.style.width = "280px";
-      img.style.height = "56px";
-      img.style.maxHeight = "48px";
-      img.style.objectFit = "cover";
-      img.style.objectPosition = "25% 25%";
-      img.style.borderRadius = "6px";
-      img.style.border = "1px solid #dbdde6"
-      img.setAttribute("id", "imagePreview");
-
-      document.querySelector("#imageOutput").appendChild(img);
-      // document.querySelector(".modal").classList.remove("modal");
-      document.querySelector(".modal").style.maxHeight = "480px";
-      document.querySelector(".modal").style.height = "480px";
+      document.querySelector("#createIdea").style.height = "452px";
+      document.querySelector("#createIdea").style.maxHeight = "452px";
     };
 
     // Removes the image preview from the UI
     const removeImageFromDatabase = async () => {
       if (!image.value) return;
-      document.querySelector("#imagePreview").remove();
-      document.querySelector(".modal").style.maxHeight = "401px";
-      document.querySelector(".modal").style.height = "401px";
 
       deleteImageFromDatabase();
     };
@@ -143,6 +130,7 @@ export default {
       deleteImageFromDatabase,
       uploadImageToDatabase,
       loading,
+      fileName,
     };
   },
   methods: {
@@ -156,69 +144,68 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.imgUploader {
-  padding: relative;
-  input[type="file"] {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-  }
-  .header {
-    display: flex;
-    justify-content: space-between;
-    label {
-      font-size: 12px;
-      padding: 0 0 6px;
-    }
-    .optional {
-      color: #9ba1bb;
-      font-weight: 400;
-      margin-left: 4px;
-    }
-  }
-  // .output {
-  //   height: 52px;
-  //   border: 2px solid #dbdde6;
-  //   border-radius: 8px;
-  //   position: absolute;
-  //   bottom: 64px;
-  //   left: 24px;
-  // }
-  .remove {
-    position: absolute;
-    bottom: 42px;
-    left: 275px;
-    display: flex;
-    justify-content: flex-end;
-    color: #3d52d5;
-    font-weight: 800;
-    font-size: 13px;
-    padding: 3px;
-    margin: 0 0 2px;
-    background: white;
-    border: 1px solid #dbdde6;
-    border-radius: 100%;
-  }
-  .remove:hover {
-    cursor: pointer;
-    text-decoration: underline;
-    color: #3549c5;
-  }
+.img {
+  display: flex;
+  flex-direction: column;
   .upload {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 3px;
-    .upload__button {
-      height: 24px;
+    position: relative;
+    input[type="file"] {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
     }
-    .upload__button:hover {
+    .header {
+      display: flex;
+      justify-content: space-between;
+      label {
+        font-size: 12px;
+        padding: 0 0 6px;
+      }
+      .optional {
+        color: #9ba1bb;
+        font-weight: 400;
+        margin-left: 4px;
+      }
+    }
+    .remove {
+      position: absolute;
+      bottom: 34px;
+      left: 274px;
+      display: flex;
+      justify-content: flex-end;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 1px;
+      margin: 0 0 2px;
+      background: white;
+      border: 1px solid #dbdde6;
+      border-radius: 100%;
+    }
+    .remove:hover > svg {
       cursor: pointer;
-      background: #e9e6e6;
+      fill: #393e53;
     }
+    .upload {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+      .upload__button {
+        height: 24px;
+      }
+      // .upload__button:hover {
+      //   cursor: pointer;
+      //   background: #e9e6e6;
+      // }
+    }
+  }
+
+  .output {
+    position: relative;
+    top: 20px;
   }
 }
 </style>

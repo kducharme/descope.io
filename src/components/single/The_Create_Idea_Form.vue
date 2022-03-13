@@ -114,15 +114,32 @@
             />
           </svg>
         </button>
-        <BaseImageUploaderIcon
-          :id="id"
-          ref="imageUploader"
-          v-on:updateImage="updateFeedbackImage"
-          class="actions__icon"
-        />
+        <div class="upload" id="upload">
+          <label for="upload_file" class="actions__icon"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="22px"
+              viewBox="0 0 24 24"
+              width="22px"
+              fill="#7B82A3"
+            >
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path
+                d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z"
+              />
+            </svg>
+            <input
+              type="file"
+              id="upload_file"
+              accept="image/*"
+              @change="
+                uploadImageToDatabase();
+              "
+            />
+          </label>
+        </div>
       </div>
     </div>
-    <div id="imageOutput" class="imageOutput"></div>
   </div>
 </template>
 
@@ -143,14 +160,12 @@ import Text from "@tiptap/extension-text";
 import Heading from "@tiptap/extension-heading";
 import Italic from "@tiptap/extension-italic";
 import Bold from "@tiptap/extension-bold";
-import BaseImageUploaderIcon from "../global/Base_ImageUpload_Icon.vue";
 import BaseButton from "../global/Base_Button_Text.vue";
 
 export default {
   name: "BaseCommentInput",
   components: {
     EditorContent,
-    BaseImageUploaderIcon,
     BaseButton,
   },
   props: {
@@ -182,7 +197,6 @@ export default {
     const feedbackDetails = ref(null);
     const feedbackImage = ref(null);
     const imageName = ref(null);
-    const feedbackCategory = ref(null);
     const feedbackProject = ref(null);
 
     const errorMsg = ref(null);
@@ -236,6 +250,63 @@ export default {
       }
     };
 
+    // Create data
+    const image = ref(null);
+    const loading = ref(null);
+    const fileName = ref(null);
+
+    // When a user selects an image, this function is called
+    const uploadImageToDatabase = async () => {
+      const file = document.querySelector("#upload_file").files[0];
+      image.value = file;
+
+      displayImage(file);
+      try {
+        const { error } = await supabase.storage
+          .from("feedback")
+          .upload("post/" + props.id + ".jpeg", file);
+        if (error) throw error;
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
+      }
+    };
+
+    // Displays a preview of the image in the component
+    const displayImage = (file) => {
+      fileName.value = file.name;
+
+      document.querySelector("#createIdea").style.height = "452px";
+      document.querySelector("#createIdea").style.maxHeight = "452px";
+    };
+
+    // Removes the image preview from the UI
+    const removeImageFromDatabase = async () => {
+      if (!image.value) return;
+
+      deleteImageFromDatabase();
+    };
+
+    // Deletes the image from the database
+    const deleteImageFromDatabase = async () => {
+      if (!image.value) return;
+      image.value = null;
+      try {
+        const { error } = await supabase.storage
+          .from("feedback")
+          .remove(["post/" + props.id + ".jpeg"]);
+        if (error) throw error;
+        // this.updateParentFeedbackImage();
+      } catch (error) {
+        errorMsg.value = `Error: ${error.message}`;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 5000);
+      }
+    };
+
     // Generates a unique ID for the feedback
 
     const generateFeedbackId = () => {
@@ -286,7 +357,7 @@ export default {
             id: id.value,
             title: feedbackTitle.value,
             description: editor.value.getJSON(),
-            category: feedbackCategory.value,
+            category: 'idea',
             image: imageName.value,
             source: "app",
             votes_up: [`${store.state.activeUser.id}`],
@@ -324,7 +395,6 @@ export default {
       saveFeedback,
       feedbackTitle,
       feedbackDetails,
-      feedbackCategory,
       feedbackProject,
       feedbackImage,
       errorMsg,
@@ -332,6 +402,13 @@ export default {
       removeImageFunction,
       checkContent,
       tooltipStatus,
+      image,
+      displayImage,
+      removeImageFromDatabase,
+      deleteImageFromDatabase,
+      uploadImageToDatabase,
+      loading,
+      fileName,
     };
   },
   mounted() {
@@ -425,9 +502,25 @@ export default {
         background: #e9e6e6;
       }
     }
+    .upload {
+      position: relative;
+
+      input[type="file"] {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+      }
+    }
   }
-  .imageOutput {
+  .attachment {
     margin: 16px 0 0 0;
+    background: #f1f3f7;
+    border: 1px solid #dbdde6;
+    border-radius: 3px;
+    padding: 6px 8px;
   }
 }
 

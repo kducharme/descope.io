@@ -105,7 +105,10 @@
             v-for="feedback in store.getters.filterFeedback(this.filter)"
             :key="feedback.id"
             @click="setActiveFeedback(feedback.id)"
-            v-show="feedback.category === this.filter.category || this.filter.category === 'all'"
+            v-show="
+              feedback.category === this.filter.category ||
+              this.filter.category === 'all'
+            "
           >
             <div class="fb__top">
               <div class="fb__top--left">
@@ -256,23 +259,6 @@ export default {
     //
     // Set initial data
     const router = useRouter();
-    // const activeFilter = ref(null);
-    // const categories = ref(null);
-
-    // const setActiveFilter = (id) => {
-    //   //
-    //   // Remove any active filters
-    //   categories.value.forEach((cat) => {
-    //     document
-    //       .querySelector(`#cat__${cat.id}`)
-    //       .classList.remove("cat__active");
-    //   });
-
-    //   //
-    //   // Set active filter value & styling
-    //   document.querySelector(`#cat__${id}`).classList.add("cat__active");
-    //   activeFilter.value = id;
-    // };
 
     const routeToFeedbackDetails = (id) => {
       router.push({ name: "feedbackDetails", params: { feedbackId: id } });
@@ -283,45 +269,9 @@ export default {
       routeToFeedbackDetails(id);
     };
 
-    // const setCategories = () => {
-    //   categories.value = [
-    //     {
-    //       id: "all",
-    //       title: "All feedback",
-    //       style: "cat__all",
-    //     },
-    //     {
-    //       id: "idea",
-    //       title: "Ideas",
-    //       style: "dot__idea",
-    //     },
-    //     {
-    //       id: "question",
-    //       title: "Questions",
-    //       style: "dot__question",
-    //     },
-    //     {
-    //       id: "issue",
-    //       title: "Issues",
-    //       style: "dot__issue",
-    //     },
-    //     {
-    //       id: "resolved",
-    //       title: "Resolved",
-    //       style: "dot__resolved",
-    //     },
-    //   ];
-    //   activeFilter.value = "all";
-    // };
-
-    // setCategories();
-
     return {
       store,
       setActiveFeedback,
-      // setActiveFilter,
-      // categories,
-      // activeFilter,
     };
   },
   methods: {
