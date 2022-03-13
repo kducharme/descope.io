@@ -132,13 +132,28 @@
               type="file"
               id="upload_file"
               accept="image/*"
-              @change="
-                uploadImageToDatabase();
-              "
+              @change="uploadImageToDatabase()"
             />
           </label>
         </div>
       </div>
+    </div>
+    <div id="output" class="output" v-if="fileName">
+      <p id="output_name" class="output__name">{{ fileName }}</p>
+      <p class="output__remove" v-if="image" @click="removeImageFromDatabase()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          width="18px"
+          viewBox="0 0 24 24"
+          fill="#868fac"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+          />
+        </svg>
+      </p>
     </div>
   </div>
 </template>
@@ -191,17 +206,24 @@ export default {
     };
   },
   setup(props) {
-    // Setup data
+    // General data
+    //
+    const errorMsg = ref(null);
+    //
+    // Feedback data
     const id = ref(null);
     const feedbackTitle = ref(null);
     const feedbackDetails = ref(null);
     const feedbackImage = ref(null);
-    const imageName = ref(null);
+    const feedbackImageName = ref(null);
     const feedbackProject = ref(null);
-
-    const errorMsg = ref(null);
-    const removeImageFunction = ref(null);
     const tooltipStatus = ref(null);
+    //
+    // Image data
+    const image = ref(null);
+    const fileName = ref(null);
+    const imageLoading = ref(null);
+    const removeImageFunction = ref(null);
 
     tooltipStatus.value = true;
 
@@ -250,11 +272,6 @@ export default {
       }
     };
 
-    // Create data
-    const image = ref(null);
-    const loading = ref(null);
-    const fileName = ref(null);
-
     // When a user selects an image, this function is called
     const uploadImageToDatabase = async () => {
       const file = document.querySelector("#upload_file").files[0];
@@ -264,7 +281,7 @@ export default {
       try {
         const { error } = await supabase.storage
           .from("feedback")
-          .upload("post/" + props.id + ".jpeg", file);
+          .upload("post/" + id.value + ".jpeg", file);
         if (error) throw error;
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
@@ -285,6 +302,9 @@ export default {
     // Removes the image preview from the UI
     const removeImageFromDatabase = async () => {
       if (!image.value) return;
+      fileName.value = null;
+      document.querySelector("#createIdea").style.height = "401px";
+      document.querySelector("#createIdea").style.maxHeight = "401px";
 
       deleteImageFromDatabase();
     };
@@ -296,9 +316,8 @@ export default {
       try {
         const { error } = await supabase.storage
           .from("feedback")
-          .remove(["post/" + props.id + ".jpeg"]);
+          .remove(["post/" + id.value + ".jpeg"]);
         if (error) throw error;
-        // this.updateParentFeedbackImage();
       } catch (error) {
         errorMsg.value = `Error: ${error.message}`;
         setTimeout(() => {
@@ -325,7 +344,7 @@ export default {
     };
 
     const generateImageName = (id) => {
-      return (imageName.value = id.value + ".jpeg");
+      return (feedbackImageName.value = id.value + ".jpeg");
     };
 
     // const saveToDatabase = async () => {
@@ -342,7 +361,9 @@ export default {
     // };
 
     const saveToDatabase = async () => {
-      feedbackImage.value ? imageName.value : (imageName.value = null);
+      feedbackImage.value
+        ? feedbackImageName.value
+        : (feedbackImageName.value = null);
       feedbackProject.value
         ? (feedbackProject.value = feedbackProject.value.id)
         : (feedbackProject.value = null);
@@ -357,8 +378,8 @@ export default {
             id: id.value,
             title: feedbackTitle.value,
             description: editor.value.getJSON(),
-            category: 'idea',
-            image: imageName.value,
+            category: "idea",
+            image: feedbackImageName.value,
             source: "app",
             votes_up: [`${store.state.activeUser.id}`],
             votes_down: [],
@@ -407,7 +428,7 @@ export default {
       removeImageFromDatabase,
       deleteImageFromDatabase,
       uploadImageToDatabase,
-      loading,
+      imageLoading,
       fileName,
     };
   },
@@ -515,12 +536,39 @@ export default {
       }
     }
   }
-  .attachment {
+  .output {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin: 16px 0 0 0;
     background: #f1f3f7;
     border: 1px solid #dbdde6;
     border-radius: 3px;
     padding: 6px 8px;
+    .output__name {
+      font-size: 12px;
+      color: #636c92;
+      max-width: 400px;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #636c92;
+    }
+    .output__remove {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .output__remove:hover {
+      background: #e3e5eb;
+      cursor: pointer;
+      border-radius: 3px;
+      svg:hover {
+        fill: #636c92;
+      }
+    }
   }
 }
 
