@@ -114,28 +114,40 @@
             />
           </svg>
         </button>
-        <div class="upload" id="upload">
-          <label for="upload_file" class="actions__icon"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="22px"
-              viewBox="0 0 24 24"
-              width="22px"
-              fill="#7B82A3"
+        <VueCustomTooltip
+          label="For now, only one attachment can be uploaded."
+          :active="tooltip"
+          :multiline="true"
+          size="is-small"
+          position="is-top"
+        >
+          <div class="upload" id="upload">
+            <label
+              for="upload_file"
+              id="upload_label"
+              class="actions__icon actions__icon--attach"
             >
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path
-                d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="21px"
+                viewBox="0 0 24 24"
+                width="21px"
+                fill="#7B82A3"
+              >
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path
+                  d="M18.5 16H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h12.5c1.38 0 2.5 1.12 2.5 2.5S20.88 13 19.5 13H9c-.55 0-1-.45-1-1s.45-1 1-1h9.5V9.5H9c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5h10.5c2.21 0 4-1.79 4-4s-1.79-4-4-4H7c-3.04 0-5.5 2.46-5.5 5.5s2.46 5.5 5.5 5.5h11.5V16z"
+                />
+              </svg>
+              <input
+                type="file"
+                id="upload_file"
+                accept="image/*"
+                @change="uploadImageToDatabase()"
               />
-            </svg>
-            <input
-              type="file"
-              id="upload_file"
-              accept="image/*"
-              @change="uploadImageToDatabase()"
-            />
-          </label>
-        </div>
+            </label>
+          </div>
+        </VueCustomTooltip>
       </div>
     </div>
     <div id="output" class="output" v-if="fileName">
@@ -159,8 +171,7 @@
 </template>
 
 <script>
-// TODO: Add disabled button when there isn't content
-
+import VueCustomTooltip from "@adamdehaven/vue-custom-tooltip";
 import store from "../../store/index";
 import { supabase } from "../../supabase/init";
 import { v4 as uuidv4 } from "uuid";
@@ -182,6 +193,7 @@ export default {
   components: {
     EditorContent,
     BaseButton,
+    VueCustomTooltip,
   },
   props: {
     modelValue: {
@@ -224,6 +236,7 @@ export default {
     const fileName = ref(null);
     const imageLoading = ref(null);
     const removeImageFunction = ref(null);
+    const tooltip = ref(null);
 
     tooltipStatus.value = true;
 
@@ -249,6 +262,7 @@ export default {
         const title = document.querySelector("#feedbackTitle").value;
 
         if (editor.getText() === "" || title === "") {
+          document.querySelector("#saveButton").classList.add("disabled");
           document.querySelector("#saveButton").classList.add("disabled");
           tooltipStatus.value = true;
         }
@@ -294,17 +308,25 @@ export default {
     // Displays a preview of the image in the component
     const displayImage = (file) => {
       fileName.value = file.name;
+      tooltip.value = true;
 
       document.querySelector("#createIdea").style.height = "452px";
       document.querySelector("#createIdea").style.maxHeight = "452px";
+      document.querySelector("#upload").classList.add("disabled");
+      document.querySelector("#upload_label").classList.remove("actions__icon");
+      document.querySelector("#upload_file").disabled = true;
     };
 
     // Removes the image preview from the UI
     const removeImageFromDatabase = async () => {
       if (!image.value) return;
       fileName.value = null;
+      tooltip.value = false;
       document.querySelector("#createIdea").style.height = "401px";
       document.querySelector("#createIdea").style.maxHeight = "401px";
+      document.querySelector("#upload").classList.remove("disabled");
+      document.querySelector("#upload_label").classList.add("actions__icon");
+      document.querySelector("#upload_file").disabled = false;
 
       deleteImageFromDatabase();
     };
@@ -430,6 +452,7 @@ export default {
       uploadImageToDatabase,
       imageLoading,
       fileName,
+      tooltip,
     };
   },
   mounted() {
@@ -493,6 +516,9 @@ export default {
       margin: 0 8px 0 0;
       padding: 0;
     }
+    .actions__icon--attach {
+      transform: rotate(-90deg);
+    }
     .actions__icon:hover {
       cursor: pointer;
       background: #e9e6e6;
@@ -548,8 +574,7 @@ export default {
     .output__name {
       font-size: 12px;
       color: #636c92;
-      max-width: 400px;
-      display: -webkit-box;
+      max-width: 340px;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       overflow: hidden;
@@ -570,6 +595,14 @@ export default {
       }
     }
   }
+}
+
+.disabled {
+  opacity: 0.3;
+  transform: rotate(-90deg);
+}
+.disabled:hover {
+  cursor: not-allowed !important;
 }
 
 ::v-deep .ProseMirror {
@@ -593,5 +626,14 @@ export default {
     background: #d5d9e7;
     border-radius: 3px;
   }
+}
+
+::v-deep .vue-custom-tooltip:after {
+  background: #212430;
+  border-radius: 3px;
+  font-family: "Avenir Next";
+  font-weight: 500;
+  font-size: 12px;
+  max-width: 140px;
 }
 </style>

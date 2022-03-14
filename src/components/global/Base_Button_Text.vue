@@ -4,6 +4,8 @@
       :label="props.tooltip"
       :active="props.tooltip_status"
       :position="props.tooltip_position"
+      :multiline="true"
+      size="is-small"
     >
       <button
         :id="props.id"
