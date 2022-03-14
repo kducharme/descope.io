@@ -4,6 +4,21 @@
       <p v-if="errorMsg" class="message__error">{{ errorMsg }}</p>
     </div>
     <form @submit.prevent="saveFeedback" class="form">
+      <!-- Associations -->
+      <div class="associations">
+        <div class="form__input">
+          <select name="projects" id="project" v-model="feedbackProject">
+            <option value="" selected id="placeholder">Project</option>
+            <option
+              v-for="project in store.state.teams_active_projects"
+              :key="project.id"
+              :value="project"
+            >
+              {{ project.name }}
+            </option>
+          </select>
+        </div>
+      </div>
       <!-- Title input -->
       <div class="inputs">
         <input
@@ -79,24 +94,6 @@
           </svg>
         </button>
         <button
-          @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-          :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-          class="actions__icon"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="22px"
-            viewBox="0 0 24 24"
-            width="22px"
-            fill="#7B82A3"
-          >
-            <path d="M0 0h24v24H0V0z" fill="none" />
-            <path
-              d="M5 5.5C5 6.33 5.67 7 6.5 7h4v10.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V7h4c.83 0 1.5-.67 1.5-1.5S18.33 4 17.5 4h-11C5.67 4 5 4.67 5 5.5z"
-            />
-          </svg>
-        </button>
-        <button
           @click="editor.chain().focus().toggleBulletList().run()"
           :class="{ 'is-active': editor.isActive('bulletList') }"
           class="actions__icon"
@@ -115,7 +112,7 @@
           </svg>
         </button>
         <VueCustomTooltip
-          label="For now, only one attachment can be uploaded."
+          label="For now, only one attachment can be uploaded at a time."
           :active="tooltip"
           :multiline="true"
           size="is-small"
@@ -475,6 +472,14 @@ export default {
   flex-direction: column;
   width: 100%;
   background-color: white;
+  .associations {
+    display: flex;
+    .form__input {
+      select {
+        border: none;
+      }
+    }
+  }
   .inputs {
     .inputs__title {
       outline: none;
