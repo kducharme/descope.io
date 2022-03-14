@@ -1,5 +1,5 @@
 <template>
-  <div class="feedback">I am the company feedback page</div>
+  <div class="feedback">I show the trending feedback across the company.</div>
 </template>
 
 <script>
@@ -20,7 +20,7 @@ export default {
 
 <style lang="scss" scoped>
 .feedback {
-    margin: 0 0 0 220px;
+    margin: 0 0 0 200px;
     padding: 24px;
 }
 </style>

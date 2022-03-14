@@ -42,7 +42,7 @@
 <script>
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
-import BaseButton from "../global/BaseButton.vue";
+import BaseButton from "../global/Base_Button_Text.vue";
 import store from "../../store/index";
 
 export default {
@@ -63,13 +63,26 @@ export default {
     const companyName = ref(null);
     const errorMsg = ref(null);
 
+    const colors = [
+      "C8E5F9",
+      "FE938C",
+      "EDAF97",
+      "F9FBB2",
+      "F59CA9",
+      "B0CA87",
+      "D6FFB7",
+      "F0C987",
+      "F6EFA6",
+      "FFC49B"
+    ];
+
     // Register function
     const createProfile = async () => {
       const org = await createOrganization();
 
       try {
         const user = supabase.auth.user();
-        console.log(user.id)
+        console.log(user.id);
         const updates = {
           id: user.id,
           firstname: firstName.value,
@@ -77,6 +90,7 @@ export default {
           email: user.email,
           updated_at: new Date(),
           onboarded: true,
+          color: colors[Math.floor(Math.random() * colors.length)],
           organization_id: org[0].id,
         };
         let { error } = await supabase.from("profiles").upsert(updates);
@@ -142,7 +156,7 @@ export default {
       flex-direction: column;
       .form__title {
         font-size: 18px;
-        font-weight: 600;
+        font-weight: 800;
         margin: 0 0 8px;
       }
       .form__description {
@@ -167,7 +181,7 @@ export default {
         input,
         textarea {
           background: white;
-          border: 2px solid #DBDDE6;
+          border: 2px solid #dbdde6;
           padding: 8px;
           resize: none;
         }

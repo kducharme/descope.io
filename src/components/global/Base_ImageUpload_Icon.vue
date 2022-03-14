@@ -1,24 +1,19 @@
 <template>
-  <div class="imgUploader">
-    <div class="header">
-      <label class="header__label"
-        >Image<span class="optional">(optional)</span></label
-      >
-      <p
-        class="header__remove"
-        v-if="image"
-        @click="
-          removeImageFromDatabase();
-          updatedParentFeedbackImage(false);
-        "
-      >
-        Remove
-      </p>
-    </div>
-    <div class="output" id="output" v-show="image"></div>
-    <div class="upload" id="upload" v-show="!image">
+  <div class="img">
+    <div class="upload" id="upload">
       <label for="upload_file" class="upload__button"
-        >Upload image
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="22px"
+          viewBox="0 0 24 24"
+          width="22px"
+          fill="#7B82A3"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z"
+          />
+        </svg>
         <input
           type="file"
           id="upload_file"
@@ -29,6 +24,30 @@
           "
         />
       </label>
+    </div>
+    <div id="output" class="output">
+      <p id="output_name">{{ fileName }}</p>
+      <p
+        class="remove"
+        v-if="image"
+        @click="
+          removeImageFromDatabase();
+          updatedParentFeedbackImage(false);
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          width="18px"
+          viewBox="0 0 24 24"
+          fill="#868fac"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+          />
+        </svg>
+      </p>
     </div>
   </div>
 </template>
@@ -49,6 +68,7 @@ export default {
     const image = ref(null);
     const errorMsg = ref(null);
     const loading = ref(null);
+    const fileName = ref(null);
 
     // When a user selects an image, this function is called
     const uploadImageToDatabase = async () => {
@@ -71,23 +91,15 @@ export default {
 
     // Displays a preview of the image in the component
     const displayImage = (file) => {
-      const img = new Image();
+      fileName.value = file.name;
 
-      img.src = URL.createObjectURL(file);
-      img.style.width = "100%";
-      img.style.height = "120px";
-      img.style.maxHeight = "120px";
-      img.style.objectFit = "cover";
-      img.style.objectPosition = "25% 25%";
-      img.setAttribute("id", "imagePreview");
-
-      document.querySelector("#output").appendChild(img);
+      document.querySelector("#createIdea").style.height = "452px";
+      document.querySelector("#createIdea").style.maxHeight = "452px";
     };
 
     // Removes the image preview from the UI
     const removeImageFromDatabase = async () => {
       if (!image.value) return;
-      document.querySelector("#imagePreview").remove();
 
       deleteImageFromDatabase();
     };
@@ -118,6 +130,7 @@ export default {
       deleteImageFromDatabase,
       uploadImageToDatabase,
       loading,
+      fileName,
     };
   },
   methods: {
@@ -131,67 +144,68 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.imgUploader {
-  input[type="file"] {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-  }
-  .header {
-    display: flex;
-    justify-content: space-between;
-    label {
-      font-size: 12px;
-      padding: 0 0 6px;
+.img {
+  display: flex;
+  flex-direction: column;
+  .upload {
+    position: relative;
+    input[type="file"] {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
     }
-    .optional {
-      color: #9ba1bb;
-      font-weight: 400;
-      margin-left: 4px;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      label {
+        font-size: 12px;
+        padding: 0 0 6px;
+      }
+      .optional {
+        color: #9ba1bb;
+        font-weight: 400;
+        margin-left: 4px;
+      }
     }
-    .header__remove {
+    .remove {
+      position: absolute;
+      bottom: 34px;
+      left: 274px;
       display: flex;
       justify-content: flex-end;
-      color: #3d52d5;
-      font-weight: 600;
+      font-weight: 800;
       font-size: 13px;
+      padding: 1px;
       margin: 0 0 2px;
+      background: white;
+      border: 1px solid #dbdde6;
+      border-radius: 100%;
     }
-    .header__remove:hover {
+    .remove:hover > svg {
       cursor: pointer;
-      text-decoration: underline;
-      color: #3549c5;
+      fill: #393e53;
+    }
+    .upload {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+      .upload__button {
+        height: 24px;
+      }
+      // .upload__button:hover {
+      //   cursor: pointer;
+      //   background: #e9e6e6;
+      // }
     }
   }
+
   .output {
-    padding: 8px 8px 4px 8px;
-    background: #eeeff3;
-    border: 2px solid #dbdde6;
-    max-height: 320px;
-  }
-  .upload {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    background: rgba(255, 255, 255, 0.473);
-    border: 2px solid #dbdde6;
-    border-radius: 3px;
-    border-style: dashed;
-    .upload__button {
-      font-weight: 500;
-      background: #eeeff3;
-      border: 2px solid #dbdde6;
-      padding: 8px 12px;
-      display: inline-block;
-    }
-    .upload__button:hover {
-      cursor: pointer;
-      background: #dbdde6;
-    }
+    position: relative;
+    top: 20px;
   }
 }
 </style>

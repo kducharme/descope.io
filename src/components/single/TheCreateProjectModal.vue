@@ -56,7 +56,7 @@
 import { ref } from "vue";
 import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
-import BaseButton from "../global/BaseButton.vue";
+import BaseButton from "../global/Base_Button_Text.vue";
 import store from "../../store/index";
 
 export default {
@@ -152,7 +152,7 @@ export default {
       // border-bottom: 1px solid #CFD2DE;
       .title {
         font-size: 20px;
-        font-weight: 600;
+        font-weight: 800;
         margin: 0 0 8px;
       }
     }
@@ -165,7 +165,7 @@ export default {
         margin: 12px 0;
         label {
           font-size: 12px;
-          font-weight: 600;
+          font-weight: 800;
           color: #7c83a2;
           padding: 0 0 6px;
         }

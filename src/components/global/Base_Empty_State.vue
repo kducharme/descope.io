@@ -152,7 +152,7 @@
 
 <script>
 import { ref } from "vue";
-import BaseButton from "./BaseButton.vue";
+import BaseButton from "./Base_Button_Text.vue";
 import store from "../../store/index";
 
 export default {
@@ -213,7 +213,7 @@ export default {
     margin: 0 24px 0 0;
     .content__title {
       font-size: 22px;
-      font-weight: 600;
+      font-weight: 800;
       margin: 0 0 12px 0;
     }
     .content__body {

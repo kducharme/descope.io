@@ -30,6 +30,9 @@ export default {
     // Set active user
     const user = supabase.auth.user();
 
+    // Set teams
+    store.dispatch("setTeams");
+
     // Configures the nav component
     if (user) {
       nav.value = NavApp;
@@ -50,10 +53,17 @@ export default {
           session,
         });
 
+        store.dispatch("setOrganization", {
+          session,
+        });
+
         // Set active user profile
         store.dispatch("setActiveUserProfile", {
           session,
         });
+
+        // Set teams
+        store.dispatch("setTeams");
 
         // Check if the user has been onboarded
         checkOnboardedStatus(session);
@@ -90,8 +100,8 @@ export default {
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap");
 
-body { 
-    overflow-y: auto;
+body {
+  overflow-y: auto;
 }
 body,
 h1,
@@ -101,11 +111,13 @@ p,
 a,
 div,
 input,
+span,
 textarea,
 select,
+button,
 select option {
   color: #212430;
-  font-family: "Avenir Next";
+  font-family: "Avenir";
   font-size: 14px;
   margin: 0;
 }
@@ -115,7 +127,7 @@ a {
 }
 
 input {
-  border: 2px solid #DBDDE6;
+  border: 1px solid #dbdde6;
   background: white;
   padding: 8px;
 }
@@ -124,7 +136,8 @@ div,
 span,
 section,
 article,
-nav {
+nav,
+input {
   box-sizing: border-box;
 }
 
@@ -146,7 +159,84 @@ body {
 }
 
 .noScroll {
-  // height: 100%;
-  overflow: hidden!important;
+  position: static;
+  overflow-y: auto !important;
+}
+
+// ::-webkit-scrollbar {
+//   position: relative;
+//   height: 16px;
+//   // overflow: visible;
+//   // width: 0px;
+//   // box-shadow: none;
+//   // margin: 0 4px;
+//   // position: fixed;
+// }
+
+// ::-webkit-scrollbar-button {
+//   height: 0;
+//   width: 0;
+// }
+
+// ::-webkit-scrollbar-corner {
+//   background: transparent;
+// }
+
+// ::-webkit-scrollbar-thumb {
+//   position: absolute;
+//   right: 0;
+//   border-style: solid;
+//   border-color: transparent;
+//   border-width: 4px;
+//   background-color: #dbdbdb;
+//   border-radius: 8px;
+//   box-shadow: none;
+//   background: red;
+// }
+
+// ::-webkit-scrollbar-thumb {
+//   background-color: rgba(0, 0, 0, 0.2);
+//   background-clip: padding-box;
+//   border: solid transparent;
+//   min-height: 28px;
+//   padding: 100px 0 0;
+// }
+
+// Avatar colors
+
+.C8E5F9 {
+  background: #c8e5f9;
+}
+
+.FE938C {
+  background: #fe938c;
+}
+
+.EDAF97 {
+  background: #edaf97;
+}
+
+.F59CA9 {
+  background: #f59ca9;
+}
+
+.B0CA87 {
+  background: #b0ca87;
+}
+
+.D6FFB7 {
+  background: #d6ffb7;
+}
+
+.F0C987 {
+  background: #f0c987;
+}
+
+.F6EFA6 {
+  background: #f6efa6;
+}
+
+.FFC49B {
+  background: #ffc49b;
 }
 </style>

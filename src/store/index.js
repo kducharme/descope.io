@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import { supabase } from "../supabase/init";
+import { useRouter } from "vue-router";
 
 
 export default new Vuex.Store({
@@ -11,34 +12,70 @@ export default new Vuex.Store({
         onboarded: null,
         profile: null,
         organization: null,
+        members: null,
 
         // Team Data
-        teams_all: [],
-        teams_active_id: null,
-        teams_active_data: null,
-        teams_active_members: [],
+        teams: [],
+        teams_active: null,
+        teams_active_feedback: [],
+        teams_active_projects: null,
+        teams_active_members: null,
 
         // Project Data
-        projects: [],
+        // projects: [],
         projects_active: null,
-        feedback: [],
+
+        feedback: null,
         feedback_active: null,
         feedback_active_id: null,
+
+        feedback_chart_debt: null,
+        feedback_chart_requests: null,
+
+        comments: [],
 
         // UI Elements
         createTeamModal: false,
         createProjectModal: false,
-        createFeedbackModal: false,
+        createIssueModal: false,
+        createRequestModal: false,
+        createQuestionModal: false,
+        createLaunchModal: false,
     },
     getters: {
-        getFeedback: state => (payload) => {
-            return state.feedback.filter(fb =>
-                fb.title.toLowerCase().includes(payload.toLowerCase()) ||
-                fb.description.toLowerCase().includes(payload.toLowerCase()) ||
-                fb._project.name.toLowerCase().includes(payload.toLowerCase()) ||
-                fb.category.toLowerCase().includes(payload.toLowerCase())
+        filterFeedback: state => (payload) => {
+            return state.teams_active_feedback.filter(fb =>
+            (fb.title.toLowerCase().includes(payload.search.toLowerCase()) ||
+                fb.description.toLowerCase().includes(payload.search.toLowerCase()) ||
+                fb.category.toLowerCase().includes(payload.search.toLowerCase()))
             );
         },
+        searchProjects: state => (payload) => {
+            let projects = [];
+
+            if (state.teams_active_projects) {
+                state.teams_active_projects.forEach(p => {
+                    if (p.name.toLowerCase().includes(payload.toLowerCase()) || p.description.toLowerCase().includes(payload.toLowerCase())) {
+                        projects.push(p)
+                    }
+                })
+            }
+
+            projects.sort((a, b) => {
+                if (a.name.toLowerCase() < b.name.toLowerCase()) { return -1; }
+                if (a.name.toLowerCase() > b.name.toLowerCase()) { return 1; }
+                return 0;
+            })
+
+            return projects;
+
+
+        },
+        getComments: state => () => {
+            return state.comments.sort((a, b) => {
+                return a._dateAdded - b._dateAdded;
+            })
+        }
     },
 
     mutations: {
@@ -47,7 +84,7 @@ export default new Vuex.Store({
             state.activeUser = null;
             state.profile = null;
             state.organization = null;
-            state.teams_all = [];
+            state.teams = [];
             state.teams_active_id = null;
             state.teams_active_data = null;
             state.teams_active_members = [];
@@ -74,14 +111,20 @@ export default new Vuex.Store({
         SET_ORGANIZATION: (state, organization) => {
             state.organization = organization;
         },
+        SET_MEMBERS: (state, members) => {
+            state.members = members;
+        },
         SET_TEAMS: (state, teams) => {
-            state.teams_all = teams;
+            state.teams = teams;
         },
-        SET_ACTIVE_TEAM_ID: (state, team) => {
-            state.teams_active_id = team;
+        SET_ACTIVE_TEAM: (state, id) => {
+            state.teams_active = id;
         },
-        SET_ACTIVE_TEAM_DATA: (state, team) => {
-            state.teams_active_data = team;
+        SET_ACTIVE_TEAM_PROJECTS: (state, projects) => {
+            state.teams_active_projects = projects;
+        },
+        SET_ACTIVE_TEAM_FEEDBACK: (state, feedback) => {
+            state.teams_active_feedback = feedback;
         },
         SET_ACTIVE_TEAM_MEMBERS: (state, members) => {
             state.teams_active_members = members;
@@ -95,10 +138,21 @@ export default new Vuex.Store({
             state.projects_active = project;
         },
         SET_ALL_FEEDBACK: (state, feedback) => {
-            state.feedback = feedback;
+            if (feedback.length > 0) {
+                state.feedback = feedback;
+            }
+            else { state.feedback = null }
+        },
+        SET_FEEDBACK_CHART_DATA: (state, data) => {
+            state.feedback_chart_debt = data.arrDebtReduced;
+            state.feedback_chart_requests = data.arrRequestsReduced;
         },
         SET_ACTIVE_FEEDBACK: (state, feedback) => {
             state.feedback_active = feedback;
+            console.log(state.feedback_active)
+        },
+        SET_ACTIVE_COMMENTS: (state, comments) => {
+            state.comments = comments;
         },
 
         // SET STATE — UI CONFIGRATUIONS
@@ -108,17 +162,35 @@ export default new Vuex.Store({
         HIDE_CREATE_PROJECT_MODAL: (state) => {
             state.createProjectModal = false;
         },
-        SHOW_ADD_FEEDBACK_MODAL: (state) => {
-            state.createFeedbackModal = true;
+        SHOW_ADD_ISSUE_MODAL: (state) => {
+            state.createIssueModal = true;
         },
-        HIDE_ADD_FEEDBACK_MODAL: (state) => {
-            state.createFeedbackModal = false;
+        HIDE_ADD_ISSUE_MODAL: (state) => {
+            state.createIssueModal = false;
         },
         SHOW_CREATE_TEAM_MODAL: (state) => {
             state.createTeamModal = true;
         },
         HIDE_CREATE_TEAM_MODAL: (state) => {
             state.createTeamModal = false;
+        },
+        SHOW_CREATE_REQUEST_MODAL: (state) => {
+            state.createRequestModal = true;
+        },
+        HIDE_CREATE_REQUEST_MODAL: (state) => {
+            state.createRequestModal = false;
+        },
+        SHOW_CREATE_QUESTION_MODAL: (state) => {
+            state.createQuestionModal = true;
+        },
+        HIDE_CREATE_QUESTION_MODAL: (state) => {
+            state.createQuestionModal = false;
+        },
+        SHOW_CREATE_LAUNCH_MODAL: (state) => {
+            state.createLaunchModal = true;
+        },
+        HIDE_CREATE_LAUNCH_MODAL: (state) => {
+            state.createLaunchModal = false;
         },
     },
     actions: {
@@ -135,9 +207,17 @@ export default new Vuex.Store({
 
             if (profile[0]) {
                 context.commit("SET_PROFILE", profile);
-                context.commit("SET_ORGANIZATION", profile[0].organization_id);
+                context.dispatch("setMembers")
             }
             context.dispatch("setTeams")
+        },
+        async setOrganization(context, payload) {
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id", payload.session.user.id);
+
+            context.commit("SET_ORGANIZATION", profile[0].organization_id);
         },
         async setTeams(context) {
             if (context.state.organization) {
@@ -160,21 +240,197 @@ export default new Vuex.Store({
                         return 0;
                     })
 
-                    context.commit("SET_TEAMS", await teams);
-                    await context.dispatch("setActiveTeamData", { teams })
+                    context.commit("SET_TEAMS", teams);
                 }
             }
-
         },
-        setActiveTeamId(context, payload) {
-            context.commit("SET_ACTIVE_TEAM_ID", payload.team_id);
-        },
-
-        async setActiveFeedback(context, payload) {
-            const moment = require('moment')
-            const { data: fb } = await supabase
-                .from("feedback")
+        async setMembers(context) {
+            const { data: members } = await supabase
+                .from("profiles")
                 .select("*")
+                .eq("organization_id", context.state.organization);
+
+            context.commit("SET_MEMBERS", members);
+        },
+
+        async setActiveTeamData(context) {
+            const router = useRouter();
+
+            // Get team id
+            const team_id = window.location.pathname.split("/")[2];
+
+            if (team_id) {
+                const { data: teamData } = await supabase
+                    .from('teams')
+                    .select('*,feedback(*)')
+                    .eq("id", team_id);
+
+                const members = teamData[0].members
+                context.commit("SET_ACTIVE_TEAM", teamData[0]);
+                context.dispatch("setActiveTeamProjects")
+                context.dispatch("setActiveTeamFeedback")
+                context.dispatch("setActiveTeamMembers", { members })
+            }
+            else {
+                const team_id_backup = router.currentRoute.value.fullPath.split("/")[2];
+                const { data: teamData } = await supabase
+                    .from('teams')
+                    .select('*,feedback(*)')
+                    .eq("id", team_id_backup);
+                const members = teamData[0].members
+                context.commit("SET_ACTIVE_TEAM", teamData[0]);
+                context.dispatch("setActiveTeamProjects")
+                context.dispatch("setActiveTeamFeedback")
+                context.dispatch("setActiveTeamMembers", { members })
+
+            }
+
+
+        },
+
+        async setActiveTeamFeedback(context) {
+            const moment = require('moment')
+
+            const { data: allFeedback } = await supabase
+                .from('feedback')
+                .select('*,profiles(id,*),projects(*)')
+                .eq("team_id", context.state.teams_active.id);
+
+            // Hydrate the feedback object
+
+            for (const fb of allFeedback) {
+
+                if (fb.votes_up) {
+                    fb._votes_up_total = fb.votes_up.length;
+                    if (fb.votes_up.includes(context.state.activeUser.id)) {
+                        fb._vote_up = true;
+                        fb._vote_down = null;
+                    }
+                    else {
+                        fb._vote_up = null;
+                    }
+                }
+                else {
+                    fb._votes_up_total = 0;
+                }
+                if (fb.votes_down) {
+                    fb._votes_down_total = fb.votes_down.length;
+                    if (fb.votes_down.includes(context.state.activeUser.id)) {
+                        fb._vote_up = null;
+                        fb._vote_down = true;
+                    }
+                    else {
+                        fb._vote_down = null;
+                    }
+                }
+                else {
+                    fb._votes_down_total = 0;
+                }
+
+                // Get images and add it to the feedback object
+                if (fb.image) {
+                    const { data: img } = await supabase.storage
+                        .from("feedback")
+                        .download(`post/${fb.image}`)
+
+                    const url = URL.createObjectURL(img);
+                    fb._image = url;
+                }
+
+                fb._votes_total = fb._votes_up_total - fb._votes_down_total;
+                fb._addedBy = fb.profiles.firstname + " " + fb.profiles.lastname;
+                fb._initials = fb.profiles.firstname.charAt(0) + fb.profiles.lastname.charAt(0);
+                fb._date = moment(fb.created_at, "YYYMMDD").format("MM/DD");
+                fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
+            }
+
+            allFeedback.sort((a, b) => {
+                if (a._votes_total > b._votes_total) { return -1; }
+                if (a._votes_total < b._votes_total) { return 1; }
+                if (a._priority < b._priority) { return 1; }
+                if (a._priority > b._priority) { return -1; }
+                return 0;
+            })
+
+            context.commit("SET_ACTIVE_TEAM_FEEDBACK", allFeedback)
+        },
+
+
+        async setActiveTeamMembers(context) {
+
+            // const memberIds = payload.members;
+
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id", context.state.activeUser.id);
+
+            const { data: allMembers } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("organization_id", profile[0].organization_id);
+
+            allMembers.forEach(p => {
+                p._initials = p.firstname.charAt(0) + p.lastname.charAt(0);
+            })
+
+            const members = allMembers.filter(m => context.state.teams_active.members.includes(m.id));
+            context.commit("SET_ACTIVE_TEAM_MEMBERS", members);
+        },
+
+
+        async setActiveTeamProjects(context) {
+
+            const { data: projects } = await supabase
+                .from("projects")
+                .select("*", "feedback(*")
+                .select('*,feedback(project_id, *)')
+                .eq("team_id", context.state.teams_active.id);
+
+            context.commit("SET_ACTIVE_TEAM_PROJECTS", projects);
+        },
+
+        async getComments(context, payload) {
+            const moment = require('moment')
+
+            const { data: allComments } = await supabase
+                .from('feedback_comments')
+                .select('*,profiles(*)')
+                .eq("feedback_id", payload.feedback_id);
+
+            allComments.map(comment => {
+                comment._addedBy = comment.profiles.firstname + " " + comment.profiles.lastname;
+                comment._initials = comment.profiles.firstname.charAt(0) + comment.profiles.lastname.charAt(0);
+                comment._dateAdded = moment(comment.date_created).startOf('minute').fromNow();
+            })
+
+            allComments.sort((a, b) => {
+                return new Date(b.date_created) - new Date(a.date_created);
+            });
+
+            context.commit("SET_ACTIVE_COMMENTS", allComments)
+        },
+        async setActiveProject(context, payload) {
+
+            const { data: project } = await supabase
+                .from("projects")
+                .select("*")
+                .eq("id", payload.id);
+
+            context.commit("SET_ACTIVE_PROJECT", project[0]);
+        },
+        async setActiveFeedback(context, payload) {
+            const moment = require('moment');
+
+            // const { data: fb } = await supabase
+            //     .from("feedback")
+            //     .select("*", 'profiles(*)')
+            //     .eq("id", payload.feedback_id);
+
+
+            const { data: fb } = await supabase
+                .from('feedback')
+                .select('*,profiles(*),projects(id, *)')
                 .eq("id", payload.feedback_id);
 
             const activeFeedback = fb[0];
@@ -214,112 +470,6 @@ export default new Vuex.Store({
             context.commit("SET_ACTIVE_FEEDBACK", await activeFeedback)
         },
 
-        setActiveTeamData(context, payload) {
-            payload.teams.forEach((team) => {
-                if (team.id == context.state.teams_active_id) {
-                    context.commit("SET_ACTIVE_TEAM_DATA", team);
-                }
-            })
-            context.dispatch("setActiveTeamMembers")
-            context.dispatch("setAllTeamProjects")
-            context.dispatch("setAllTeamFeedback")
-        },
-        async setActiveTeamMembers(context) {
-            if (context.state.teams_active_data) {
-
-                const teamMemberIds = context.state.teams_active_data.members;
-
-                const { data: profiles } = await supabase
-                    .from("profiles")
-                    .select("*")
-                    .eq("organization_id", context.state.organization);
-
-                profiles.forEach(p => {
-                    p._initials = p.firstname.charAt(0) + p.lastname.charAt(0);
-                })
-
-                const members = profiles.filter(p => teamMemberIds.includes(p.id));
-
-                context.commit("SET_ACTIVE_TEAM_MEMBERS", members);
-            }
-        },
-        async setAllTeamProjects(context) {
-            if (context.state.teams_active_data) {
-
-                const { data: projects } = await supabase
-                    .from("projects")
-                    .select("*")
-                    .eq("team_id", context.state.teams_active_data.id);
-
-                context.commit("SET_PROJECTS", projects);
-            }
-        },
-        async setAllTeamFeedback(context) {
-            // Create variables
-            const moment = require('moment')
-
-            const { data: feedback } = await supabase
-                .from("feedback")
-                .select("*")
-                .eq("team_id", context.state.teams_active_data.id);
-
-            for (const fb of feedback) {
-                const { data: profile } = await supabase
-                    .from("profiles")
-                    .select("*")
-                    .eq("id", fb.created_by);
-
-                fb._addedBy = profile[0].firstname + " " + profile[0].lastname;
-                fb._initials = profile[0].firstname.charAt(0) + profile[0].lastname.charAt(0);
-                fb._dateAdded = moment(fb.created_at).startOf('minute').fromNow();
-                if (fb.priority === "High") { fb._priority = 3; }
-                if (fb.priority === "Med") { fb._priority = 2; }
-                if (fb.priority === "Low") { fb._priority = 1; }
-
-                if (fb.project_id) {
-                    const { data: project } = await supabase
-                        .from("projects")
-                        .select("*")
-                        .eq("id", fb.project_id);
-
-                    fb._project = project[0];
-
-                }
-
-                // Get images and add it to the feedback object
-
-                if (fb.image) {
-                    const { data: img } = await supabase.storage
-                        .from("feedback")
-                        .download(`post/${fb.image}`)
-
-                    const url = URL.createObjectURL(await img);
-                    fb._image = url;
-                }
-
-            }
-
-            // TODO — sort based on votes then priority
-            feedback.sort((a, b) => {
-                if (a.votes > b.votes) { return -1; }
-                if (a.votes < b.votes) { return 1; }
-                if (a._priority < b._priority) { return 1; }
-                if (a._priority > b._priority) { return -1; }
-                return 0;
-            })
-
-            context.commit("SET_ALL_FEEDBACK", await feedback);
-        },
-        async setActiveProject(context, payload) {
-
-            const { data: project } = await supabase
-                .from("projects")
-                .select("*")
-                .eq("id", payload.id);
-
-            context.commit("SET_ACTIVE_PROJECT", project[0]);
-        },
-
         // RESET ACTIONS
         resetState(context) {
             context.commit("RESET_STATE");
@@ -340,18 +490,35 @@ export default new Vuex.Store({
         hideCreateProjectModal(context) {
             context.commit("HIDE_CREATE_PROJECT_MODAL")
         },
-        showCreateFeedbackModal(context) {
-            context.commit("SHOW_ADD_FEEDBACK_MODAL")
+        showCreateIssueModal(context) {
+            context.commit("SHOW_ADD_ISSUE_MODAL")
         },
-        hideCreateFeedbackModal(context) {
-            context.commit("HIDE_ADD_FEEDBACK_MODAL")
+        hideCreateIssueModal(context) {
+            context.commit("HIDE_ADD_ISSUE_MODAL")
         },
         showCreateTeamModal(context) {
             context.commit("SHOW_CREATE_TEAM_MODAL")
         },
-
         hideCreateTeamModal(context) {
             context.commit("HIDE_CREATE_TEAM_MODAL")
+        },
+        showCreateRequestModal(context) {
+            context.commit("SHOW_CREATE_REQUEST_MODAL")
+        },
+        hideCreateRequestModal(context) {
+            context.commit("HIDE_CREATE_REQUEST_MODAL")
+        },
+        showCreateQuestionModal(context) {
+            context.commit("SHOW_CREATE_QUESTION_MODAL")
+        },
+        hideCreateQuestionModal(context) {
+            context.commit("HIDE_CREATE_QUESTION_MODAL")
+        },
+        showCreateLaunchModal(context) {
+            context.commit("SHOW_CREATE_LAUNCH_MODAL")
+        },
+        hideCreateLaunchModal(context) {
+            context.commit("HIDE_CREATE_LAUNCH_MODAL")
         },
     }
 });

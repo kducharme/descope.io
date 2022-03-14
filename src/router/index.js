@@ -8,9 +8,9 @@ import ConfirmEmail from "../views/marketing/ConfirmEmail.vue";
 
 // App pages
 import Home from "../views/app/Home.vue";
-import AllCompanyFeedback from "../views/app/AllCompanyFeedback.vue";
+import TrendingFeedback from "../views/app/TrendingFeedback.vue";
 import Team from "../views/app/Team.vue";
-import Insights from "../views/app/Insights.vue";
+import Launches from "../views/app/Launches.vue";
 import Projects from "../views/app/Projects.vue";
 import AllTeamFeedback from "../views/app/AllTeamFeedback.vue";
 import TeamSettings from "../views/app/TeamSettings.vue";
@@ -51,20 +51,20 @@ const routes = [
     component: Home,
   },
   {
-    path: "/feedback",
-    name: "allCompanyFeedback",
-    component: AllCompanyFeedback,
+    path: "/trending",
+    name: "trendingFeedback",
+    component: TrendingFeedback,
   },
   {
     path: "/team/:id",
     name: "team",
     component: Team,
-    redirect: { name: 'projects' },
+    redirect: { name: 'feedback' },
     children: [
       {
-        path: "insights",
-        name: "insights",
-        component: Insights,
+        path: "launches",
+        name: "launches",
+        component: Launches,
       },
       {
         path: "projects",
@@ -77,7 +77,7 @@ const routes = [
         path: "projects/:projectId",
         name: "project",
         component: IndividualProject,
-        redirect: { name: 'projectOverview' },
+        redirect: { name: 'projectFeedback' },
         children: [
           {
             path: "overview",

@@ -1,4 +1,4 @@
-<template>
+\<template>
   <header>
     <nav class="nav">
       <TheCreateTeamModal v-if="store.state.createTeamModal" />
@@ -24,8 +24,8 @@
           <router-link class="nav__link" :to="{ name: 'home' }"
             >Overview</router-link
           >
-          <router-link class="nav__link" :to="{ name: 'allCompanyFeedback' }"
-            >Feedback</router-link
+          <router-link class="nav__link" :to="{ name: 'trendingFeedback' }"
+            >Trending</router-link
           >
           <div class="title">
             <p class="title__text">Teams</p>
@@ -58,14 +58,12 @@
 import { supabase } from "../../supabase/init";
 import { useRouter } from "vue-router";
 import TheTeamList from "./TheTeamList.vue";
-// import BaseButton from "../global/BaseButton.vue";
 import TheCreateTeamModal from "../single/TheCreateTeamModal.vue";
 import store from "../../store/index";
 
 export default {
   components: {
     TheTeamList,
-    // BaseButton,
     TheCreateTeamModal,
   },
   data() {
@@ -111,8 +109,9 @@ export default {
   justify-content: space-between;
   height: 100vh;
   padding: 16px;
-  width: 220px;
-  background: #212430;
+  width: 200px;
+  background: #fff;
+  border-right: 1px solid #dbdde6;
   .nav__top {
     width: 100%;
     .logo {
@@ -120,10 +119,10 @@ export default {
       align-items: center;
       .logo__text {
         margin-left: 6px;
-        font-weight: 600;
+        font-weight: 800;
         font-size: 17px;
         letter-spacing: 0.3px;
-        color: white;
+        color: #212430;
       }
     }
     .actions {
@@ -146,7 +145,7 @@ export default {
         margin: 16px 0 8px -16px;
         padding: 8px 8px 0px 24px;
         .title__text {
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 500;
           color: #9aa3ac;
         }
@@ -164,22 +163,25 @@ export default {
         }
       }
       .nav__link {
-        color: white;
+        color: #212430;
         margin: 0 0 0 -16px;
         padding: 10px 8px 10px 24px;
       }
       .router-link-active,
       .router-link-exact-active {
         font-weight: 500;
-        background: #313649;
+        background: #f1f3f7;
+        border-left: 4px solid #3253e4;
+        border-top-right-radius: 100px;
+        border-bottom-right-radius: 100px;
       }
     }
   }
   .nav__bottom {
-    border-top: 1px solid #778ea7;
+    border-top: 1px solid #dbdde6;
     width: 100%;
     padding: 16px 0 8px;
-    color: white;
+    color: #212430;
     .nav__link--logout:hover {
       cursor: pointer;
     }

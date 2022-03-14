@@ -1,9 +1,9 @@
 <template>
-  <div class="feedback" v-if="store.state.feedback_active">
+  <div class="feedback">
     <div class="background"></div>
     <div class="content">
       <div class="content__left">
-        <div class="header">
+        <div class="feedbackHeader">
           <div class="close" @click="navigateBack">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -18,9 +18,12 @@
               />
             </svg>
           </div>
+        </div>
+
+        <div class="feedbackDetails" v-if="store.state.feedback_active">
           <div class="about">
             <div class="about__left">
-              <p class="initials">
+              <p :class="['initials', store.state.feedback_active.profiles.color]">
                 {{ store.state.feedback_active._initials }}
               </p>
             </div>
@@ -42,36 +45,42 @@
           <p class="description">
             {{ store.state.feedback_active.description }}
           </p>
-        </div>
-        <div class="image">
-          <img
-            :src="store.state.feedback_active._image"
-            v-if="store.state.feedback_active._image"
-            class="fb__image"
-          />
-          <div
-            class="fb__image--placeholder"
-            v-if="!store.state.feedback_active._image"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="32px"
-              viewBox="0 0 24 24"
-              width="32px"
-              fill="#B7BBCC"
+          <div class="image">
+            <img
+              :src="store.state.feedback_active._image"
+              v-if="store.state.feedback_active._image"
+              class="fb__image"
+            />
+            <div
+              class="fb__image--placeholder"
+              v-if="!store.state.feedback_active._image"
             >
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path
-                d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.9 13.98l2.1 2.53 3.1-3.99c.2-.26.6-.26.8.01l3.51 4.68c.25.33.01.8-.4.8H6.02c-.42 0-.65-.48-.39-.81L8.12 14c.19-.26.57-.27.78-.02z"
-              />
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="32px"
+                viewBox="0 0 24 24"
+                width="32px"
+                fill="#B7BBCC"
+              >
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path
+                  d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.9 13.98l2.1 2.53 3.1-3.99c.2-.26.6-.26.8.01l3.51 4.68c.25.33.01.8-.4.8H6.02c-.42 0-.65-.48-.39-.81L8.12 14c.19-.26.57-.27.78-.02z"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
       <div class="content__right">
-        <div class="top">Comments go here</div>
-        <div class="bottom">
-          <BaseChatInput v-model="content" />
+        <div class="comments__list" id="comments">
+          <BaseCommentList
+            v-for="comment in store.state.comments"
+            :key="comment.id"
+            :comment="comment"
+          />
+        </div>
+        <div class="comments__add">
+          <BaseCommentInput />
         </div>
       </div>
     </div>
@@ -81,12 +90,14 @@
 <script>
 import store from "../../store/index";
 import { useRouter } from "vue-router";
-import BaseChatInput from "../../components/global/BaseChatInput.vue";
+import BaseCommentInput from "../../components/global/Base_Comment_Input.vue";
+import BaseCommentList from "../../components/global/Base_Comment_List.vue";
 
 export default {
   name: "Feedback Details",
   components: {
-    BaseChatInput,
+    BaseCommentInput,
+    BaseCommentList,
   },
   setup() {
     // Create data / vars
@@ -94,15 +105,15 @@ export default {
 
     // Get data
     const setActiveFeedbackData = async () => {
-      const team_id = router.currentRoute.value.fullPath.split("/")[2];
       const feedback_id = router.currentRoute.value.fullPath.split("/")[4];
       store.dispatch("setActiveFeedback", {
         feedback_id,
       });
-      store.dispatch("setActiveTeamId", {
-        team_id,
+      store.dispatch("getComments", {
+        feedback_id,
       });
-    };
+      store.dispatch("setActiveTeamData");
+    }
 
     setActiveFeedbackData();
 
@@ -111,12 +122,18 @@ export default {
       router.push({
         name: "feedback",
         params: {
-          id: store.state.teams_active_data.id,
+          id: store.state.teams_active.id,
         },
       });
     };
 
     return { store, navigateBack };
+  },
+  mounted() {
+    // console.log(document.querySelector("#comments").childElementCount)
+    // document.querySelector("#comments").scrollTo(0,800)
+    // console.log(commentArea.scrollHeight);
+    // commentArea.scrollTo(0, 699);
   },
 };
 </script>
@@ -151,7 +168,7 @@ export default {
       width: 60%;
       padding: 64px 80px;
       overflow-y: auto;
-      .header {
+      .feedbackHeader {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -176,9 +193,11 @@ export default {
           cursor: pointer;
           background: #eeeff3;
         }
+      }
+      .feedbackDetails {
         .title {
           font-size: 18px;
-          font-weight: 600;
+          font-weight: 800;
           margin: 0 0 8px;
         }
         .description {
@@ -191,17 +210,17 @@ export default {
           align-items: center;
           margin: 0 0 20px;
           .about__left {
-            margin: 0 8px 0 0;
+            margin: 0 12px 0 0;
             .initials {
               display: flex;
               align-items: center;
               justify-content: center;
-              background: #c9eddc;
-              height: 32px;
-              width: 32px;
-              border-radius: 100%;
+              // background: #c8e4f9;
+              height: 40px;
+              width: 40px;
+              border-radius: 6px;
               font-size: 12px;
-              font-weight: 600;
+              font-weight: 800;
               letter-spacing: 1.1px;
             }
           }
@@ -209,7 +228,7 @@ export default {
             display: flex;
             flex-direction: column;
             .project {
-              font-weight: 600;
+              font-weight: 800;
               font-size: 12px;
               margin: 0 0 2px;
             }
@@ -224,24 +243,25 @@ export default {
             }
           }
         }
-      }
-      .image {
-        width: 100%;
-        img {
+        .image {
+          margin: 24px 0 0 0;
           width: 100%;
-          border: 1px solid #dbdde6;
-          border-radius: 5px;
-        }
-        .fb__image--placeholder {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: 2px solid #dbdde6;
-          border-style: dashed;
-          //   background: #f2f3f5;
-          border-radius: 5px;
-          height: 350px;
-          width: 100%;
+          img {
+            width: 100%;
+            border: 1px solid #dbdde6;
+            border-radius: 5px;
+          }
+          .fb__image--placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #dbdde6;
+            border-style: dashed;
+            //   background: #f2f3f5;
+            border-radius: 5px;
+            height: 350px;
+            width: 100%;
+          }
         }
       }
     }
@@ -250,19 +270,23 @@ export default {
       flex-direction: column;
       justify-content: space-between;
       width: 40%;
-      background: #eeeff3;
-      //   border-left: 1px solid #dbdde6;
+      background: #f3f4f7;
+      border-left: 1px solid #dbdde6;
       border-top-right-radius: 12px;
       border-bottom-right-radius: 12px;
-      .top {
-        height: calc(100% - 160px);
-        padding: 16px;
+      .comments__list {
+        display: flex;
+        flex-direction: column-reverse;
+        // justify-content: flex-end;
+        height: 100%;
+        padding: 16px 16px 0 16px;
+        overflow-y: auto;
       }
-      .bottom {
+      .comments__add {
         display: flex;
         align-items: flex-end;
         justify-content: center;
-        height: 160px;
+        // height: 160px;
         width: 100%;
         padding: 16px;
       }

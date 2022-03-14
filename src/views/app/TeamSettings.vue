@@ -18,7 +18,7 @@ export default {
 
 <style lang="scss" scoped>
 .overview {
-  background: #eeeff3;
+  background: #f1f3f7;
   height: calc(100vh - 102px);
   padding: 24px;
 }

@@ -1,60 +1,92 @@
 <template>
-  <div class="content">
-    <!-- <div class="actions">
-      <div class="actions__filters">
-        <div class="form__input">
-          <div class="form__select" id="team">Search</div>
-        </div>
+  <div class="page">
+    <div class="content">
+      <div class="search">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          fill="#7B82A3"
+          class="search__input--icon"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+          />
+        </svg>
+        <input
+          type="text"
+          v-model="search"
+          class="search__input"
+          placeholder="Search name or decription"
+          @keyup="searchProjects"
+        />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          viewBox="0 0 24 24"
+          width="18px"
+          fill="#7B82A3"
+          class="search__input--reset"
+          @click="resetSearch()"
+          v-if="this.search"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+          />
+        </svg>
       </div>
-      <div class="actions__buttons">
-      </div>
-    </div> -->
-    <div class="projects">
-      <div
-        v-for="project in store.state.projects"
-        :key="project.id"
-        @click="setActiveProject(project.id)"
-        class="proj"
-      >
-        <div class="col col__1">
-          <div class="icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              enable-background="new 0 0 24 24"
-              height="18px"
-              viewBox="0 0 24 24"
-              width="18px"
-              fill="#212430"
-            >
-              <g><rect fill="none" height="24" width="24" /></g>
-              <g>
-                <g>
-                  <path
-                    d="M5,5h2v3h10V5h2v5h2V5c0-1.1-0.9-2-2-2h-4.18C14.4,1.84,13.3,1,12,1S9.6,1.84,9.18,3H5C3.9,3,3,3.9,3,5v14 c0,1.1,0.9,2,2,2h6v-2H5V5z M12,3c0.55,0,1,0.45,1,1s-0.45,1-1,1s-1-0.45-1-1S11.45,3,12,3z"
-                  />
-                  <polygon
-                    points="21,11.5 15.51,17 12.5,14 11,15.5 15.51,20 22.5,13"
-                  />
-                </g>
-              </g>
-            </svg>
+      <div class="cards">
+        <div
+          class="cards__item"
+          v-for="project in store.getters.searchProjects(this.search)"
+          :key="project.id"
+          @click="setActiveProject(project.id)"
+        >
+          <div class="card">
+            <div class="card__content">
+              <div class="header">
+                <p class="card__name">{{ project.name }}</p>
+                <p class="card__description">
+                  {{ project.description }}
+                </p>
+              </div>
+              <div class="footer">
+                <div class="data">
+                  <p class="label">Issues</p>
+                  <p class="metric">
+                    {{
+                      project.feedback.filter((f) =>
+                        f.category.includes("issue")
+                      ).length
+                    }}
+                  </p>
+                </div>
+                <div class="data">
+                  <p class="label">Requests</p>
+                  <p class="metric">
+                    {{
+                      project.feedback.filter((f) =>
+                        f.category.includes("request")
+                      ).length
+                    }}
+                  </p>
+                </div>
+                <div class="data">
+                  <p class="label">Questions</p>
+                  <p class="metric">
+                    {{
+                      project.feedback.filter((f) =>
+                        f.category.includes("question")
+                      ).length
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="col col__2">
-          <p class="name">
-            {{ project.name }}
-          </p>
-          <p class="description">
-            {{ project.description }}
-          </p>
-        </div>
-        <div class="col col__3">
-          <span class="status status__active" v-if="project.status === 'active'"
-            >Active</span
-          >
-          <span class="status status__draft" v-if="project.status === 'draft'"
-            >Draft</span
-          >
         </div>
       </div>
     </div>
@@ -67,6 +99,11 @@ import { useRouter } from "vue-router";
 
 export default {
   name: "Projects",
+  data() {
+    return {
+      search: "",
+    };
+  },
   setup() {
     // Crate data
     const router = useRouter();
@@ -84,104 +121,152 @@ export default {
     };
     return { store, setActiveProject };
   },
+  methods: {
+    resetSearch() {
+      this.search = "";
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // justify-content: center;
+  background: #f1f3f7;
+  min-height: calc(100vh - 102px);
+  width: 100%;
+}
+
 .content {
   display: flex;
   flex-direction: column;
-  background: #eeeff3;
-  min-height: calc(100vh - 102px);
-  padding: 24px;
-  .actions {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 0 24px 0;
-    .actions__filters {
-      display: flex;
-      width: 50%;
-      .form__select {
-        background: white;
-        border: 2px solid #dbdde6;
-        padding: 8px;
-        width: 220px;
-        border-radius: 3px;
-      }
-    }
-    .actions__buttons {
-      display: flex;
-      justify-content: flex-end;
-      width: 50%;
+  align-items: center;
+  padding: 32px 80px;
+  max-width: 880px;
+  min-width: 720px;
+}
+
+.search {
+  margin: 0 0 16px 0;
+  position: relative;
+  width: calc(100% - 20px);
+  min-width: 700px;
+  input {
+    width: 100%;
+    padding: 10px 10px 10px 36px;
+    border-radius: 6px;
+  }
+  .search__input--icon {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+  }
+  .search__input--reset {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding: 2px;
+  }
+  svg:hover {
+    fill: #212430;
+  }
+  .search__input--reset:hover {
+    background: #eeeff3;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+
+  // justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  // gap: auto;
+}
+
+.cards__item {
+  display: flex;
+  padding: 0.7rem;
+  height: 240px;
+  @media (min-width: 40rem) {
+    width: 50%;
+  }
+  @media (min-width: 56rem) {
+    width: 33.3333%;
+  }
+}
+
+.card {
+  background-color: white;
+  border: 2px solid white;
+  border-radius: 12px;
+  // box-shadow: 0px 1px 5px rgba(45, 62, 80, 0.12);
+  border: 1px solid #dbdde6;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  &:hover {
+    .card__image {
+      filter: contrast(100%);
     }
   }
-  .projects {
+  .card__content {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    .proj {
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    .header {
       display: flex;
-      width: 100%;
-      align-items: center;
-      background: white;
-      border: 1px solid #dbdde6;
-      border-radius: 5px;
-      margin: 0 0 8px 0;
-      padding: 16px;
-      .col {
-        margin-right: 16px;
+      flex-direction: column;
+      .card__name {
+        font-size: 15px;
+        font-weight: 800;
+        margin: 0 0 12px 0;
       }
-      .col__1 {
-        display: flex;
-        .icon {
-          align-items: center;
-          justify-content: center;
-          display: flex;
-          width: 36px;
-          height: 36px;
-          background: #e6e8ef;
-          font-size: 12px;
-          font-weight: 600;
-          border-radius: 100%;
+      .card__description {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #636c92;
+        line-height: 1.4;
+        height: 60px;
+      }
+    }
+    .footer {
+      display: flex;
+      margin: 16px 0 0 0;
+      .data {
+        margin: 0 22px 0 0;
+        .label {
+          font-size: 11px;
+          color: #636c92;
+          font-weight: 800;
+          margin: 0 0 8px;
         }
-      }
-      .col__2 {
-        display: flex;
-        flex-direction: column;
-        width: 400px;
-        .name {
+        .metric {
           font-size: 14px;
-          font-weight: 600;
-          margin: 0 0 4px 0;
-        }
-        .description {
-          font-weight: 400;
-          font-size: 13px;
-          color: #778ea7;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-      }
-      .col__3 {
-        .status {
-          padding: 4px 6px;
-          border-radius: 3px;
-          font-size: 11.5px;
           font-weight: 500;
-        }
-        .status__active {
-          background: #d2f1e4;
-        }
-        .status__draft {
-          background: #eeeff3;
+          // margin: 0 0 12px 0;
         }
       }
     }
-    .proj:hover {
-      background: #f3f4f7;
-      cursor: pointer;
-    }
+  }
+}
+.card:hover {
+  cursor: pointer;
+  .card__name {
+    text-decoration: underline;
   }
 }
 </style>
